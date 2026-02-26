@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>나의 스탬프 여권</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@300;400;500&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#1a1208;--paper:#f5efe3;--aged:#e8dcc8;--seal:#c0392b;--gold:#b8860b;--green:#2d6a4f;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:#2c1f0e;background-image:radial-gradient(ellipse at 50% 0%,rgba(184,134,11,.15) 0%,transparent 60%);min-height:100vh;font-family:'Noto Sans KR',sans-serif;padding:36px 16px 80px;}
+
+  .passport{max-width:660px;margin:0 auto;animation:bookOpen .7s cubic-bezier(.16,1,.3,1) both;}
+  @keyframes bookOpen{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+
+  .passport-cover{background:linear-gradient(160deg,#1a3a2a 0%,#0f2a1e 100%);border-radius:12px 12px 0 0;padding:40px 36px 32px;border:1px solid rgba(184,134,11,.3);border-bottom:none;position:relative;overflow:hidden;}
+  .passport-cover::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 10px,rgba(255,255,255,.01) 10px,rgba(255,255,255,.01) 11px);}
+  .cover-emblem{font-size:2.6rem;display:block;text-align:center;margin-bottom:6px;filter:drop-shadow(0 2px 8px rgba(184,134,11,.5));}
+  .cover-title{font-family:'Noto Serif KR',serif;text-align:center;font-size:.68rem;letter-spacing:.3em;color:rgba(232,220,200,.5);margin-bottom:4px;}
+  .cover-main{font-family:'IM Fell English',serif;text-align:center;font-size:1.5rem;color:#d4af37;letter-spacing:.05em;}
+  .cover-visitor{font-family:'Noto Serif KR',serif;text-align:center;font-size:.9rem;color:rgba(232,220,200,.85);margin-top:4px;letter-spacing:.08em;}
+  .cover-line{width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(184,134,11,.5),transparent);margin:18px 0;}
+  .stats-bar{display:flex;gap:20px;justify-content:center;}
+  .stat{text-align:center;}
+  .stat-num{font-family:'IM Fell English',serif;font-size:1.9rem;color:#d4af37;line-height:1;}
+  .stat-label{font-size:.65rem;color:rgba(232,220,200,.5);letter-spacing:.1em;margin-top:3px;}
+  .stat-divider{width:1px;background:rgba(232,220,200,.15);align-self:stretch;}
+
+  .passport-body{background:var(--paper);border-radius:0 0 12px 12px;border:1px solid rgba(184,134,11,.3);border-top:none;padding:28px 28px 36px;box-shadow:0 20px 60px rgba(0,0,0,.4);}
+
+  .progress-wrap{background:white;border:1px solid var(--aged);border-radius:8px;padding:16px 18px;margin-bottom:24px;}
+  .progress-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px;}
+  .progress-header span:first-child{font-family:'Noto Serif KR',serif;font-size:.86rem;font-weight:600;color:var(--ink);}
+  .pct-text{font-family:'IM Fell English',serif;font-size:1.05rem;color:var(--gold);}
+  .progress-bar{height:7px;background:var(--aged);border-radius:4px;overflow:hidden;}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--seal));border-radius:4px;transition:width 1.2s cubic-bezier(.16,1,.3,1);width:0%;}
+
+  /* Completion CTA */
+  .completion-cta{background:linear-gradient(135deg,#1a3a2a,#0f2a1e);border:1px solid rgba(184,134,11,.4);border-radius:10px;padding:22px;text-align:center;margin-bottom:22px;}
+  .completion-cta .c-emoji{font-size:2rem;margin-bottom:8px;}
+  .completion-cta h3{font-family:'Noto Serif KR',serif;color:#d4af37;font-size:.95rem;margin-bottom:4px;}
+  .completion-cta p{color:rgba(232,220,200,.6);font-size:.78rem;margin-bottom:14px;}
+  .btn-apply{padding:11px 28px;background:#d4af37;color:#1a1208;border:none;border-radius:6px;font-family:'Noto Serif KR',serif;font-size:.9rem;font-weight:600;cursor:pointer;letter-spacing:.05em;transition:all .2s;}
+  .btn-apply:hover{background:#f0cc55;transform:translateY(-1px);}
+  .applied-notice{display:inline-flex;align-items:center;gap:6px;background:rgba(45,106,79,.3);border:1px solid rgba(165,214,167,.4);border-radius:20px;padding:7px 16px;color:#a5d6a7;font-size:.8rem;}
+
+  /* Tabs */
+  .tabs{display:flex;border-bottom:2px solid var(--aged);margin-bottom:20px;}
+  .tab{padding:9px 16px;font-size:.82rem;color:#7a6a50;cursor:pointer;letter-spacing:.05em;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s;}
+  .tab.active{color:var(--seal);border-bottom-color:var(--seal);font-weight:500;}
+  .tab-content{display:none;} .tab-content.active{display:block;}
+
+  .stamp-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;}
+  .stamp-item{aspect-ratio:1;border:2px dashed var(--aged);border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:white;overflow:hidden;animation:sA .4s both;position:relative;}
+  @keyframes sA{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:none}}
+  .stamp-item.done{border:2px solid rgba(192,57,43,.3);background:linear-gradient(135deg,#fff5f5,white);}
+  .stamp-item.done::before{content:'';position:absolute;inset:0;background:radial-gradient(circle,rgba(192,57,43,.06),transparent 70%);}
+  .s-num{font-size:.58rem;color:#ccc;font-family:monospace;margin-bottom:3px;}
+  .stamp-item.done .s-num{color:rgba(192,57,43,.5);}
+  .s-seal{width:30px;height:30px;border-radius:50%;background:#ede5d4;display:flex;align-items:center;justify-content:center;font-size:.52rem;color:#bbb;font-family:'Noto Serif KR',serif;}
+  .stamp-item.done .s-seal{background:var(--seal);color:white;font-size:.95rem;box-shadow:0 2px 8px rgba(192,57,43,.4);}
+  .s-label{font-size:.48rem;color:#bbb;margin-top:3px;text-align:center;padding:0 3px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;max-width:100%;}
+  .stamp-item.done .s-label{color:#7a6a50;font-weight:500;}
+
+  .visit-list{display:flex;flex-direction:column;gap:8px;}
+  .visit-item{display:flex;align-items:center;gap:12px;background:white;border:1px solid var(--aged);border-radius:6px;padding:12px 14px;animation:fadeUp .3s both;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .v-badge{width:36px;height:36px;min-width:36px;background:var(--seal);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.95rem;box-shadow:0 2px 8px rgba(192,57,43,.3);}
+  .v-info{flex:1;min-width:0;}
+  .v-name{font-family:'Noto Serif KR',serif;font-size:.88rem;font-weight:600;color:var(--ink);}
+  .v-time{font-size:.72rem;color:#aaa;margin-top:2px;}
+  .v-check{color:var(--green);font-size:1rem;}
+
+  .empty-state{text-align:center;padding:40px 20px;color:#bbb;}
+  .empty-state .icon{font-size:2.8rem;margin-bottom:10px;display:block;}
+  .empty-state p{font-size:.83rem;}
+
+  .footer-actions{margin-top:22px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
+  .btn{padding:9px 18px;border-radius:4px;font-size:.8rem;font-family:'Noto Sans KR',sans-serif;cursor:pointer;letter-spacing:.04em;border:none;transition:all .2s;}
+  .btn-dark{background:var(--ink);color:var(--paper);} .btn-dark:hover{background:var(--seal);}
+  .btn-outline{background:transparent;color:#7a6a50;border:1px solid var(--aged);} .btn-outline:hover{background:var(--aged);}
+
+  /* Apply Modal */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(26,18,8,.75);z-index:100;align-items:center;justify-content:center;}
+  .modal-overlay.open{display:flex;}
+  .modal{background:white;border-radius:10px;padding:32px;max-width:400px;width:92%;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.4);}
+  .modal-close{position:absolute;top:12px;right:14px;background:none;border:none;color:#bbb;font-size:1.3rem;cursor:pointer;padding:0;}
+  .modal-close:hover{color:var(--ink);}
+  .modal h3{font-family:'Noto Serif KR',serif;font-size:1.15rem;color:var(--ink);margin-bottom:6px;}
+  .modal-sub{font-size:.8rem;color:#7a6a50;margin-bottom:20px;line-height:1.6;}
+  .visit-summary-box{background:var(--paper);border:1px solid var(--aged);border-radius:6px;padding:11px 14px;margin-bottom:18px;font-size:.82rem;color:#7a6a50;}
+  .visit-summary-box strong{color:var(--ink);}
+  .form-group{margin-bottom:14px;}
+  .form-group label{font-size:.76rem;color:#7a6a50;letter-spacing:.04em;display:block;margin-bottom:5px;}
+  .form-group input{width:100%;padding:10px 13px;border:1px solid var(--aged);border-radius:4px;font-family:'Noto Sans KR',sans-serif;font-size:.9rem;color:var(--ink);background:var(--paper);}
+  .form-group input:focus{outline:none;border-color:var(--gold);}
+  .btn-submit{width:100%;padding:12px;background:var(--seal);color:white;border:none;border-radius:6px;font-family:'Noto Serif KR',serif;font-size:.95rem;font-weight:600;cursor:pointer;letter-spacing:.05em;transition:all .2s;margin-top:4px;}
+  .btn-submit:hover{background:#a93226;}
+  .btn-submit:disabled{background:#ccc;cursor:not-allowed;}
+  .form-error{font-size:.73rem;color:var(--seal);margin-top:8px;text-align:center;display:none;}
+
+  /* Loading overlay */
+  .page-loading{position:fixed;inset:0;background:rgba(44,31,14,.8);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200;}
+  .page-loading .spinner{width:44px;height:44px;border:3px solid rgba(255,255,255,.2);border-top-color:#d4af37;border-radius:50%;animation:spin .8s linear infinite;margin-bottom:14px;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .page-loading p{color:rgba(232,220,200,.7);font-size:.85rem;}
+
+  /* Toast */
+  .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 20px;border-radius:30px;font-size:.82rem;opacity:0;pointer-events:none;transition:opacity .3s;z-index:999;white-space:nowrap;}
+  .toast.show{opacity:1;}
+
+  @media(max-width:480px){.passport-cover,.passport-body{padding:24px 16px}.stamp-grid{grid-template-columns:repeat(4,1fr);gap:6px}.stats-bar{gap:14px}}
+</style>
+</head>
+<body>
+
+<div class="page-loading" id="page-loading">
+  <div class="spinner"></div>
+  <p>여권 불러오는 중...</p>
+</div>
+
+<div class="passport" style="opacity:0" id="passport-wrap">
+  <div class="passport-cover">
+    <span class="cover-emblem">🗺️</span>
+    <div class="cover-title">스탬프 투어 · 여행 기록</div>
+    <div class="cover-main">Stamp Passport</div>
+    <div class="cover-visitor" id="cover-visitor">-</div>
+    <div class="cover-line"></div>
+    <div class="stats-bar">
+      <div class="stat"><div class="stat-num" id="cov-collected">0</div><div class="stat-label">방문 완료</div></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><div class="stat-num" id="cov-total">30</div><div class="stat-label">전체 지점</div></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><div class="stat-num" id="cov-pct">0%</div><div class="stat-label">달성률</div></div>
+    </div>
+  </div>
+
+  <div class="passport-body">
+    <div class="completion-cta" id="completion-cta" style="display:none">
+      <div class="c-emoji" id="cta-emoji">🏆</div>
+      <h3 id="cta-title"></h3>
+      <p id="cta-desc"></p>
+      <div id="cta-btn-wrap">
+        <button class="btn-apply" onclick="openApplyModal()">완주 신청하기</button>
+      </div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-header">
+        <span>수집 현황</span>
+        <span class="pct-text" id="pct-text">0%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('grid',this)">스탬프 도장</div>
+      <div class="tab" onclick="switchTab('list',this)">방문 기록</div>
+    </div>
+    <div class="tab-content active" id="tab-grid"><div class="stamp-grid" id="stamp-grid"></div></div>
+    <div class="tab-content" id="tab-list"><div class="visit-list" id="visit-list"></div></div>
+
+    <div class="footer-actions">
+      <button class="btn btn-dark" onclick="location.href='stamp.html'">QR 스캔</button>
+    </div>
+  </div>
+</div>
+
+<!-- Apply Modal -->
+<div class="modal-overlay" id="apply-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeApplyModal()">✕</button>
+    <h3>완주 신청</h3>
+    <div class="modal-sub">방문 기록이 관리자에게 전달됩니다.<br>연락처를 남겨주시면 안내해드릴게요.</div>
+    <div class="visit-summary-box" id="apply-summary"></div>
+    <div class="form-group">
+      <label>연락처 (전화번호 또는 이메일) *</label>
+      <input type="text" id="apply-contact" placeholder="010-0000-0000" maxlength="60"/>
+    </div>
+    <button class="btn-submit" id="btn-submit" onclick="submitApplication()">신청 완료</button>
+    <div class="form-error" id="apply-error">연락처를 입력해주세요.</div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, getDoc, getDocs, collection, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAW13Cf2qQnsGWYiAdz9rF3TrWkGR_lLNg",
+  authDomain: "stemp-tour.firebaseapp.com",
+  projectId: "stemp-tour",
+  storageBucket: "stemp-tour.firebasestorage.app",
+  messagingSenderId: "823116268455",
+  appId: "1:823116268455:web:4b060bf808eae664f62c82"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const EMOJIS=['🏯','⛩️','🌸','🎋','🎎','🏔️','🗿','🌊','🎏','🏮','🌺','🎐','⚡','🌙','🎍','🔮','🌈','🦋','🐉','🌿','🍃','🔔','🌸','🎯','🏺','🎴','🌙','⭐','🎑','🌅'];
+
+function switchTab(id,el){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.getElementById('tab-'+id).classList.add('active');}
+window.switchTab = switchTab;
+
+function formatDate(iso){const d=new Date(iso);return `${d.getFullYear()}.${d.getMonth()+1}.${d.getDate()} ${d.getHours()<12?'오전':'오후'} ${d.getHours()%12||12}:${String(d.getMinutes()).padStart(2,'0')}`;}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+
+// Get UID from URL or localStorage
+const urlParams = new URLSearchParams(location.search);
+let uid = urlParams.get('uid') || localStorage.getItem('stampUID');
+
+async function loadPassport(){
+  if(!uid){ document.getElementById('page-loading').style.display='none'; document.getElementById('passport-wrap').style.opacity='1'; return; }
+
+  try {
+    const [participantSnap, locsSnap, stampsSnap, configSnap] = await Promise.all([
+      getDoc(doc(db,'participants',uid)),
+      getDocs(collection(db,'locations')),
+      getDocs(collection(db,'participants',uid,'stamps')),
+      getDoc(doc(db,'meta','config'))
+    ]);
+
+    const pData = participantSnap.exists() ? participantSnap.data() : {name:'방문자',visitCount:0,applied:false};
+    const total = configSnap.exists() ? (configSnap.data().locationCount||30) : 30;
+    const collected = stampsSnap.size;
+    const pct = total>0 ? Math.round(collected/total*100) : 0;
+
+    // 지점 목록 (순서 유지)
+    const locations = [];
+    locsSnap.forEach(d=>locations.push({id:d.id,...d.data()}));
+    locations.sort((a,b)=>(a.order||0)-(b.order||0));
+
+    // 스탬프 맵
+    const stamps = {};
+    stampsSnap.forEach(d=>stamps[d.id]=d.data());
+
+    // Cover
+    document.getElementById('cover-visitor').textContent = pData.name + ' 님';
+    document.getElementById('cov-collected').textContent = collected;
+    document.getElementById('cov-total').textContent = total;
+    document.getElementById('cov-pct').textContent = pct+'%';
+    document.getElementById('pct-text').textContent = pct+'%';
+
+    // CTA
+    if(collected >= Math.ceil(total*0.5) && collected > 0){
+      const cta = document.getElementById('completion-cta');
+      cta.style.display = 'block';
+      const isFull = collected >= total;
+      document.getElementById('cta-emoji').textContent = isFull?'🏆':'🎯';
+      document.getElementById('cta-title').textContent = isFull?'모든 지점 방문 완료!':'절반 이상 방문했어요!';
+      document.getElementById('cta-desc').textContent = isFull?'완주 신청을 하고 기념품을 받아보세요.':'계속 모아서 완주 신청해보세요!';
+      if(pData.applied){
+        document.getElementById('cta-btn-wrap').innerHTML='<div class="applied-notice">✓ 완주 신청 완료</div>';
+      }
+    }
+
+    // Progress
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      document.getElementById('progress-fill').style.width = pct+'%';
+    }));
+
+    // Grid
+    const grid = document.getElementById('stamp-grid'); grid.innerHTML='';
+    locations.forEach((loc,i)=>{
+      const done = !!stamps[loc.id];
+      const div = document.createElement('div');
+      div.className = 'stamp-item'+(done?' done':'');
+      div.style.animationDelay = (i*.02)+'s';
+      div.innerHTML=`<div class="s-num">${String(i+1).padStart(2,'0')}</div><div class="s-seal">${done?EMOJIS[i%EMOJIS.length]:'미방문'}</div><div class="s-label">${loc.name}</div>`;
+      if(done) div.title=`${loc.name}\n${formatDate(stamps[loc.id].visitedAt)}`;
+      grid.appendChild(div);
+    });
+
+    // List
+    const list = document.getElementById('visit-list'); list.innerHTML='';
+    const visitedList = locations.filter(l=>stamps[l.id]).sort((a,b)=>new Date(stamps[b.id].visitedAt)-new Date(stamps[a.id].visitedAt));
+    if(!visitedList.length){
+      list.innerHTML='<div class="empty-state"><span class="icon">🗺️</span><p>아직 방문한 지점이 없어요.</p></div>';
+    } else {
+      visitedList.forEach((loc,i)=>{
+        const item=document.createElement('div'); item.className='visit-item'; item.style.animationDelay=(i*.05)+'s';
+        item.innerHTML=`<div class="v-badge">${EMOJIS[locations.indexOf(loc)%EMOJIS.length]}</div><div class="v-info"><div class="v-name">${loc.name}</div><div class="v-time">${formatDate(stamps[loc.id].visitedAt)}</div></div><div class="v-check">✓</div>`;
+        list.appendChild(item);
+      });
+    }
+
+    // Store for apply modal
+    window._dashData = { pData, collected, total, uid, stamps, locations };
+
+  } catch(e){ console.error(e); }
+
+  document.getElementById('page-loading').style.display='none';
+  document.getElementById('passport-wrap').style.opacity='1';
+  document.getElementById('passport-wrap').style.transition='opacity .4s';
+}
+
+window.openApplyModal = function(){
+  const d = window._dashData;
+  if(!d) return;
+  document.getElementById('apply-summary').innerHTML=`<strong>${d.pData.name}</strong> 님 · <strong>${d.collected}/${d.total}곳</strong> 방문 기록이 함께 전송됩니다.`;
+  document.getElementById('apply-contact').value='';
+  document.getElementById('apply-error').style.display='none';
+  document.getElementById('apply-modal').classList.add('open');
+  setTimeout(()=>document.getElementById('apply-contact').focus(),200);
+};
+window.closeApplyModal = function(){ document.getElementById('apply-modal').classList.remove('open'); };
+document.getElementById('apply-modal').addEventListener('click',function(e){if(e.target===this)window.closeApplyModal();});
+
+window.submitApplication = async function(){
+  const contact = document.getElementById('apply-contact').value.trim();
+  if(!contact){ document.getElementById('apply-error').style.display='block'; return; }
+  document.getElementById('btn-submit').disabled = true;
+  document.getElementById('apply-error').style.display='none';
+  const d = window._dashData;
+  try {
+    await updateDoc(doc(db,'participants',d.uid),{
+      applied: true, contact,
+      appliedAt: new Date().toISOString()
+    });
+    window.closeApplyModal();
+    document.getElementById('cta-btn-wrap').innerHTML='<div class="applied-notice">✓ 완주 신청 완료</div>';
+    showToast('✓ 완주 신청이 완료되었습니다!');
+  } catch(e){
+    showToast('오류가 발생했습니다. 다시 시도해주세요.');
+    document.getElementById('btn-submit').disabled = false;
+  }
+};
+
+loadPassport();
+</script>
+</body>
+</html>

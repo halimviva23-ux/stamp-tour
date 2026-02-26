@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>스탬프 인증</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#1a1208;--paper:#f5efe3;--aged:#e8dcc8;--seal:#c0392b;--gold:#b8860b;--green:#2d6a4f;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{min-height:100vh;background:var(--paper);display:flex;align-items:center;justify-content:center;font-family:'Noto Sans KR',sans-serif;position:relative;overflow:hidden;}
+  body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle at 15% 85%,rgba(192,57,43,.08) 0%,transparent 40%),radial-gradient(circle at 85% 15%,rgba(184,134,11,.1) 0%,transparent 40%);pointer-events:none;}
+
+  .card{background:white;border-radius:10px;padding:52px 40px;max-width:400px;width:92%;text-align:center;box-shadow:0 8px 48px rgba(26,18,8,.15),0 0 0 1px var(--aged);position:relative;animation:cardIn .6s cubic-bezier(.16,1,.3,1) both;}
+  @keyframes cardIn{from{opacity:0;transform:translateY(30px) scale(.97)}to{opacity:1;transform:none}}
+  .card::before{content:'';position:absolute;top:10px;left:10px;right:10px;bottom:10px;border:1px solid var(--aged);border-radius:6px;pointer-events:none;}
+
+  .state{display:none;} .state.active{display:block;}
+
+  /* Loading */
+  .spinner{width:48px;height:48px;border:3px solid var(--aged);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 20px;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .loading-text{font-size:.9rem;color:#7a6a50;}
+
+  /* Name input */
+  #state-name h2{font-family:'Noto Serif KR',serif;font-size:1.3rem;color:var(--ink);margin-bottom:8px;}
+  #state-name p{font-size:.83rem;color:#7a6a50;margin-bottom:24px;line-height:1.6;}
+  .name-input{width:100%;padding:12px 16px;border:1.5px solid var(--aged);border-radius:6px;font-family:'Noto Sans KR',sans-serif;font-size:1rem;color:var(--ink);background:var(--paper);text-align:center;margin-bottom:12px;transition:border-color .2s;}
+  .name-input:focus{outline:none;border-color:var(--gold);}
+  .btn-confirm{width:100%;padding:13px;background:var(--seal);color:white;border:none;border-radius:6px;font-family:'Noto Serif KR',serif;font-size:.95rem;font-weight:600;cursor:pointer;letter-spacing:.05em;transition:all .2s;}
+  .btn-confirm:hover{background:#a93226;}
+  .btn-confirm:disabled{background:#ccc;cursor:not-allowed;}
+  .input-error{font-size:.75rem;color:var(--seal);margin-top:6px;display:none;}
+
+  /* Success */
+  .stamp-wrap{position:relative;display:inline-block;margin-bottom:24px;}
+  .stamp-icon{width:100px;height:100px;background:var(--seal);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.8rem;margin:0 auto;box-shadow:0 4px 20px rgba(192,57,43,.35);animation:stampIn .5s .2s cubic-bezier(.34,1.56,.64,1) both;position:relative;}
+  @keyframes stampIn{from{opacity:0;transform:scale(.3) rotate(-20deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+  .stamp-icon::after{content:'';position:absolute;inset:-6px;border:3px dashed rgba(192,57,43,.35);border-radius:50%;animation:spinSlow 8s linear infinite;}
+  @keyframes spinSlow{to{transform:rotate(360deg)}}
+  .confetti{position:absolute;top:50%;left:50%;pointer-events:none;}
+  .confetti span{position:absolute;width:6px;height:6px;border-radius:50%;animation:burst .6s .3s cubic-bezier(0,.9,.57,1) both;}
+  .confetti span:nth-child(1){background:var(--gold);--angle:0deg}
+  .confetti span:nth-child(2){background:var(--seal);--angle:45deg}
+  .confetti span:nth-child(3){background:var(--gold);--angle:90deg}
+  .confetti span:nth-child(4){background:var(--green);--angle:135deg}
+  .confetti span:nth-child(5){background:var(--gold);--angle:180deg}
+  .confetti span:nth-child(6){background:var(--seal);--angle:225deg}
+  .confetti span:nth-child(7){background:var(--gold);--angle:270deg}
+  .confetti span:nth-child(8){background:var(--green);--angle:315deg}
+  @keyframes burst{from{transform:rotate(var(--angle)) translateY(0) scale(0);opacity:1}to{transform:rotate(var(--angle)) translateY(-60px) scale(1);opacity:0}}
+
+  .verified-badge{display:inline-flex;align-items:center;gap:5px;background:#e8f5e9;color:var(--green);border:1px solid #a5d6a7;border-radius:20px;padding:4px 14px;font-size:.75rem;font-weight:500;margin-bottom:14px;animation:fadeUp .4s .5s both;}
+  .verified-badge::before{content:'✓';font-weight:700;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .already-badge{display:inline-block;background:#fff3e0;color:#e65100;border:1px solid #ffcc80;border-radius:20px;padding:4px 14px;font-size:.75rem;margin-bottom:14px;}
+  .loc-name{font-family:'Noto Serif KR',serif;font-size:1.6rem;font-weight:700;color:var(--ink);margin-bottom:6px;animation:fadeUp .4s .6s both;}
+  .loc-desc{font-size:.83rem;color:#7a6a50;margin-bottom:6px;animation:fadeUp .4s .7s both;}
+  .visitor-name{font-size:.82rem;color:#aaa;margin-bottom:20px;animation:fadeUp .4s .75s both;}
+  .visitor-name strong{color:#7a6a50;}
+  .timestamp{font-size:.76rem;color:#bbb;letter-spacing:.04em;margin-bottom:24px;animation:fadeUp .4s .8s both;}
+
+  .progress-section{background:var(--paper);border-radius:6px;padding:16px 18px;border:1px solid var(--aged);animation:fadeUp .4s .9s both;margin-bottom:20px;}
+  .progress-label{display:flex;justify-content:space-between;font-size:.77rem;color:#7a6a50;margin-bottom:9px;}
+  .progress-bar{height:6px;background:var(--aged);border-radius:3px;overflow:hidden;}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--seal));border-radius:3px;transition:width 1s 1.1s cubic-bezier(.16,1,.3,1);width:0%;}
+
+  .btn-goto{display:block;padding:11px;background:var(--ink);color:var(--paper);border:none;border-radius:6px;font-family:'Noto Sans KR',sans-serif;font-size:.85rem;letter-spacing:.05em;cursor:pointer;transition:background .2s;text-decoration:none;animation:fadeUp .4s 1s both;}
+  .btn-goto:hover{background:var(--seal);}
+
+  /* Error */
+  .err-icon{font-size:3rem;margin-bottom:16px;}
+  #state-error h2{font-family:'Noto Serif KR',serif;font-size:1.2rem;color:var(--ink);margin-bottom:8px;}
+  #state-error p{font-size:.85rem;color:#7a6a50;}
+</style>
+</head>
+<body>
+<div class="card">
+  <!-- 로딩 -->
+  <div class="state active" id="state-loading">
+    <div class="spinner"></div>
+    <p class="loading-text">인증 준비 중...</p>
+  </div>
+
+  <!-- 이름 입력 (첫 방문자) -->
+  <div class="state" id="state-name">
+    <h2>처음 방문이신가요?</h2>
+    <p>스탬프 기록에 사용할<br>이름(닉네임)을 입력해주세요.</p>
+    <input class="name-input" type="text" id="visitor-name-input" placeholder="예: 홍길동" maxlength="20" />
+    <div class="input-error" id="name-error">이름을 입력해주세요.</div>
+    <button class="btn-confirm" id="btn-confirm" onclick="confirmName()">확인</button>
+  </div>
+
+  <!-- 인증 완료 -->
+  <div class="state" id="state-success">
+    <div class="stamp-wrap">
+      <div class="stamp-icon" id="stamp-emoji">🏮</div>
+      <div class="confetti"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    </div>
+    <div id="already-notice" style="display:none"><div class="already-badge">이미 방문한 곳이에요</div></div>
+    <div id="new-notice"><div class="verified-badge">인증 완료</div></div>
+    <div class="loc-name" id="loc-name-text"></div>
+    <div class="loc-desc" id="loc-desc-text"></div>
+    <div class="visitor-name" id="visitor-label"></div>
+    <div class="timestamp" id="stamp-time-text"></div>
+    <div class="progress-section">
+      <div class="progress-label">
+        <span>내 스탬프 현황</span>
+        <span><b id="my-collected">0</b> / <b id="my-total">30</b></span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="my-progress-fill"></div></div>
+    </div>
+    <button class="btn-goto" onclick="location.href='dashboard.html?uid='+getUID()">📖 내 여권 보기</button>
+  </div>
+
+  <!-- 에러 -->
+  <div class="state" id="state-error">
+    <div class="err-icon">⚠️</div>
+    <h2>인식 오류</h2>
+    <p id="error-msg">올바른 스탬프 투어 QR코드를 스캔해주세요.</p>
+  </div>
+</div>
+
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, serverTimestamp, increment } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAW13Cf2qQnsGWYiAdz9rF3TrWkGR_lLNg",
+  authDomain: "stemp-tour.firebaseapp.com",
+  projectId: "stemp-tour",
+  storageBucket: "stemp-tour.firebasestorage.app",
+  messagingSenderId: "823116268455",
+  appId: "1:823116268455:web:4b060bf808eae664f62c82"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const EMOJIS = ['🏯','⛩️','🌸','🎋','🎎','🏔️','🗿','🌊','🎏','🏮','🌺','🎐','⚡','🌙','🎍','🔮','🌈','🦋','🐉','🌿','🍃','🔔','🌸','🎯','🏺','🎴','🌙','⭐','🎑','🌅'];
+
+function showState(id){ document.querySelectorAll('.state').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+function showError(msg){ document.getElementById('error-msg').textContent = msg||'오류가 발생했습니다.'; showState('state-error'); }
+function formatDate(ts){
+  const d = ts?.toDate ? ts.toDate() : new Date(ts);
+  return `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 ${d.getHours()<12?'오전':'오후'} ${d.getHours()%12||12}:${String(d.getMinutes()).padStart(2,'0')}`;
+}
+
+// UID 관리 (기기별 고유 ID)
+function getUID(){
+  let uid = localStorage.getItem('stampUID');
+  if(!uid){ uid = 'U' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).substr(2,4).toUpperCase(); localStorage.setItem('stampUID', uid); }
+  return uid;
+}
+window.getUID = getUID;
+
+const params = new URLSearchParams(location.search);
+const locId = params.get('id');
+const locName = decodeURIComponent(params.get('name')||'');
+let locData = null;
+let visitorName = localStorage.getItem('stampVisitorName');
+
+async function init(){
+  if(!locId || !locName){ showError('올바른 QR코드를 스캔해주세요.'); return; }
+  try {
+    // 지점 정보 가져오기
+    const locDoc = await getDoc(doc(db, 'locations', locId));
+    if(locDoc.exists()) locData = locDoc.data();
+
+    if(!visitorName){
+      showState('state-name');
+      setTimeout(()=>document.getElementById('visitor-name-input').focus(), 300);
+    } else {
+      await doStamp();
+    }
+  } catch(e){
+    showError('네트워크 오류가 발생했습니다. 다시 시도해주세요.');
+    console.error(e);
+  }
+}
+
+window.confirmName = async function(){
+  const input = document.getElementById('visitor-name-input').value.trim();
+  if(!input){ document.getElementById('name-error').style.display='block'; return; }
+  document.getElementById('name-error').style.display='none';
+  document.getElementById('btn-confirm').disabled = true;
+  visitorName = input;
+  localStorage.setItem('stampVisitorName', visitorName);
+  showState('state-loading');
+  await doStamp();
+};
+
+document.getElementById('visitor-name-input').addEventListener('keydown', e=>{ if(e.key==='Enter') window.confirmName(); });
+
+async function doStamp(){
+  const uid = getUID();
+  const stampRef = doc(db, 'participants', uid, 'stamps', locId);
+  const participantRef = doc(db, 'participants', uid);
+
+  try {
+    const stampSnap = await getDoc(stampRef);
+    const isNew = !stampSnap.exists();
+    const now = new Date().toISOString();
+
+    // 참여자 문서 upsert
+    const participantSnap = await getDoc(participantRef);
+    if(!participantSnap.exists()){
+      await setDoc(participantRef, {
+        name: visitorName, uid,
+        createdAt: now, updatedAt: now,
+        visitCount: 0, applied: false
+      });
+    } else {
+      await updateDoc(participantRef, { name: visitorName, updatedAt: now });
+    }
+
+    // 스탬프 기록
+    if(isNew){
+      await setDoc(stampRef, { locId, locName, visitedAt: now });
+      await updateDoc(participantRef, { visitCount: increment(1), updatedAt: now });
+    }
+
+    // 참여자 최신 정보
+    const pSnap = await getDoc(participantRef);
+    const pData = pSnap.data();
+
+    // 전체 지점 수
+    const locsSnap = await getDoc(doc(db, 'meta', 'config'));
+    const total = locsSnap.exists() ? (locsSnap.data().locationCount || 30) : 30;
+
+    // UI 업데이트
+    const idx = parseInt(params.get('idx')||'0');
+    document.getElementById('stamp-emoji').textContent = EMOJIS[idx % EMOJIS.length];
+    document.getElementById('loc-name-text').textContent = locName;
+    document.getElementById('loc-desc-text').textContent = locData?.desc || '';
+    document.getElementById('visitor-label').innerHTML = `<strong>${visitorName}</strong> 님의 방문`;
+    document.getElementById('stamp-time-text').textContent = formatDate(isNew ? now : stampSnap.data().visitedAt);
+    document.getElementById('my-collected').textContent = pData.visitCount || 0;
+    document.getElementById('my-total').textContent = total;
+
+    if(!isNew){
+      document.getElementById('already-notice').style.display = 'block';
+      document.getElementById('new-notice').style.display = 'none';
+    }
+
+    showState('state-success');
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      const pct = Math.min(100, Math.round((pData.visitCount||0)/total*100));
+      document.getElementById('my-progress-fill').style.width = pct + '%';
+    }));
+
+  } catch(e){
+    showError('저장 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+    console.error(e);
+  }
+}
+
+init();
+</script>
+</body>
+</html>
