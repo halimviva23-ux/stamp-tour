@@ -110,6 +110,23 @@
   .toast.show{opacity:1;}
 
   @media(max-width:480px){.passport-cover,.passport-body{padding:24px 16px}.stamp-grid{grid-template-columns:repeat(4,1fr);gap:6px}.stats-bar{gap:14px}}
+
+  .list-controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
+  .chip{border:1px solid var(--aged);background:rgba(255,255,255,.7);color:#7a6a50;border-radius:999px;padding:7px 10px;font-size:.72rem;cursor:pointer;transition:.15s;}
+  .chip.active{background:var(--ink);color:white;border-color:var(--ink);}
+  .visit-item{justify-content:space-between;}
+  .v-left{display:flex;align-items:center;gap:12px;min-width:0;flex:1;}
+  .v-info{min-width:0;}
+  .v-name{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .v-status{font-size:.63rem;padding:2px 8px;border-radius:999px;border:1px solid var(--aged);color:#7a6a50;background:rgba(245,239,227,.7);}
+  .v-status.done{border-color:rgba(45,106,79,.35);color:#2d6a4f;background:rgba(45,106,79,.08);}
+  .v-status.remain{border-color:rgba(192,57,43,.25);color:#c0392b;background:rgba(192,57,43,.06);}
+  .v-desc{font-size:.72rem;color:#8a7a60;margin-top:2px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;max-width:100%;}
+  .v-actions{display:flex;align-items:center;gap:8px;margin-left:10px;}
+  .map-btn{border:1px solid var(--aged);background:white;border-radius:999px;padding:6px 10px;font-size:.7rem;cursor:pointer;color:#7a6a50;}
+  .map-btn:hover{border-color:var(--gold);color:var(--gold);}
+  .v-check{margin-left:0;}
+
 </style>
 </head>
 <body>
@@ -155,10 +172,17 @@
 
     <div class="tabs">
       <div class="tab active" onclick="switchTab('grid',this)">스탬프 도장</div>
-      <div class="tab" onclick="switchTab('list',this)">방문 기록</div>
+      <div class="tab" onclick="switchTab('list',this)">코스 목록</div>
     </div>
     <div class="tab-content active" id="tab-grid"><div class="stamp-grid" id="stamp-grid"></div></div>
-    <div class="tab-content" id="tab-list"><div class="visit-list" id="visit-list"></div></div>
+    <div class="tab-content" id="tab-list">
+<div class="list-controls">
+  <button class="chip active" data-filter="all" onclick="setListFilter('all',this)">전체</button>
+  <button class="chip" data-filter="remaining" onclick="setListFilter('remaining',this)">남은 코스</button>
+  <button class="chip" data-filter="done" onclick="setListFilter('done',this)">완료</button>
+</div>
+<div class="visit-list" id="visit-list"></div>
+</div>
 
     <div class="footer-actions">
       <button class="btn btn-dark" onclick="location.href='stamp.html'">QR 스캔</button>
@@ -206,6 +230,7 @@ window.switchTab = switchTab;
 
 function formatDate(iso){const d=new Date(iso);return `${d.getFullYear()}.${d.getMonth()+1}.${d.getDate()} ${d.getHours()<12?'오전':'오후'} ${d.getHours()%12||12}:${String(d.getMinutes()).padStart(2,'0')}`;}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+function esc(s){return String(s||'').replace(/[&<>"]/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[m]));}
 
 // Get UID from URL or localStorage
 const urlParams = new URLSearchParams(location.search);
@@ -273,20 +298,94 @@ async function loadPassport(){
       grid.appendChild(div);
     });
 
-    // List
-    const list = document.getElementById('visit-list'); list.innerHTML='';
-    const visitedList = locations.filter(l=>stamps[l.id]).sort((a,b)=>new Date(stamps[b.id].visitedAt)-new Date(stamps[a.id].visitedAt));
-    if(!visitedList.length){
-      list.innerHTML='<div class="empty-state"><span class="icon">🗺️</span><p>아직 방문한 지점이 없어요.</p></div>';
-    } else {
-      visitedList.forEach((loc,i)=>{
-        const item=document.createElement('div'); item.className='visit-item'; item.style.animationDelay=(i*.05)+'s';
-        item.innerHTML=`<div class="v-badge">${EMOJIS[locations.indexOf(loc)%EMOJIS.length]}</div><div class="v-info"><div class="v-name">${loc.name}</div><div class="v-time">${formatDate(stamps[loc.id].visitedAt)}</div></div><div class="v-check">✓</div>`;
+    // List (전체 코스)
+    window._dashData = { pData, collected, total, uid, stamps, locations }; // store early
+
+    window._listFilter = window._listFilter || 'all';
+
+    function mapUrlFor(loc){
+      if(loc.mapUrl) return loc.mapUrl;
+      const lat = loc.lat ?? loc.latitude;
+      const lng = loc.lng ?? loc.longitude;
+      if(typeof lat === 'number' && typeof lng === 'number'){
+        return `https://www.google.com/maps?q=${lat},${lng}`;
+      }
+      if(loc.address){
+        return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc.address)}`;
+      }
+      return '';
+    }
+
+    window.setListFilter = function(filter, btn){
+      window._listFilter = filter;
+      document.querySelectorAll('.chip').forEach(b=>b.classList.remove('active'));
+      if(btn) btn.classList.add('active');
+      renderCourseList();
+    }
+
+    function renderCourseList(){
+      const list = document.getElementById('visit-list'); list.innerHTML='';
+      const data = window._dashData;
+      if(!data) return;
+      const { locations, stamps } = data;
+
+      let filtered = locations;
+      if(window._listFilter === 'done') filtered = locations.filter(l=>stamps[l.id]);
+      if(window._listFilter === 'remaining') filtered = locations.filter(l=>!stamps[l.id]);
+
+      if(!filtered.length){
+        list.innerHTML = '<div class="empty-state"><span class="icon">🗺️</span><p>표시할 지점이 없어요.</p></div>';
+        return;
+      }
+
+      // 정렬: 전체일 때는 코스 순서 유지, done일 때는 최근 방문 순
+      if(window._listFilter === 'done'){
+        filtered = filtered.slice().sort((a,b)=> new Date(stamps[b.id].visitedAt) - new Date(stamps[a.id].visitedAt));
+      } else {
+        filtered = filtered.slice().sort((a,b)=>(a.order||0)-(b.order||0));
+      }
+
+      filtered.forEach((loc,i)=>{
+        const done = !!stamps[loc.id];
+        const visitedAt = done ? formatDate(stamps[loc.id].visitedAt) : '';
+        const url = mapUrlFor(loc);
+        const item=document.createElement('div'); item.className='visit-item'; item.style.animationDelay=(i*.03)+'s';
+
+        const emoji = EMOJIS[(locations.indexOf(loc) >= 0 ? locations.indexOf(loc) : i) % EMOJIS.length];
+        const statusHtml = done
+          ? `<span class="v-status done">완료</span>`
+          : `<span class="v-status remain">미방문</span>`;
+
+        const desc = (loc.desc||'').trim();
+        const descHtml = desc ? `<div class="v-desc">${esc(desc)}</div>` : '';
+        const timeHtml = done ? `<div class="v-time">${visitedAt}</div>` : `<div class="v-time">아직 방문하지 않았어요</div>`;
+
+        const mapBtn = url
+          ? `<button class="map-btn" onclick="window.open('${url}','_blank')">지도</button>`
+          : '';
+
+        item.innerHTML = `
+          <div class="v-left">
+            <div class="v-badge">${emoji}</div>
+            <div class="v-info">
+              <div class="v-name">${esc(loc.name)} ${statusHtml}</div>
+              ${descHtml}
+              ${timeHtml}
+            </div>
+          </div>
+          <div class="v-actions">
+            ${mapBtn}
+            ${done ? '<div class="v-check">✓</div>' : ''}
+          </div>`;
         list.appendChild(item);
       });
     }
 
+    // initial render
+    renderCourseList();
+
     // Store for apply modal
+
     window._dashData = { pData, collected, total, uid, stamps, locations };
 
   } catch(e){ console.error(e); }
