@@ -221,6 +221,7 @@ function buildCourseCard(course, ci, locations){
     const loc = locations[id];
     const emoji = EMOJIS[li%EMOJIS.length];
     const hasAddress = loc?.address && loc.address.trim();
+    const hasImg = loc?.imageUrl && loc.imageUrl.trim();
     const mapsUrl = hasAddress
       ? `https://map.kakao.com/link/search/${encodeURIComponent(loc.address)}`
       : null;
@@ -241,6 +242,11 @@ function buildCourseCard(course, ci, locations){
         </div>
         <div class="loc-detail">
           <div class="loc-detail-inner">
+            ${hasImg ? `
+            <div style="margin-bottom:12px">
+              <img src="${loc.imageUrl}" alt="${(loc?.name||id)}" style="width:100%;border-radius:10px;border:1px solid var(--aged);display:block"/>
+            </div>
+            ` : ``}
             <div class="address-row">
               <span class="address-icon">📍</span>
               <div class="address-text-wrap">
