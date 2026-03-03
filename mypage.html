@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>마이페이지</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@300;400;500&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#1a1208;--paper:#f5efe3;--aged:#e8dcc8;--seal:#c0392b;--gold:#b8860b;--green:#2d6a4f;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:#2c1f0e;background-image:radial-gradient(ellipse at 50% 0%,rgba(184,134,11,.15) 0%,transparent 55%);min-height:100vh;font-family:'Noto Sans KR',sans-serif;padding:32px 16px 80px;}
+
+  .passport{max-width:660px;margin:0 auto;}
+
+  /* Cover */
+  .passport-cover{background:linear-gradient(160deg,#1a3a2a 0%,#0f2a1e 100%);border-radius:12px 12px 0 0;padding:36px 32px 28px;border:1px solid rgba(184,134,11,.3);border-bottom:none;position:relative;overflow:hidden;animation:slideDown .7s cubic-bezier(.16,1,.3,1) both;}
+  @keyframes slideDown{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:none}}
+  .passport-cover::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 10px,rgba(255,255,255,.01) 10px,rgba(255,255,255,.01) 11px);}
+  .cover-emblem{font-size:2.4rem;display:block;text-align:center;margin-bottom:5px;filter:drop-shadow(0 2px 8px rgba(184,134,11,.5));}
+  .cover-title{font-family:'Noto Serif KR',serif;text-align:center;font-size:.66rem;letter-spacing:.28em;color:rgba(232,220,200,.5);margin-bottom:3px;}
+  .cover-main{font-family:'IM Fell English',serif;text-align:center;font-size:1.45rem;color:#d4af37;letter-spacing:.05em;}
+  .cover-visitor{font-family:'Noto Serif KR',serif;text-align:center;font-size:.88rem;color:rgba(232,220,200,.8);margin-top:4px;letter-spacing:.06em;}
+  .cover-line{width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(184,134,11,.5),transparent);margin:16px 0;}
+  .stats-bar{display:flex;gap:0;justify-content:center;}
+  .stat{text-align:center;flex:1;}
+  .stat-num{font-family:'IM Fell English',serif;font-size:1.75rem;color:#d4af37;line-height:1;}
+  .stat-label{font-size:.62rem;color:rgba(232,220,200,.5);letter-spacing:.1em;margin-top:3px;}
+  .stat-divider{width:1px;background:rgba(232,220,200,.15);align-self:stretch;}
+
+  /* Body */
+  .passport-body{background:var(--paper);border-radius:0 0 12px 12px;border:1px solid rgba(184,134,11,.3);border-top:none;padding:24px 24px 32px;box-shadow:0 20px 60px rgba(0,0,0,.4);animation:slideUp .7s .1s cubic-bezier(.16,1,.3,1) both;}
+  @keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+
+  /* Tabs */
+  .tabs{display:flex;border-bottom:2px solid var(--aged);margin-bottom:20px;}
+  .tab{padding:9px 14px;font-size:.81rem;color:#7a6a50;cursor:pointer;letter-spacing:.04em;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s;white-space:nowrap;}
+  .tab.active{color:var(--seal);border-bottom-color:var(--seal);font-weight:500;}
+  .tab-content{display:none;}.tab-content.active{display:block;}
+
+  /* Course cards */
+  .courses-list{display:flex;flex-direction:column;gap:14px;}
+  .course-block{background:white;border:1px solid var(--aged);border-radius:10px;overflow:hidden;animation:fadeUp .4s both;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .course-block.completed{border-color:rgba(184,134,11,.4);}
+  .course-header{padding:14px 16px 12px;border-bottom:1px solid var(--aged);display:flex;align-items:center;gap:10px;}
+  .course-block.completed .course-header{background:linear-gradient(135deg,rgba(184,134,11,.06),transparent);}
+  .course-color-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+  .course-header-info{flex:1;min-width:0;}
+  .course-header-name{font-family:'Noto Serif KR',serif;font-size:.95rem;font-weight:700;color:var(--ink);}
+  .course-header-sub{font-size:.72rem;color:#7a6a50;margin-top:2px;}
+  .course-complete-badge{font-size:.69rem;background:var(--gold);color:white;padding:3px 9px;border-radius:12px;white-space:nowrap;font-weight:600;flex-shrink:0;}
+  .course-body{padding:14px 16px;}
+  .course-progress-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+  .course-prog-bar{flex:1;height:7px;background:var(--aged);border-radius:4px;overflow:hidden;}
+  .course-prog-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--gold),var(--seal));transition:width 1.2s cubic-bezier(.16,1,.3,1);width:0%;}
+  .course-prog-label{font-size:.75rem;color:#7a6a50;white-space:nowrap;}
+  .spots-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:6px;}
+  .spot-item{padding:7px 6px;background:var(--paper);border:1px solid var(--aged);border-radius:6px;font-size:.67rem;text-align:center;color:#bbb;line-height:1.3;}
+  .spot-item.visited{background:#e8f5e9;border-color:#a5d6a7;color:var(--green);}
+  .spot-item.visited .spot-emoji{opacity:1;}
+  .spot-emoji{display:block;font-size:1rem;margin-bottom:2px;opacity:.3;}
+  .spot-name{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+  .spot-time{display:block;font-size:.58rem;color:#aaa;margin-top:1px;}
+
+  /* Visit list */
+  .visit-list{display:flex;flex-direction:column;gap:8px;}
+  .visit-item{display:flex;align-items:center;gap:12px;background:white;border:1px solid var(--aged);border-radius:8px;padding:12px 14px;animation:fadeUp .3s both;}
+  .v-badge{width:34px;height:34px;min-width:34px;background:var(--seal);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;box-shadow:0 2px 8px rgba(192,57,43,.3);}
+  .v-info{flex:1;min-width:0;}
+  .v-name{font-family:'Noto Serif KR',serif;font-size:.87rem;font-weight:600;color:var(--ink);}
+  .v-course{font-size:.69rem;color:#7a6a50;margin-top:1px;}
+  .v-time{font-size:.7rem;color:#aaa;margin-top:1px;}
+
+  /* Completion CTA */
+  .completion-cta{background:linear-gradient(135deg,#1a3a2a,#0f2a1e);border:1px solid rgba(184,134,11,.4);border-radius:10px;padding:20px;text-align:center;margin-bottom:20px;}
+  .completion-cta .c-emoji{font-size:1.9rem;margin-bottom:7px;}
+  .completion-cta h3{font-family:'Noto Serif KR',serif;color:#d4af37;font-size:.92rem;margin-bottom:4px;}
+  .completion-cta p{color:rgba(232,220,200,.6);font-size:.77rem;margin-bottom:13px;}
+  .btn-apply{padding:10px 24px;background:#d4af37;color:#1a1208;border:none;border-radius:6px;font-family:'Noto Serif KR',serif;font-size:.88rem;font-weight:600;cursor:pointer;letter-spacing:.04em;transition:all .2s;}
+  .btn-apply:hover{background:#f0cc55;transform:translateY(-1px);}
+  .applied-notice{display:inline-flex;align-items:center;gap:6px;background:rgba(45,106,79,.3);border:1px solid rgba(165,214,167,.4);border-radius:20px;padding:6px 14px;color:#a5d6a7;font-size:.79rem;}
+
+  /* Apply modal */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(26,18,8,.78);z-index:100;align-items:center;justify-content:center;}
+  .modal-overlay.open{display:flex;}
+  .modal{background:white;border-radius:10px;padding:30px;max-width:390px;width:92%;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.4);}
+  .modal-close{position:absolute;top:11px;right:13px;background:none;border:none;color:#bbb;font-size:1.2rem;cursor:pointer;padding:0;}
+  .modal-close:hover{color:var(--ink);}
+  .modal h3{font-family:'Noto Serif KR',serif;font-size:1.1rem;color:var(--ink);margin-bottom:5px;}
+  .modal-sub{font-size:.79rem;color:#7a6a50;margin-bottom:18px;line-height:1.6;}
+  .summary-box{background:var(--paper);border:1px solid var(--aged);border-radius:6px;padding:10px 13px;margin-bottom:16px;font-size:.8rem;color:#7a6a50;}
+  .summary-box strong{color:var(--ink);}
+  .form-group{margin-bottom:13px;}
+  .form-group label{font-size:.74rem;color:#7a6a50;letter-spacing:.04em;display:block;margin-bottom:4px;}
+  .form-group input{width:100%;padding:9px 12px;border:1px solid var(--aged);border-radius:4px;font-family:'Noto Sans KR',sans-serif;font-size:.88rem;color:var(--ink);background:var(--paper);}
+  .form-group input:focus{outline:none;border-color:var(--gold);}
+  .btn-submit{width:100%;padding:11px;background:var(--seal);color:white;border:none;border-radius:6px;font-family:'Noto Serif KR',serif;font-size:.92rem;font-weight:600;cursor:pointer;letter-spacing:.05em;transition:all .2s;margin-top:2px;}
+  .btn-submit:hover{background:#a93226;}
+  .btn-submit:disabled{background:#ccc;cursor:not-allowed;}
+  .form-error{font-size:.72rem;color:var(--seal);margin-top:7px;text-align:center;display:none;}
+
+  /* Loading */
+  .page-loading{position:fixed;inset:0;background:rgba(44,31,14,.85);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200;}
+  .page-loading .spinner{width:40px;height:40px;border:3px solid rgba(255,255,255,.2);border-top-color:#d4af37;border-radius:50%;animation:spin .8s linear infinite;margin-bottom:12px;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .page-loading p{color:rgba(232,220,200,.6);font-size:.83rem;}
+
+  .empty-state{text-align:center;padding:36px 20px;color:#bbb;}
+  .empty-state .icon{font-size:2.6rem;margin-bottom:10px;display:block;}
+  .empty-state p{font-size:.82rem;}
+
+  .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:9px 18px;border-radius:30px;font-size:.79rem;opacity:0;pointer-events:none;transition:opacity .3s;z-index:999;white-space:nowrap;}
+  .toast.show{opacity:1;}
+
+  @media(max-width:480px){.passport-cover,.passport-body{padding:22px 16px}.stats-bar .stat-num{font-size:1.5rem}}
+</style>
+</head>
+<body>
+
+<div class="page-loading" id="page-loading">
+  <div class="spinner"></div>
+  <p>여권 불러오는 중...</p>
+</div>
+
+<div class="passport" id="passport-wrap" style="opacity:0">
+  <div class="passport-cover">
+    <span class="cover-emblem">🗺️</span>
+    <div class="cover-title">스탬프 투어 · 마이페이지</div>
+    <div class="cover-main">My Passport</div>
+    <div class="cover-visitor" id="cover-visitor">-</div>
+    <div class="cover-line"></div>
+    <div class="stats-bar">
+      <div class="stat"><div class="stat-num" id="s-visited">0</div><div class="stat-label">방문 지점</div></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><div class="stat-num" id="s-courses">0</div><div class="stat-label">참여 코스</div></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><div class="stat-num" id="s-completed">0</div><div class="stat-label">완주 코스</div></div>
+    </div>
+  </div>
+
+  <div class="passport-body">
+    <!-- Completion CTA -->
+    <div class="completion-cta" id="completion-cta" style="display:none">
+      <div class="c-emoji" id="cta-emoji">🏆</div>
+      <h3 id="cta-title"></h3>
+      <p id="cta-desc"></p>
+      <div id="cta-btn-wrap">
+        <button class="btn-apply" onclick="openApplyModal()">완주 신청하기</button>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('courses',this)">코스별 현황</div>
+      <div class="tab" onclick="switchTab('history',this)">방문 기록</div>
+    </div>
+
+    <div class="tab-content active" id="tab-courses">
+      <div class="courses-list" id="courses-list"></div>
+    </div>
+    <div class="tab-content" id="tab-history">
+      <div class="visit-list" id="visit-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Apply Modal -->
+<div class="modal-overlay" id="apply-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeApplyModal()">✕</button>
+    <h3>완주 신청</h3>
+    <div class="modal-sub">방문 기록이 관리자에게 전달됩니다.<br>연락처를 남겨주시면 안내해드릴게요.</div>
+    <div class="summary-box" id="apply-summary"></div>
+    <div class="form-group">
+      <label>연락처 (전화번호 또는 이메일) *</label>
+      <input type="text" id="apply-contact" placeholder="010-0000-0000" maxlength="60"/>
+    </div>
+    <button class="btn-submit" id="btn-submit" onclick="submitApplication()">신청 완료</button>
+    <div class="form-error" id="apply-error">연락처를 입력해주세요.</div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, getDoc, getDocs, updateDoc, collection } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAW13Cf2qQnsGWYiAdz9rF3TrWkGR_lLNg",
+  authDomain: "stemp-tour.firebaseapp.com",
+  projectId: "stemp-tour",
+  storageBucket: "stemp-tour.firebasestorage.app",
+  messagingSenderId: "823116268455",
+  appId: "1:823116268455:web:4b060bf808eae664f62c82"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const EMOJIS=['🏯','⛩️','🌸','🎋','🎎','🏔️','🗿','🌊','🎏','🏮','🌺','🎐','⚡','🌙','🎍','🔮','🌈','🦋','🐉','🌿','🍃','🔔','🎯','🏺','🎴','⭐','🎑','🌅','🦁','🐯'];
+const COURSE_COLORS=['#c0392b','#b8860b','#2d6a4f','#1565c0','#6a1b9a','#e65100','#00838f','#37474f'];
+
+function switchTab(id,el){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.getElementById('tab-'+id).classList.add('active');}
+window.switchTab=switchTab;
+
+function formatDate(iso){const d=new Date(iso);return `${d.getFullYear()}.${d.getMonth()+1}.${d.getDate()} ${d.getHours()<12?'오전':'오후'} ${d.getHours()%12||12}:${String(d.getMinutes()).padStart(2,'0')}`;}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+
+const urlParams=new URLSearchParams(location.search);
+const uid=urlParams.get('uid')||localStorage.getItem('stampUID');
+
+async function load(){
+  if(!uid){
+    document.getElementById('page-loading').style.display='none';
+    document.getElementById('passport-wrap').style.opacity='1';
+    document.getElementById('courses-list').innerHTML='<div class="empty-state"><span class="icon">🗺️</span><p>QR코드를 스캔하면<br>마이페이지가 활성화됩니다.</p></div>';
+    return;
+  }
+  try{
+    const [participantSnap,stampsSnap,coursesSnap,locsSnap]=await Promise.all([
+      getDoc(doc(db,'participants',uid)),
+      getDocs(collection(db,'participants',uid,'stamps')),
+      getDocs(collection(db,'courses')),
+      getDocs(collection(db,'locations'))
+    ]);
+
+    const pData=participantSnap.exists()?participantSnap.data():{name:'방문자',visitCount:0,applied:false};
+
+    const stamps={};
+    stampsSnap.forEach(d=>stamps[d.id]=d.data());
+
+    const courses=[];
+    coursesSnap.forEach(d=>courses.push({id:d.id,...d.data()}));
+    courses.sort((a,b)=>(a.order||0)-(b.order||0));
+
+    const locations={};
+    locsSnap.forEach(d=>locations[d.id]={id:d.id,...d.data()});
+
+    const visitedCount=Object.keys(stamps).length;
+    const participatingCourses=courses.filter(c=>(c.locationIds||[]).some(id=>stamps[id]));
+    const completedCourses=courses.filter(c=>{
+      const ids=c.locationIds||[];
+      return ids.length>0&&ids.every(id=>stamps[id]);
+    });
+
+    // Cover
+    document.getElementById('cover-visitor').textContent=pData.name+' 님';
+    document.getElementById('s-visited').textContent=visitedCount;
+    document.getElementById('s-courses').textContent=participatingCourses.length;
+    document.getElementById('s-completed').textContent=completedCourses.length;
+
+    // CTA
+    if(completedCourses.length>0){
+      const cta=document.getElementById('completion-cta'); cta.style.display='block';
+      document.getElementById('cta-emoji').textContent='🏆';
+      document.getElementById('cta-title').textContent=`${completedCourses.length}개 코스 완주 달성!`;
+      document.getElementById('cta-desc').textContent='완주 신청을 하고 기념품을 받아보세요.';
+      if(pData.applied) document.getElementById('cta-btn-wrap').innerHTML='<div class="applied-notice">✓ 완주 신청 완료</div>';
+    }
+
+    // Courses tab
+    const coursesList=document.getElementById('courses-list');
+    if(!courses.length){
+      coursesList.innerHTML='<div class="empty-state"><span class="icon">🗺️</span><p>등록된 코스가 없습니다.</p></div>';
+    } else {
+      coursesList.innerHTML='';
+      courses.forEach((course,ci)=>{
+        const locIds=course.locationIds||[];
+        const visitedIds=locIds.filter(id=>stamps[id]);
+        const total=locIds.length;
+        const count=visitedIds.length;
+        const pct=total>0?Math.round(count/total*100):0;
+        const isComplete=count>=total&&total>0;
+        const color=COURSE_COLORS[ci%COURSE_COLORS.length];
+
+        const block=document.createElement('div');
+        block.className='course-block'+(isComplete?' completed':'');
+        block.style.animationDelay=(ci*.08)+'s';
+
+        const spotsHtml=locIds.map((id,li)=>{
+          const loc=locations[id];
+          const visited=stamps[id];
+          const emoji=EMOJIS[li%EMOJIS.length];
+          return `<div class="spot-item${visited?' visited':''}">
+            <span class="spot-emoji">${emoji}</span>
+            <span class="spot-name">${loc?.name||id}</span>
+            ${visited?`<span class="spot-time">${formatDate(stamps[id].visitedAt)}</span>`:'<span class="spot-time">미방문</span>'}
+          </div>`;
+        }).join('');
+
+        block.innerHTML=`
+          <div class="course-header">
+            <div class="course-color-dot" style="background:${color}"></div>
+            <div class="course-header-info">
+              <div class="course-header-name">${course.name}</div>
+              <div class="course-header-sub">${count}/${total}곳 방문${isComplete?'':` · ${total-count}곳 남음`}</div>
+            </div>
+            ${isComplete?'<span class="course-complete-badge">🏆 완주</span>':''}
+          </div>
+          <div class="course-body">
+            <div class="course-progress-row">
+              <div class="course-prog-bar"><div class="course-prog-fill" data-pct="${pct}" style="width:0%"></div></div>
+              <span class="course-prog-label">${pct}%</span>
+            </div>
+            <div class="spots-grid">${spotsHtml}</div>
+          </div>`;
+        coursesList.appendChild(block);
+      });
+
+      // Animate progress bars
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{
+        document.querySelectorAll('.course-prog-fill').forEach(el=>{
+          el.style.width=el.dataset.pct+'%';
+        });
+      }));
+    }
+
+    // History tab - all visited, sorted by time
+    const visitList=document.getElementById('visit-list');
+    const visitedEntries=Object.entries(stamps).sort((a,b)=>new Date(b[1].visitedAt)-new Date(a[1].visitedAt));
+    if(!visitedEntries.length){
+      visitList.innerHTML='<div class="empty-state"><span class="icon">🗺️</span><p>아직 방문한 지점이 없어요.<br>QR코드를 스캔해보세요!</p></div>';
+    } else {
+      visitList.innerHTML='';
+      // Build locId → courses map
+      const locCourseMap={};
+      courses.forEach(c=>{(c.locationIds||[]).forEach(id=>{if(!locCourseMap[id])locCourseMap[id]=[];locCourseMap[id].push(c.name);});});
+
+      visitedEntries.forEach(([locId,data],i)=>{
+        const loc=locations[locId];
+        const courseNames=(locCourseMap[locId]||[]).join(', ');
+        const item=document.createElement('div');
+        item.className='visit-item'; item.style.animationDelay=(i*.04)+'s';
+        item.innerHTML=`<div class="v-badge">${EMOJIS[i%EMOJIS.length]}</div><div class="v-info"><div class="v-name">${loc?.name||data.locName||locId}</div>${courseNames?`<div class="v-course">📍 ${courseNames}</div>`:''}<div class="v-time">${formatDate(data.visitedAt)}</div></div>`;
+        visitList.appendChild(item);
+      });
+    }
+
+    window._myData={pData,visitedCount,uid,completedCourses,participatingCourses};
+  } catch(e){console.error(e);}
+
+  document.getElementById('page-loading').style.display='none';
+  const pw=document.getElementById('passport-wrap');
+  pw.style.opacity='1'; pw.style.transition='opacity .4s';
+}
+
+window.openApplyModal=function(){
+  const d=window._myData; if(!d) return;
+  document.getElementById('apply-summary').innerHTML=`<strong>${d.pData.name}</strong> 님 · 완주 코스 <strong>${d.completedCourses.length}개</strong> · 방문 지점 <strong>${d.visitedCount}곳</strong>`;
+  document.getElementById('apply-contact').value='';
+  document.getElementById('apply-error').style.display='none';
+  document.getElementById('apply-modal').classList.add('open');
+  setTimeout(()=>document.getElementById('apply-contact').focus(),200);
+};
+window.closeApplyModal=function(){document.getElementById('apply-modal').classList.remove('open');};
+document.getElementById('apply-modal').addEventListener('click',function(e){if(e.target===this)window.closeApplyModal();});
+
+window.submitApplication=async function(){
+  const contact=document.getElementById('apply-contact').value.trim();
+  if(!contact){document.getElementById('apply-error').style.display='block';return;}
+  document.getElementById('btn-submit').disabled=true;
+  document.getElementById('apply-error').style.display='none';
+  const d=window._myData;
+  try{
+    await updateDoc(doc(db,'participants',d.uid),{applied:true,contact,appliedAt:new Date().toISOString()});
+    window.closeApplyModal();
+    document.getElementById('cta-btn-wrap').innerHTML='<div class="applied-notice">✓ 완주 신청 완료</div>';
+    showToast('✓ 완주 신청이 완료되었습니다!');
+  } catch(e){
+    showToast('오류가 발생했습니다. 다시 시도해주세요.');
+    document.getElementById('btn-submit').disabled=false;
+  }
+};
+
+load();
+</script>
+</body>
+</html>
