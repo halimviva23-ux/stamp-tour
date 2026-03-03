@@ -258,7 +258,7 @@
     </div>
     <div class="table-wrap">
       <table>
-        <thead><tr><th style="width:40px">#</th><th>지점명</th><th>설명</th><th style="width:95px">고유 ID</th><th style="width:150px">작업</th></tr></thead>
+        <thead><tr><th style="width:40px">#</th><th>지점명</th><th>설명</th><th>주소/장소</th><th>지도 링크</th><th style="width:95px">고유 ID</th><th style="width:150px">작업</th></tr></thead>
         <tbody id="loc-tbody"></tbody>
       </table>
     </div>
@@ -397,7 +397,7 @@ function renderOverview(){
     tr.innerHTML=`<td style="color:#bbb;font-size:.76rem">${i+1}</td><td style="font-weight:500">${esc(loc.name)}</td><td style="font-family:'Noto Serif KR',serif;font-size:1rem;font-weight:700">${loc.visitCount||0}</td><td style="color:#7a6a50">${pct}%</td><td><div style="height:6px;background:var(--aged);border-radius:3px;overflow:hidden"><div style="height:100%;width:${pct}%;background:linear-gradient(90deg,var(--gold),var(--seal));border-radius:3px;transition:width .8s"></div></div></td>`;
     tbody.appendChild(tr);
   });
-  if(!sorted.length) tbody.innerHTML='<tr class="empty-row"><td colspan="5">지점 없음</td></tr>';
+  if(!sorted.length) tbody.innerHTML='<tr class="empty-row"><td colspan="7">지점 없음</td></tr>';
 
   // Recent activity
   const allActs = [];
@@ -486,13 +486,15 @@ window.renderCompletions = function(){
 // ── Locations ──
 function renderLocations(){
   const tbody=document.getElementById('loc-tbody');
-  if(!locations.length){ tbody.innerHTML='<tr class="empty-row"><td colspan="5">지점 없음. 파일 업로드 또는 직접 추가하세요.</td></tr>'; document.getElementById('loc-count-label').textContent='0개'; return; }
+  if(!locations.length){ tbody.innerHTML='<tr class="empty-row"><td colspan="7">지점 없음. 파일 업로드 또는 직접 추가하세요.</td></tr>'; document.getElementById('loc-count-label').textContent='0개'; return; }
   tbody.innerHTML='';
   locations.forEach((loc,i)=>{
     const tr=document.createElement('tr');
     tr.innerHTML=`<td style="color:#bbb;font-size:.76rem">${i+1}</td>
       <td><input type="text" value="${esc(loc.name)}" onchange="updateLoc('${loc.id}','name',this.value)"/></td>
       <td><input type="text" value="${esc(loc.desc||'')}" onchange="updateLoc('${loc.id}','desc',this.value)" placeholder="설명 없음"/></td>
+      <td><input type="text" value="${esc(loc.address||'')}" onchange="updateLoc('${loc.id}','address',this.value)" placeholder="예: 전주시 덕진구 …"/></td>
+      <td><input type="text" value="${esc(loc.mapUrl||'')}" onchange="updateLoc('${loc.id}','mapUrl',this.value)" placeholder="예: https://maps.google.com/?q=..."/></td>
       <td><span class="loc-id">${loc.id}</span></td>
       <td><div class="row-actions"><button class="btn btn-outline btn-sm" onclick="showQR('${loc.id}',${i})">QR</button><button class="btn btn-danger btn-sm" onclick="removeLoc('${loc.id}','${esc(loc.name)}')">삭제</button></div></td>`;
     tbody.appendChild(tr);
