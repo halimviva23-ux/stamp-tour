@@ -249,10 +249,11 @@
   </div>
   <div class="card">
     <div class="card-title">✏️ 지점 직접 추가</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1.4fr auto;gap:8px;align-items:end;">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1.4fr 1.2fr auto;gap:8px;align-items:end;">
       <div><label>지점명 *</label><input type="text" id="new-name" placeholder="예: 경복궁" onkeydown="if(event.key==='Enter')addLocation()"/></div>
       <div><label>설명 (선택)</label><input type="text" id="new-desc" placeholder="예: 조선 최대 법궁"/></div>
       <div><label>주소 (선택)</label><input type="text" id="new-addr" placeholder="예: 서울시 종로구 사직로 161"/></div>
+      <div><label>이미지 URL (선택)</label><input type="text" id="new-img" placeholder="https://...jpg/png"/></div>
       <button class="btn btn-dark" onclick="addLocation()">추가</button>
     </div>
   </div>
@@ -264,7 +265,7 @@
         <button class="btn btn-danger btn-sm" onclick="clearAllLocs()">전체 삭제</button>
       </div>
     </div>
-    <div class="table-wrap"><table><thead><tr><th style="width:36px">#</th><th>지점명</th><th>설명</th><th>주소</th><th>배정 코스</th><th style="width:90px">ID</th><th style="width:130px">작업</th></tr></thead><tbody id="loc-tbody"></tbody></table></div>
+    <div class="table-wrap"><table><thead><tr><th style="width:36px">#</th><th>지점명</th><th>설명</th><th>주소</th><th>이미지</th><th>배정 코스</th><th style="width:90px">ID</th><th style="width:130px">작업</th></tr></thead><tbody id="loc-tbody"></tbody></table></div>
   </div>
 </div>
 
@@ -541,7 +542,7 @@ function renderLocations(){
   const tbody=document.getElementById('loc-tbody');
   const locCourseMap={};
   courses.forEach(c=>(c.locationIds||[]).forEach(id=>{if(!locCourseMap[id])locCourseMap[id]=[];locCourseMap[id].push(c.name);}));
-  if(!locations.length){tbody.innerHTML='<tr class="empty-row"><td colspan="7">지점 없음</td></tr>';document.getElementById('loc-count-label').textContent='0개';return;}
+  if(!locations.length){tbody.innerHTML='<tr class="empty-row"><td colspan="8">지점 없음</td></tr>';document.getElementById('loc-count-label').textContent='0개';return;}
   tbody.innerHTML='';
   locations.forEach((l,i)=>{
     const courseNames=(locCourseMap[l.id]||[]).map(n=>`<span style="background:#e8f5e9;color:var(--green);border:1px solid #a5d6a7;border-radius:3px;padding:1px 6px;font-size:.68rem">${esc(n)}</span>`).join(' ')||'<span style="color:#bbb;font-size:.74rem">미배정</span>';
@@ -550,6 +551,7 @@ function renderLocations(){
       <td><input type="text" value="${esc(l.name)}" onchange="updateLoc('${l.id}','name',this.value)"/></td>
       <td><input type="text" value="${esc(l.desc||'')}" onchange="updateLoc('${l.id}','desc',this.value)" placeholder="설명 없음"/></td>
       <td><input type="text" value="${esc(l.address||'')}" onchange="updateLoc('${l.id}','address',this.value)" placeholder="주소 입력"/></td>
+      <td><input type="text" value="${esc(l.imageUrl||'')}" onchange="updateLoc('${l.id}','imageUrl',this.value)" placeholder="https://..."/></td>
       <td>${courseNames}</td>
       <td><span class="loc-id">${l.id}</span></td>
       <td><div class="row-actions"><button class="btn btn-outline btn-sm" onclick="showQR('${l.id}',${i})">QR</button><button class="btn btn-danger btn-sm" onclick="removeLoc('${l.id}','${esc(l.name)}')">삭제</button></div></td>`;
@@ -559,10 +561,10 @@ function renderLocations(){
 }
 window.addLocation=async function(){
   const name=document.getElementById('new-name').value.trim(); if(!name){showToast('지점명을 입력해주세요');return;}
-  const id=genId(), desc=document.getElementById('new-desc').value.trim(), address=document.getElementById('new-addr').value.trim();
-  await setDoc(doc(db,'locations',id),{name,desc,address,order:locations.length});
-  locations.push({id,name,desc,address,order:locations.length,visitCount:0});
-  document.getElementById('new-name').value=''; document.getElementById('new-desc').value=''; document.getElementById('new-addr').value='';
+  const id=genId(), desc=document.getElementById('new-desc').value.trim(), address=document.getElementById('new-addr').value.trim(), imageUrl=document.getElementById('new-img').value.trim();
+  await setDoc(doc(db,'locations',id),{name,desc,address,imageUrl,order:locations.length});
+  locations.push({id,name,desc,address,imageUrl,order:locations.length,visitCount:0});
+  document.getElementById('new-name').value=''; document.getElementById('new-desc').value=''; document.getElementById('new-addr').value=''; document.getElementById('new-img').value='';
   await setDoc(doc(db,'meta','config'),{locationCount:locations.length},{merge:true});
   updateBadges(); renderLocations(); renderCourseDetail();
   showToast('✓ 지점 추가됨');
