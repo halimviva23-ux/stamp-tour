@@ -245,13 +245,14 @@
       <p>파일을 드래그하거나 클릭하여 업로드</p>
       <small>CSV, Excel(.xlsx/.xls) · 기존 목록에 추가됩니다</small>
     </div>
-    <div class="csv-hint"><span>📋 형식:</span><code>지점명</code><code>설명</code> 두 열 (첫 행 헤더) <button class="btn btn-outline btn-sm" onclick="downloadTemplate()" style="margin-left:auto">샘플 다운로드</button></div>
+    <div class="csv-hint"><span>📋 형식:</span><code>지점명</code><code>설명</code><code>주소</code> 세 열 (첫 행 헤더) <button class="btn btn-outline btn-sm" onclick="downloadTemplate()" style="margin-left:auto">샘플 다운로드</button></div>
   </div>
   <div class="card">
     <div class="card-title">✏️ 지점 직접 추가</div>
-    <div class="input-row">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1.4fr auto;gap:8px;align-items:end;">
       <div><label>지점명 *</label><input type="text" id="new-name" placeholder="예: 경복궁" onkeydown="if(event.key==='Enter')addLocation()"/></div>
-      <div><label>설명 (선택)</label><input type="text" id="new-desc" placeholder="예: 조선 최대 법궁" onkeydown="if(event.key==='Enter')addLocation()"/></div>
+      <div><label>설명 (선택)</label><input type="text" id="new-desc" placeholder="예: 조선 최대 법궁"/></div>
+      <div><label>주소 (선택)</label><input type="text" id="new-addr" placeholder="예: 서울시 종로구 사직로 161"/></div>
       <button class="btn btn-dark" onclick="addLocation()">추가</button>
     </div>
   </div>
@@ -263,7 +264,7 @@
         <button class="btn btn-danger btn-sm" onclick="clearAllLocs()">전체 삭제</button>
       </div>
     </div>
-    <div class="table-wrap"><table><thead><tr><th style="width:36px">#</th><th>지점명</th><th>설명</th><th>배정 코스</th><th style="width:90px">ID</th><th style="width:130px">작업</th></tr></thead><tbody id="loc-tbody"></tbody></table></div>
+    <div class="table-wrap"><table><thead><tr><th style="width:36px">#</th><th>지점명</th><th>설명</th><th>주소</th><th>배정 코스</th><th style="width:90px">ID</th><th style="width:130px">작업</th></tr></thead><tbody id="loc-tbody"></tbody></table></div>
   </div>
 </div>
 
@@ -540,7 +541,7 @@ function renderLocations(){
   const tbody=document.getElementById('loc-tbody');
   const locCourseMap={};
   courses.forEach(c=>(c.locationIds||[]).forEach(id=>{if(!locCourseMap[id])locCourseMap[id]=[];locCourseMap[id].push(c.name);}));
-  if(!locations.length){tbody.innerHTML='<tr class="empty-row"><td colspan="6">지점 없음</td></tr>';document.getElementById('loc-count-label').textContent='0개';return;}
+  if(!locations.length){tbody.innerHTML='<tr class="empty-row"><td colspan="7">지점 없음</td></tr>';document.getElementById('loc-count-label').textContent='0개';return;}
   tbody.innerHTML='';
   locations.forEach((l,i)=>{
     const courseNames=(locCourseMap[l.id]||[]).map(n=>`<span style="background:#e8f5e9;color:var(--green);border:1px solid #a5d6a7;border-radius:3px;padding:1px 6px;font-size:.68rem">${esc(n)}</span>`).join(' ')||'<span style="color:#bbb;font-size:.74rem">미배정</span>';
@@ -548,6 +549,7 @@ function renderLocations(){
     tr.innerHTML=`<td style="color:#bbb;font-size:.74rem">${i+1}</td>
       <td><input type="text" value="${esc(l.name)}" onchange="updateLoc('${l.id}','name',this.value)"/></td>
       <td><input type="text" value="${esc(l.desc||'')}" onchange="updateLoc('${l.id}','desc',this.value)" placeholder="설명 없음"/></td>
+      <td><input type="text" value="${esc(l.address||'')}" onchange="updateLoc('${l.id}','address',this.value)" placeholder="주소 입력"/></td>
       <td>${courseNames}</td>
       <td><span class="loc-id">${l.id}</span></td>
       <td><div class="row-actions"><button class="btn btn-outline btn-sm" onclick="showQR('${l.id}',${i})">QR</button><button class="btn btn-danger btn-sm" onclick="removeLoc('${l.id}','${esc(l.name)}')">삭제</button></div></td>`;
@@ -557,10 +559,10 @@ function renderLocations(){
 }
 window.addLocation=async function(){
   const name=document.getElementById('new-name').value.trim(); if(!name){showToast('지점명을 입력해주세요');return;}
-  const id=genId(), desc=document.getElementById('new-desc').value.trim();
-  await setDoc(doc(db,'locations',id),{name,desc,order:locations.length});
-  locations.push({id,name,desc,order:locations.length,visitCount:0});
-  document.getElementById('new-name').value=''; document.getElementById('new-desc').value='';
+  const id=genId(), desc=document.getElementById('new-desc').value.trim(), address=document.getElementById('new-addr').value.trim();
+  await setDoc(doc(db,'locations',id),{name,desc,address,order:locations.length});
+  locations.push({id,name,desc,address,order:locations.length,visitCount:0});
+  document.getElementById('new-name').value=''; document.getElementById('new-desc').value=''; document.getElementById('new-addr').value='';
   await setDoc(doc(db,'meta','config'),{locationCount:locations.length},{merge:true});
   updateBadges(); renderLocations(); renderCourseDetail();
   showToast('✓ 지점 추가됨');
@@ -595,23 +597,23 @@ window.handleFileUpload=function(e){
 };
 async function bulkAddLocations(rows){
   const batch=writeBatch(db); let added=0; const base=locations.length;
-  rows.forEach(([name,desc],i)=>{
+  rows.forEach(([name,desc,address],i)=>{
     if(!name||!name.trim())return;
     const id=genId();
-    batch.set(doc(db,'locations',id),{name:name.trim(),desc:(desc||'').trim(),order:base+i});
-    locations.push({id,name:name.trim(),desc:(desc||'').trim(),order:base+i,visitCount:0}); added++;
+    batch.set(doc(db,'locations',id),{name:name.trim(),desc:(desc||'').trim(),address:(address||'').trim(),order:base+i});
+    locations.push({id,name:name.trim(),desc:(desc||'').trim(),address:(address||'').trim(),order:base+i,visitCount:0}); added++;
   });
   await batch.commit();
   await setDoc(doc(db,'meta','config'),{locationCount:locations.length},{merge:true});
   updateBadges(); renderLocations(); renderCourseDetail(); showToast(`✓ ${added}개 지점 업로드 완료`);
 }
 function parseCSV(text){const lines=text.trim().split('\n');bulkAddLocations(lines.slice(1).map(l=>l.split(',').map(c=>c.replace(/^"|"$/g,'').trim())));}
-function parseExcel(buf){const wb=XLSX.read(buf,{type:'arraybuffer'});const ws=wb.Sheets[wb.SheetNames[0]];const rows=XLSX.utils.sheet_to_json(ws,{header:1});bulkAddLocations(rows.slice(1).map(r=>[String(r[0]||'').trim(),String(r[1]||'').trim()]));}
-window.downloadTemplate=function(){const csv='지점명,설명\n경복궁,조선 최대 법궁\n창덕궁,유네스코 세계유산\n남산타워,서울 랜드마크';const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='stamp_template.csv';a.click();};
+function parseExcel(buf){const wb=XLSX.read(buf,{type:'arraybuffer'});const ws=wb.Sheets[wb.SheetNames[0]];const rows=XLSX.utils.sheet_to_json(ws,{header:1});bulkAddLocations(rows.slice(1).map(r=>[String(r[0]||'').trim(),String(r[1]||'').trim(),String(r[2]||'').trim()]));}
+window.downloadTemplate=function(){const csv='지점명,설명,주소\n경복궁,조선 최대 법궁,서울시 종로구 사직로 161\n창덕궁,유네스코 세계유산,서울시 종로구 율곡로 99\n남산타워,서울 랜드마크,서울시 용산구 남산공원길 105';const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='stamp_template.csv';a.click();};
 window.exportLocCSV=function(){
   const locCourseMap={};courses.forEach(c=>(c.locationIds||[]).forEach(id=>{if(!locCourseMap[id])locCourseMap[id]=[];locCourseMap[id].push(c.name);}));
-  let csv='번호,지점명,설명,코스,방문수,ID\n';
-  locations.forEach((l,i)=>{csv+=`${i+1},"${l.name}","${l.desc||''}","${(locCourseMap[l.id]||[]).join('/')}","${l.visitCount||0}","${l.id}"\n`;});
+  let csv='번호,지점명,설명,주소,코스,방문수,ID\n';
+  locations.forEach((l,i)=>{csv+=`${i+1},"${l.name}","${l.desc||''}","${l.address||''}","${(locCourseMap[l.id]||[]).join('/')}","${l.visitCount||0}","${l.id}"\n`;});
   const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='stamp_locations.csv';a.click();
 };
 
