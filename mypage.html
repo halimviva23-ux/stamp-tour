@@ -270,9 +270,13 @@ async function load(){
       const ids=c.locationIds||[];
       return ids.length>0&&ids.every(id=>stamps[id]);
     });
+    window.__completedCourses = completedCourses.map(c=>({id:c.id, name:c.name, locationIds:c.locationIds||[]}));
+    window.__appliedCourses = appliedCourses;
+    window.__participantData = pData;
 
     // Cover stats
     document.getElementById('cover-visitor').textContent=pData.name+' 님';
+    renderMemberBox(pData);
     document.getElementById('s-visited').textContent=visitedCount;
     document.getElementById('s-courses').textContent=participatingCourses.length;
     document.getElementById('s-completed').textContent=completedCourses.length;
