@@ -194,15 +194,23 @@
 <div class="modal-overlay" id="apply-modal">
   <div class="modal">
     <button class="modal-close" onclick="closeApplyModal()">✕</button>
-    <h3>완주 신청</h3>
-    <div class="modal-sub">방문 기록이 관리자에게 전달됩니다.<br>연락처를 남겨주시면 안내해드릴게요.</div>
+    <h3>완주 신청(코스별)</h3>
+    <div class="modal-sub">완주한 코스만 신청할 수 있어요.<br>전화번호는 평문이 아닌 해시 형태로 저장됩니다.</div>
     <div class="visit-summary-box" id="apply-summary"></div>
     <div class="form-group">
-      <label>연락처 (전화번호 또는 이메일) *</label>
-      <input type="text" id="apply-contact" placeholder="010-0000-0000" maxlength="60"/>
+      <label>완주 코스 선택 *</label>
+      <select id="apply-course" style="width:100%;padding:12px 12px;border:1px solid var(--aged);border-radius:10px;background:white"></select>
+    </div>
+    <div class="form-group">
+      <label>이름 *</label>
+      <input type="text" id="apply-name" placeholder="홍길동" maxlength="20"/>
+    </div>
+    <div class="form-group">
+      <label>전화번호 *</label>
+      <input type="text" id="apply-phone" placeholder="010-0000-0000" maxlength="20"/>
     </div>
     <button class="btn-submit" id="btn-submit" onclick="submitApplication()">신청 완료</button>
-    <div class="form-error" id="apply-error">연락처를 입력해주세요.</div>
+    <div class="form-error" id="apply-error">필수 항목을 입력해주세요.</div>
   </div>
 </div>
 
@@ -210,7 +218,27 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, getDoc, getDocs, collection, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, getDocs, collection, updateDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+function normalizePhone(input){
+  return (input||'').replace(/\s+/g,'').replace(/[^0-9]/g,'').trim();
+}
+async function sha256Hex(str){
+  const enc = new TextEncoder();
+  const buf = await crypto.subtle.digest('SHA-256', enc.encode(str));
+  return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+const PHONE_PEPPER = 'JEONJU_PASSPORT_V1_PEPPER'; // ⚠️ 강한 보안이 필요하면 서버(Cloud Functions)에서 처리 권장
+async function makePhoneHash(phone){
+  const p = normalizePhone(phone);
+  if(!p) return '';
+  return await sha256Hex(PHONE_PEPPER + '|' + p);
+}
+function last4(phone){
+  const p = normalizePhone(phone);
+  return p.length>=4 ? p.slice(-4) : p;
+}
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyAW13Cf2qQnsGWYiAdz9rF3TrWkGR_lLNg",
@@ -240,10 +268,12 @@ async function loadPassport(){
   if(!uid){ document.getElementById('page-loading').style.display='none'; document.getElementById('passport-wrap').style.opacity='1'; return; }
 
   try {
-    const [participantSnap, locsSnap, stampsSnap, configSnap] = await Promise.all([
+    const [participantSnap, locsSnap, coursesSnap, stampsSnap, appsSnap, configSnap] = await Promise.all([
       getDoc(doc(db,'participants',uid)),
       getDocs(collection(db,'locations')),
+      getDocs(collection(db,'courses')),
       getDocs(collection(db,'participants',uid,'stamps')),
+      getDocs(collection(db,'participants',uid,'applications')),
       getDoc(doc(db,'meta','config'))
     ]);
 
@@ -424,6 +454,67 @@ window.submitApplication = async function(){
   } catch(e){
     showToast('오류가 발생했습니다. 다시 시도해주세요.');
     document.getElementById('btn-submit').disabled = false;
+  }
+};
+
+window.openApplyModal = function(){
+  document.getElementById('apply-error').style.display='none';
+  const sel=document.getElementById('apply-course');
+  sel.innerHTML='';
+  const available = (window.__completedCourses||[]).filter(c=>!(window.__appliedCourses||new Set()).has(c.id));
+  if(!available.length){
+    sel.innerHTML = `<option value="">신청 가능한 완주 코스가 없습니다</option>`;
+  }else{
+    sel.innerHTML = `<option value="">코스를 선택하세요</option>` + available.map(c=>`<option value="${c.id}">${escapeHtml(c.name||c.id)}</option>`).join('');
+  }
+  const pData=window.__participantData||{};
+  document.getElementById('apply-name').value = (pData.memberName||pData.name||'').trim();
+  document.getElementById('apply-phone').value = '';
+  const sum=document.getElementById('apply-summary');
+  sum.innerHTML = `<b>완주 코스:</b> ${(window.__completedCourses||[]).length}개<br><span class="muted">코스별로 1회 신청 가능합니다.</span>`;
+  document.getElementById('apply-modal').classList.add('show');
+};
+window.closeApplyModal = function(){ document.getElementById('apply-modal').classList.remove('show'); };
+
+window.submitApplication = async function(){
+  try{
+    const courseId=(document.getElementById('apply-course').value||'').trim();
+    const name=(document.getElementById('apply-name').value||'').trim();
+    const phone=(document.getElementById('apply-phone').value||'').trim();
+    if(!courseId || !name || !normalizePhone(phone)){
+      document.getElementById('apply-error').style.display='block';
+      return;
+    }
+    const course = (window.__completedCourses||[]).find(c=>c.id===courseId);
+    if(!course){
+      showToast('이 코스는 아직 완주하지 않았어요');
+      return;
+    }
+    const phoneHash = await makePhoneHash(phone);
+    await setDoc(doc(db,'participants',uid,'applications',courseId),{
+      courseId,
+      courseName: course.name||'',
+      name,
+      phoneHash,
+      phoneLast4: last4(phone),
+      appliedAt: serverTimestamp(),
+      status:'submitted'
+    },{merge:true});
+
+    await setDoc(doc(db,'participants',uid),{
+      memberName: name,
+      phoneHash,
+      phoneLast4: last4(phone),
+      appliedAny:true,
+      updatedAt: serverTimestamp()
+    },{merge:true});
+
+    showToast('✓ 신청이 접수되었습니다');
+    closeApplyModal();
+    loadPassport();
+  }catch(e){
+    console.error(e);
+    showToast('오류: 신청에 실패했어요');
   }
 };
 
