@@ -3,165 +3,141 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>스탬프 투어 관리자</title>
+<title>관리자 · 스탬프 투어</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root{--ink:#1a1208;--paper:#f5efe3;--aged:#e8dcc8;--seal:#c0392b;--gold:#b8860b;--green:#2d6a4f;--blue:#1565c0;--shadow:rgba(26,18,8,.09);}
+  :root{--ink:#1a1208;--paper:#f5efe3;--aged:#e8dcc8;--seal:#c0392b;--gold:#b8860b;--green:#2d6a4f;--blue:#1565c0;--sh:rgba(26,18,8,.09);}
   *{box-sizing:border-box;margin:0;padding:0;}
   body{background:#f0e8d8;color:var(--ink);font-family:'Noto Sans KR',sans-serif;min-height:100vh;padding:28px 14px 80px;}
-
-  header{text-align:center;margin-bottom:28px;}
+  header{text-align:center;margin-bottom:26px;}
   header::before{content:'';display:block;width:44px;height:3px;background:var(--gold);margin:0 auto 12px;}
-  header h1{font-family:'Noto Serif KR',serif;font-size:1.5rem;font-weight:700;letter-spacing:.04em;}
-  header p{font-size:.78rem;color:#7a6a50;margin-top:4px;}
+  header h1{font-family:'Noto Serif KR',serif;font-size:1.5rem;font-weight:700;}
+  header p{font-size:.77rem;color:#7a6a50;margin-top:3px;}
   .live-dot{display:inline-block;width:6px;height:6px;background:#2ecc71;border-radius:50%;margin-right:4px;animation:pulse 2s infinite;}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
-  .nav-tabs{max-width:980px;margin:0 auto 22px;display:flex;border-bottom:2px solid var(--aged);overflow-x:auto;gap:0;}
-  .nav-tab{padding:9px 18px;font-size:.84rem;color:#7a6a50;cursor:pointer;letter-spacing:.04em;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:5px;flex-shrink:0;}
+  .nav-tabs{max-width:980px;margin:0 auto 22px;display:flex;border-bottom:2px solid var(--aged);overflow-x:auto;}
+  .nav-tab{padding:9px 16px;font-size:.82rem;color:#7a6a50;cursor:pointer;letter-spacing:.04em;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:5px;flex-shrink:0;}
   .nav-tab.active{color:var(--seal);border-bottom-color:var(--seal);font-weight:500;}
-  .nb{background:var(--seal);color:white;border-radius:9px;padding:1px 6px;font-size:.66rem;font-weight:600;}
-  .nb.green{background:var(--green);}
-  .nb.blue{background:var(--blue);}
-  .page-section{display:none;max-width:980px;margin:0 auto;}
-  .page-section.active{display:block;}
+  .nb{background:var(--seal);color:white;border-radius:9px;padding:1px 6px;font-size:.65rem;font-weight:600;}
+  .nb.green{background:var(--green);}.nb.blue{background:var(--blue);}
+  .page-section{display:none;max-width:980px;margin:0 auto;}.page-section.active{display:block;}
 
-  /* Cards */
-  .card{background:white;border:1px solid var(--aged);border-radius:8px;padding:20px 24px;box-shadow:0 2px 12px var(--shadow);margin-bottom:16px;}
+  .card{background:white;border:1px solid var(--aged);border-radius:8px;padding:20px 24px;box-shadow:0 2px 12px var(--sh);margin-bottom:16px;}
   .card-title{font-family:'Noto Serif KR',serif;font-size:.9rem;font-weight:600;color:var(--gold);letter-spacing:.06em;margin-bottom:13px;display:flex;align-items:center;gap:7px;}
 
-  /* Stats */
   .stat-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px;}
-  .stat-box{background:white;border:1px solid var(--aged);border-radius:8px;padding:16px 14px;text-align:center;box-shadow:0 2px 8px var(--shadow);}
-  .stat-box .n{font-family:'Noto Serif KR',serif;font-size:1.8rem;font-weight:700;line-height:1;}
-  .stat-box .l{font-size:.68rem;color:#7a6a50;margin-top:4px;letter-spacing:.04em;}
+  .stat-box{background:white;border:1px solid var(--aged);border-radius:8px;padding:16px 12px;text-align:center;box-shadow:0 2px 8px var(--sh);}
+  .stat-box .n{font-family:'Noto Serif KR',serif;font-size:1.75rem;font-weight:700;line-height:1;}
+  .stat-box .l{font-size:.67rem;color:#7a6a50;margin-top:3px;}
   .n.gold{color:var(--gold)}.n.seal{color:var(--seal)}.n.green{color:var(--green)}.n.blue{color:var(--blue)}
 
-  /* Upload */
-  .upload-zone{border:2px dashed var(--aged);border-radius:8px;padding:26px 18px;text-align:center;cursor:pointer;transition:all .2s;background:var(--paper);position:relative;}
+  .upload-zone{border:2px dashed var(--aged);border-radius:8px;padding:22px 18px;text-align:center;cursor:pointer;transition:all .2s;background:var(--paper);position:relative;}
   .upload-zone:hover,.upload-zone.drag-over{border-color:var(--gold);background:#fdf8ee;}
   .upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
-  .upload-zone .ui{font-size:1.8rem;margin-bottom:6px;}
-  .upload-zone p{font-size:.83rem;color:#7a6a50;margin-bottom:3px;}
-  .upload-zone small{font-size:.72rem;color:#bbb;}
-  .csv-hint{display:flex;align-items:center;gap:7px;margin-top:11px;padding:9px 13px;background:var(--paper);border-radius:4px;border:1px solid var(--aged);font-size:.77rem;color:#7a6a50;flex-wrap:wrap;}
-  .csv-hint code{background:#eee;padding:1px 6px;border-radius:3px;font-size:.74rem;color:var(--seal);font-family:monospace;}
+  .upload-zone .ui{font-size:1.8rem;margin-bottom:5px;}
+  .upload-zone p{font-size:.82rem;color:#7a6a50;}
+  .upload-zone small{font-size:.71rem;color:#bbb;}
+  .csv-hint{display:flex;align-items:center;gap:7px;margin-top:10px;padding:9px 13px;background:var(--paper);border-radius:4px;border:1px solid var(--aged);font-size:.76rem;color:#7a6a50;flex-wrap:wrap;}
+  .csv-hint code{background:#eee;padding:1px 6px;border-radius:3px;font-size:.73rem;color:var(--seal);font-family:monospace;}
 
-  /* Inputs */
-  .input-row{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end;}
-  label{font-size:.72rem;color:#7a6a50;letter-spacing:.03em;display:block;margin-bottom:4px;}
-  input[type=text]{width:100%;padding:8px 11px;border:1px solid var(--aged);border-radius:4px;background:var(--paper);font-family:'Noto Sans KR',sans-serif;font-size:.85rem;color:var(--ink);}
-  input[type=text]:focus{outline:none;border-color:var(--gold);}
-
-  /* Buttons */
-  button,.btn{padding:8px 16px;border-radius:4px;border:none;cursor:pointer;font-family:'Noto Sans KR',sans-serif;font-size:.79rem;letter-spacing:.03em;transition:all .2s;display:inline-flex;align-items:center;gap:4px;text-decoration:none;}
-  .btn-dark{background:var(--ink);color:var(--paper);}.btn-dark:hover{background:var(--seal);}
+  label{font-size:.72rem;color:#7a6a50;display:block;margin-bottom:4px;}
+  input[type=text],input[type=tel]{width:100%;padding:8px 11px;border:1px solid var(--aged);border-radius:4px;background:var(--paper);font-family:'Noto Sans KR',sans-serif;font-size:.84rem;color:var(--ink);}
+  input[type=text]:focus,input[type=tel]:focus{outline:none;border-color:var(--gold);}
+  button,.btn{padding:8px 16px;border-radius:4px;border:none;cursor:pointer;font-family:'Noto Sans KR',sans-serif;font-size:.79rem;transition:all .2s;display:inline-flex;align-items:center;gap:4px;text-decoration:none;}
+  .btn-dark{background:var(--ink);color:white;}.btn-dark:hover{background:var(--seal);}
   .btn-gold{background:var(--gold);color:white;}.btn-gold:hover{background:#9a7209;}
   .btn-outline{background:transparent;color:var(--ink);border:1px solid var(--aged);}.btn-outline:hover{background:var(--aged);}
   .btn-green{background:var(--green);color:white;}.btn-green:hover{background:#1e4d38;}
-  .btn-blue{background:var(--blue);color:white;}.btn-blue:hover{background:#0d47a1;}
-  .btn-sm{padding:4px 10px;font-size:.73rem;}
+  .btn-sm{padding:4px 10px;font-size:.72rem;}
   .btn-danger{background:transparent;color:#e74c3c;border:1px solid #e74c3c;}.btn-danger:hover{background:#e74c3c;color:white;}
 
-  /* Tables */
   .table-wrap{overflow-x:auto;}
-  table{width:100%;border-collapse:collapse;font-size:.82rem;}
-  th{background:var(--ink);color:var(--paper);padding:10px 12px;text-align:left;font-weight:500;letter-spacing:.04em;font-size:.75rem;white-space:nowrap;}
+  table{width:100%;border-collapse:collapse;font-size:.81rem;}
+  th{background:var(--ink);color:white;padding:10px 12px;text-align:left;font-weight:500;font-size:.74rem;white-space:nowrap;}
   td{padding:9px 12px;border-bottom:1px solid var(--aged);vertical-align:middle;}
-  tr:last-child td{border-bottom:none;}
-  tr:hover td{background:#fdf9f2;}
-  .loc-id{font-family:monospace;background:var(--paper);padding:2px 5px;border-radius:2px;font-size:.73rem;color:var(--seal);border:1px solid var(--aged);}
-  td input[type=text]{padding:4px 8px;font-size:.8rem;background:transparent;border:1px solid transparent;}
+  tr:last-child td{border-bottom:none;}tr:hover td{background:#fdf9f2;}
+  .loc-id{font-family:monospace;background:var(--paper);padding:2px 5px;border-radius:2px;font-size:.72rem;color:var(--seal);border:1px solid var(--aged);}
+  td input[type=text]{padding:4px 8px;font-size:.79rem;background:transparent;border:1px solid transparent;}
   td input[type=text]:focus{background:white;border-color:var(--aged);}
   .row-actions{display:flex;gap:4px;}
-  .empty-row td{text-align:center;padding:32px;color:#bbb;font-size:.82rem;}
+  .empty-row td{text-align:center;padding:32px;color:#bbb;font-size:.81rem;}
 
-  /* Course management */
-  .course-editor{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-  .course-list-panel,.course-detail-panel{background:white;border:1px solid var(--aged);border-radius:8px;overflow:hidden;}
-  .panel-header{padding:13px 16px;border-bottom:1px solid var(--aged);font-family:'Noto Serif KR',serif;font-size:.88rem;font-weight:600;color:var(--ink);display:flex;align-items:center;justify-content:space-between;}
-  .course-item{padding:11px 14px;border-bottom:1px solid var(--aged);cursor:pointer;transition:background .15s;display:flex;align-items:center;gap:10px;}
-  .course-item:last-child{border-bottom:none;}
-  .course-item:hover{background:#fdf9f2;}
-  .course-item.active{background:#fef9ec;border-left:3px solid var(--gold);}
-  .course-color-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
-  .course-item-name{flex:1;font-size:.86rem;font-weight:500;}
-  .course-item-count{font-size:.72rem;color:#7a6a50;white-space:nowrap;}
-  .course-detail-panel{padding:16px;}
-  .detail-empty{text-align:center;padding:40px 20px;color:#bbb;font-size:.82rem;}
-  .detail-name-edit{display:flex;gap:8px;margin-bottom:14px;}
-  .detail-name-edit input{flex:1;}
-  .loc-assign-area{display:flex;gap:12px;}
-  .loc-available,.loc-assigned{flex:1;}
-  .loc-available h4,.loc-assigned h4{font-size:.75rem;color:#7a6a50;letter-spacing:.05em;margin-bottom:7px;}
-  .loc-pool{border:1px solid var(--aged);border-radius:6px;height:260px;overflow-y:auto;background:var(--paper);}
-  .loc-pool-item{padding:8px 11px;border-bottom:1px solid rgba(232,220,200,.5);cursor:pointer;font-size:.81rem;transition:background .12s;display:flex;align-items:center;gap:6px;}
-  .loc-pool-item:last-child{border-bottom:none;}
-  .loc-pool-item:hover{background:rgba(184,134,11,.07);}
-  .loc-pool-item.in-course{background:#e8f5e9;color:var(--green);}
-  .loc-pool-item .lp-dot{width:7px;height:7px;border-radius:50%;background:var(--aged);flex-shrink:0;}
-  .loc-pool-item.in-course .lp-dot{background:var(--green);}
-  .loc-pool-arrow{font-size:.9rem;color:#aaa;margin-left:auto;}
-  .assign-actions{display:flex;justify-content:center;align-items:center;padding:8px 0;gap:6px;}
-
-  /* Participants */
-  .p-name{font-weight:500;font-size:.87rem;}
-  .p-time{font-size:.72rem;color:#aaa;}
-  .sb{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.68rem;font-weight:500;}
-  .sb-full{background:#e8f5e9;color:var(--green);border:1px solid #a5d6a7;}
-  .sb-partial{background:#fff3e0;color:#e65100;border:1px solid #ffcc80;}
-  .sb-applied{background:#e3f2fd;color:var(--blue);border:1px solid #90caf9;}
-  .pm-bar{height:4px;background:var(--aged);border-radius:2px;margin-top:3px;overflow:hidden;}
-  .pm-fill{height:100%;background:var(--green);border-radius:2px;}
-
-  /* Toolbar */
   .toolbar{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-bottom:13px;}
   .toolbar-right{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap;}
-  .search-input{padding:6px 10px;border:1px solid var(--aged);border-radius:4px;font-family:'Noto Sans KR',sans-serif;font-size:.79rem;background:var(--paper);color:var(--ink);width:160px;}
+  .search-input{padding:6px 10px;border:1px solid var(--aged);border-radius:4px;font-family:'Noto Sans KR',sans-serif;font-size:.78rem;background:var(--paper);color:var(--ink);width:155px;}
   .search-input:focus{outline:none;border-color:var(--gold);}
-  .filter-select{padding:6px 9px;border:1px solid var(--aged);border-radius:4px;font-family:'Noto Sans KR',sans-serif;font-size:.79rem;background:var(--paper);color:var(--ink);cursor:pointer;}
+  .filter-sel{padding:6px 9px;border:1px solid var(--aged);border-radius:4px;font-family:'Noto Sans KR',sans-serif;font-size:.78rem;background:var(--paper);cursor:pointer;}
+
+  /* Course editor */
+  .course-editor{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .panel{background:white;border:1px solid var(--aged);border-radius:8px;overflow:hidden;}
+  .panel-header{padding:12px 15px;border-bottom:1px solid var(--aged);font-family:'Noto Serif KR',serif;font-size:.87rem;font-weight:600;display:flex;align-items:center;justify-content:space-between;}
+  .course-item{padding:11px 14px;border-bottom:1px solid var(--aged);cursor:pointer;transition:background .15s;display:flex;align-items:center;gap:10px;}
+  .course-item:last-child{border-bottom:none;}.course-item:hover{background:#fdf9f2;}
+  .course-item.active{background:#fef9ec;border-left:3px solid var(--gold);}
+  .cdot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+  .ci-name{flex:1;font-size:.86rem;font-weight:500;}
+  .ci-cnt{font-size:.71rem;color:#7a6a50;}
+  .panel-body{padding:16px;}
+  .detail-empty{text-align:center;padding:36px 20px;color:#bbb;font-size:.82rem;}
+  .name-edit-row{display:flex;gap:7px;margin-bottom:13px;}
+  .name-edit-row input{flex:1;}
+  .loc-assign{display:flex;gap:10px;}
+  .loc-pool-wrap{flex:1;}
+  .loc-pool-wrap h4{font-size:.73rem;color:#7a6a50;margin-bottom:6px;}
+  .loc-pool{border:1px solid var(--aged);border-radius:6px;height:230px;overflow-y:auto;background:var(--paper);}
+  .lp-item{padding:8px 11px;border-bottom:1px solid rgba(232,220,200,.5);cursor:pointer;font-size:.79rem;transition:background .12s;display:flex;align-items:center;gap:6px;}
+  .lp-item:last-child{border-bottom:none;}.lp-item:hover{background:rgba(184,134,11,.07);}
+  .lp-item.assigned{background:#e8f5e9;color:var(--green);}
+  .lp-dot{width:7px;height:7px;border-radius:50%;background:var(--aged);flex-shrink:0;}
+  .lp-item.assigned .lp-dot{background:var(--green);}
+  .lp-arr{font-size:.85rem;color:#aaa;margin-left:auto;}
+
+  /* Status chips */
+  .sb{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.68rem;font-weight:500;}
+  .sb-applied{background:#e3f2fd;color:var(--blue);border:1px solid #90caf9;}
+  .sb-complete{background:#e8f5e9;color:var(--green);border:1px solid #a5d6a7;}
+  .sb-active{background:#fff3e0;color:#e65100;border:1px solid #ffcc80;}
+  .pm-bar{height:4px;background:var(--aged);border-radius:2px;margin-top:3px;overflow:hidden;}
+  .pm-fill{height:100%;background:var(--green);border-radius:2px;}
 
   /* Modals */
   .modal-overlay{display:none;position:fixed;inset:0;background:rgba(26,18,8,.72);z-index:100;align-items:center;justify-content:center;}
   .modal-overlay.open{display:flex;}
   .modal{background:white;border-radius:8px;padding:28px;max-width:360px;width:90%;text-align:center;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.35);}
   .modal h3{font-family:'Noto Serif KR',serif;font-size:1rem;margin-bottom:3px;}
-  .modal-url{font-size:.67rem;color:#aaa;margin-bottom:16px;word-break:break-all;}
-  #qr-container{display:flex;justify-content:center;margin-bottom:16px;}
+  .modal-url{font-size:.66rem;color:#aaa;margin-bottom:13px;word-break:break-all;}
+  #qr-container{display:flex;justify-content:center;margin-bottom:13px;}
   .modal-actions{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;}
-  .modal-close{position:absolute;top:10px;right:12px;background:none;border:none;color:#bbb;font-size:1.15rem;cursor:pointer;padding:0;}
-  .modal-close:hover{color:var(--ink);}
-  .detail-modal{max-width:520px;text-align:left;max-height:88vh;overflow-y:auto;}
-  .detail-modal h3{font-family:'Noto Serif KR',serif;margin-bottom:9px;}
-  .d-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:13px;}
-  .d-spot{padding:6px 4px;background:var(--paper);border:1px solid var(--aged);border-radius:4px;font-size:.66rem;text-align:center;color:#7a6a50;}
-  .d-spot.visited{background:#e8f5e9;border-color:#a5d6a7;color:var(--green);font-weight:500;}
-  .d-spot.visited::before{content:'✓ ';}
+  .modal-close{position:absolute;top:10px;right:12px;background:none;border:none;color:#bbb;font-size:1.1rem;cursor:pointer;padding:0;}
+  .detail-modal{max-width:540px;text-align:left;max-height:88vh;overflow-y:auto;}
+  .detail-modal h3{font-family:'Noto Serif KR',serif;margin-bottom:7px;}
+  .d-info{font-size:.77rem;color:#7a6a50;margin-bottom:14px;line-height:1.7;}
+  .d-courses{display:flex;flex-direction:column;gap:10px;margin-bottom:14px;}
+  .d-cb{padding:11px 13px;background:var(--paper);border-radius:6px;border:1px solid var(--aged);}
+  .d-ch{display:flex;align-items:center;gap:7px;margin-bottom:7px;}
+  .d-spots{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;}
+  .d-spot{padding:5px 4px;background:white;border:1px solid var(--aged);border-radius:4px;font-size:.65rem;text-align:center;color:#7a6a50;}
+  .d-spot.v{background:#e8f5e9;border-color:#a5d6a7;color:var(--green);font-weight:500;}
 
-  /* Loading */
   .loading-overlay{position:fixed;inset:0;background:rgba(240,232,216,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200;}
-  .loading-overlay .spinner{width:38px;height:38px;border:3px solid var(--aged);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:11px;}
+  .loading-overlay .sp{width:38px;height:38px;border:3px solid var(--aged);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:11px;}
   @keyframes spin{to{transform:rotate(360deg)}}
-  .loading-overlay p{font-size:.82rem;color:#7a6a50;}
-
-  .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:9px 18px;border-radius:30px;font-size:.78rem;opacity:0;pointer-events:none;transition:opacity .3s;z-index:999;white-space:nowrap;}
+  .loading-overlay p{font-size:.81rem;color:#7a6a50;}
+  .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:var(--ink);color:white;padding:9px 18px;border-radius:30px;font-size:.78rem;opacity:0;pointer-events:none;transition:opacity .3s;z-index:999;white-space:nowrap;}
   .toast.show{opacity:1;}
-
-  @media(max-width:700px){.stat-grid{grid-template-columns:repeat(3,1fr)}.course-editor{grid-template-columns:1fr}.input-row{grid-template-columns:1fr}}
+  @media(max-width:700px){.stat-grid{grid-template-columns:repeat(3,1fr)}.course-editor{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-
-<div class="loading-overlay" id="page-loading">
-  <div class="spinner"></div>
-  <p>데이터 불러오는 중...</p>
-</div>
+<div class="loading-overlay" id="page-loading"><div class="sp"></div><p>데이터 불러오는 중...</p></div>
 
 <header>
   <h1>스탬프 투어 관리자</h1>
-  <p><span class="live-dot"></span>Firebase 실시간 연동 · stemp-tour</p>
+  <p><span class="live-dot"></span>Firebase 연동 · stemp-tour</p>
 </header>
 
 <div class="nav-tabs">
@@ -172,7 +148,7 @@
   <div class="nav-tab" onclick="sw('completions',this)">🏆 완주 신청 <span class="nb green" id="nb-comps">0</span></div>
 </div>
 
-<!-- ─── 현황 ─── -->
+<!-- 현황 -->
 <div class="page-section active" id="section-overview">
   <div class="stat-grid">
     <div class="stat-box"><div class="n" id="s-locs">-</div><div class="l">전체 지점</div></div>
@@ -182,51 +158,43 @@
     <div class="stat-box"><div class="n green" id="s-comps">-</div><div class="l">완주 신청</div></div>
   </div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-    <div class="card">
-      <div class="card-title">🔥 지점별 방문 순위</div>
-      <div class="table-wrap"><table><thead><tr><th>#</th><th>지점명</th><th>방문</th><th>코스</th></tr></thead><tbody id="ov-locs"></tbody></table></div>
+    <div class="card"><div class="card-title">🔥 지점별 방문 순위</div>
+      <div class="table-wrap"><table><thead><tr><th>#</th><th>지점명</th><th>방문수</th><th>코스</th></tr></thead><tbody id="ov-locs"></tbody></table></div>
     </div>
     <div class="card">
-      <div class="card-title">🗺️ 코스별 완주 현황</div>
-      <div id="ov-courses"></div>
-      <div class="card-title" style="margin-top:16px">🕐 최근 인증</div>
-      <div id="ov-recent"></div>
+      <div class="card-title">🗺️ 코스별 완주</div><div id="ov-courses"></div>
+      <div class="card-title" style="margin-top:16px">🕐 최근 인증</div><div id="ov-recent"></div>
     </div>
   </div>
 </div>
 
-<!-- ─── 코스 관리 ─── -->
+<!-- 코스 관리 -->
 <div class="page-section" id="section-courses">
   <div class="card">
     <div class="card-title">🗺️ 코스 생성 및 지점 배정</div>
     <div style="display:flex;gap:8px;margin-bottom:16px;align-items:flex-end">
-      <div style="flex:1"><label>새 코스 이름</label><input type="text" id="new-course-name" placeholder="예: 궁궐 코스" onkeydown="if(event.key==='Enter')addCourse()"/></div>
-      <div style="flex:1"><label>설명 (선택)</label><input type="text" id="new-course-desc" placeholder="예: 서울 5대 궁궐" onkeydown="if(event.key==='Enter')addCourse()"/></div>
+      <div style="flex:1"><label>코스 이름</label><input type="text" id="new-course-name" placeholder="예: 궁궐 코스" onkeydown="if(event.key==='Enter')addCourse()"/></div>
+      <div style="flex:1"><label>설명 (선택)</label><input type="text" id="new-course-desc" placeholder="예: 서울 5대 궁궐"/></div>
       <button class="btn btn-dark" onclick="addCourse()">코스 추가</button>
     </div>
-    <div class="course-editor" id="course-editor">
-      <!-- Left: course list -->
-      <div class="course-list-panel">
-        <div class="panel-header">코스 목록 <span style="font-size:.76rem;color:#aaa;font-weight:400" id="course-count-label">0개</span></div>
-        <div id="course-list-items"><div style="padding:32px;text-align:center;color:#bbb;font-size:.81rem">코스를 추가하세요</div></div>
+    <div class="course-editor">
+      <div class="panel">
+        <div class="panel-header">코스 목록 <span style="font-size:.74rem;color:#aaa;font-weight:400" id="course-cnt-label">0개</span></div>
+        <div id="course-list-items"><div style="padding:26px;text-align:center;color:#bbb;font-size:.8rem">코스를 추가하세요</div></div>
       </div>
-      <!-- Right: location assignment -->
-      <div class="course-detail-panel" id="course-detail-panel">
-        <div class="detail-empty" id="detail-empty">← 코스를 선택하면<br>지점을 배정할 수 있어요</div>
-        <div id="detail-content" style="display:none">
-          <div class="detail-name-edit">
-            <input type="text" id="edit-course-name" placeholder="코스 이름"/>
-            <button class="btn btn-gold btn-sm" onclick="saveCourseNameEdit()">저장</button>
-            <button class="btn btn-danger btn-sm" onclick="deleteCourse()">삭제</button>
-          </div>
-          <div class="loc-assign-area">
-            <div class="loc-available">
-              <h4>전체 지점 (클릭하여 추가)</h4>
-              <div class="loc-pool" id="pool-available"></div>
+      <div class="panel">
+        <div class="panel-header">지점 배정</div>
+        <div class="panel-body">
+          <div class="detail-empty" id="det-empty">← 코스를 선택하면<br>지점을 배정할 수 있어요</div>
+          <div id="det-content" style="display:none">
+            <div class="name-edit-row">
+              <input type="text" id="edit-course-name" placeholder="코스 이름"/>
+              <button class="btn btn-gold btn-sm" onclick="saveCourseEdit()">저장</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteCourse()">삭제</button>
             </div>
-            <div class="loc-assigned">
-              <h4>이 코스의 지점 (클릭하여 제거)</h4>
-              <div class="loc-pool" id="pool-assigned"></div>
+            <div class="loc-assign">
+              <div class="loc-pool-wrap"><h4>전체 지점 (클릭하여 추가)</h4><div class="loc-pool" id="pool-avail"></div></div>
+              <div class="loc-pool-wrap"><h4>배정된 지점 (클릭하여 제거)</h4><div class="loc-pool" id="pool-assigned"></div></div>
             </div>
           </div>
         </div>
@@ -235,81 +203,78 @@
   </div>
 </div>
 
-<!-- ─── 지점 관리 ─── -->
+<!-- 지점 관리 -->
 <div class="page-section" id="section-locations">
   <div class="card">
     <div class="card-title">📂 CSV / 엑셀 업로드</div>
     <div class="upload-zone" id="upload-zone">
-      <input type="file" id="file-input" accept=".csv,.xlsx,.xls" onchange="handleFileUpload(event)">
+      <input type="file" id="file-input" accept=".csv,.xlsx,.xls" onchange="handleFile(event)">
       <div class="ui">📄</div>
       <p>파일을 드래그하거나 클릭하여 업로드</p>
-      <small>CSV, Excel(.xlsx/.xls) · 기존 목록에 추가됩니다</small>
+      <small>CSV, Excel · 기존 목록에 추가됩니다</small>
     </div>
-    <div class="csv-hint"><span>📋 형식:</span><code>지점명</code><code>설명</code><code>주소</code> 세 열 (첫 행 헤더) <button class="btn btn-outline btn-sm" onclick="downloadTemplate()" style="margin-left:auto">샘플 다운로드</button></div>
+    <div class="csv-hint"><span>📋 형식:</span><code>지점명</code><code>설명</code><code>주소</code> 세 열 (첫 행 헤더) <button class="btn btn-outline btn-sm" onclick="dlTemplate()" style="margin-left:auto">샘플 다운로드</button></div>
   </div>
   <div class="card">
     <div class="card-title">✏️ 지점 직접 추가</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1.4fr 1.2fr auto;gap:8px;align-items:end;">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1.5fr auto;gap:8px;align-items:flex-end">
       <div><label>지점명 *</label><input type="text" id="new-name" placeholder="예: 경복궁" onkeydown="if(event.key==='Enter')addLocation()"/></div>
       <div><label>설명 (선택)</label><input type="text" id="new-desc" placeholder="예: 조선 최대 법궁"/></div>
-      <div><label>주소 (선택)</label><input type="text" id="new-addr" placeholder="예: 서울시 종로구 사직로 161"/></div>
-      <div><label>이미지 URL (선택)</label><input type="text" id="new-img" placeholder="https://...jpg/png"/></div>
-      <button class="btn btn-dark" onclick="addLocation()">추가</button>
+      <div><label>주소 (선택)</label><input type="text" id="new-addr" placeholder="서울시 종로구 사직로 161"/></div>
+      <button class="btn btn-dark" onclick="addLocation()" style="align-self:flex-end">추가</button>
     </div>
   </div>
   <div class="card">
     <div class="toolbar">
-      <div class="card-title" style="margin-bottom:0">📋 지점 목록 <span style="font-family:'Noto Sans KR';font-size:.76rem;color:#aaa;font-weight:400" id="loc-count-label">0개</span></div>
+      <div class="card-title" style="margin-bottom:0">📋 지점 목록 <span style="font-size:.74rem;color:#aaa;font-weight:400" id="loc-cnt-label">0개</span></div>
       <div class="toolbar-right">
         <button class="btn btn-outline btn-sm" onclick="exportLocCSV()">💾 CSV</button>
         <button class="btn btn-danger btn-sm" onclick="clearAllLocs()">전체 삭제</button>
       </div>
     </div>
-    <div class="table-wrap"><table><thead><tr><th style="width:36px">#</th><th>지점명</th><th>설명</th><th>주소</th><th>이미지</th><th>배정 코스</th><th style="width:90px">ID</th><th style="width:130px">작업</th></tr></thead><tbody id="loc-tbody"></tbody></table></div>
+    <div class="table-wrap"><table><thead><tr><th style="width:30px">#</th><th>지점명</th><th>설명</th><th>주소</th><th>배정 코스</th><th style="width:80px">ID</th><th style="width:120px">작업</th></tr></thead><tbody id="loc-tbody"></tbody></table></div>
   </div>
 </div>
 
-<!-- ─── 참여자 ─── -->
+<!-- 참여자 -->
 <div class="page-section" id="section-participants">
   <div class="card">
     <div class="toolbar">
       <div class="card-title" style="margin-bottom:0">👥 전체 참여자</div>
-      <input class="search-input" id="p-search" placeholder="이름 검색…" oninput="renderParticipants()"/>
-      <select class="filter-select" id="p-filter" onchange="renderParticipants()">
-        <option value="all">전체</option><option value="applied">완주 신청</option><option value="active">진행 중</option>
-      </select>
+      <input class="search-input" id="p-search" placeholder="이름/전화 검색…" oninput="renderParts()"/>
+      <select class="filter-sel" id="p-filter" onchange="renderParts()"><option value="all">전체</option><option value="applied">완주신청</option><option value="active">진행중</option></select>
       <div class="toolbar-right">
         <button class="btn btn-outline btn-sm" onclick="loadAll()">🔄 새로고침</button>
         <button class="btn btn-outline btn-sm" onclick="exportPartsCSV()">💾 CSV</button>
       </div>
     </div>
-    <div class="table-wrap"><table><thead><tr><th>#</th><th>이름</th><th>방문 현황</th><th>코스 완주</th><th>마지막 방문</th><th>상태</th><th>상세</th></tr></thead><tbody id="p-tbody"></tbody></table></div>
+    <div class="table-wrap"><table><thead><tr><th>#</th><th>이름</th><th>전화번호</th><th>방문 현황</th><th>완주 코스</th><th>마지막 방문</th><th>상태</th><th>상세</th></tr></thead><tbody id="p-tbody"></tbody></table></div>
   </div>
 </div>
 
-<!-- ─── 완주 신청 ─── -->
+<!-- 완주 신청 -->
 <div class="page-section" id="section-completions">
   <div class="card">
     <div class="toolbar">
       <div class="card-title" style="margin-bottom:0">🏆 완주 신청 목록</div>
-      <input class="search-input" id="c-search" placeholder="이름 / 연락처…" oninput="renderCompletions()"/>
+      <input class="search-input" id="c-search" placeholder="이름/전화 검색…" oninput="renderComps()"/>
       <div class="toolbar-right"><button class="btn btn-outline btn-sm" onclick="exportCompsCSV()">💾 CSV</button></div>
     </div>
-    <div class="table-wrap"><table><thead><tr><th>#</th><th>이름</th><th>연락처</th><th>신청 시각</th><th>방문</th><th>완주 코스</th><th>상세</th></tr></thead><tbody id="c-tbody"></tbody></table></div>
+    <div class="table-wrap"><table><thead><tr><th>#</th><th>계정 이름</th><th>신청 이름</th><th>신청 전화번호</th><th>신청 시각</th><th>방문수</th><th>완주 코스</th><th>상세</th></tr></thead><tbody id="c-tbody"></tbody></table></div>
   </div>
 </div>
 
 <!-- QR Modal -->
-<div class="modal-overlay" id="modal">
+<div class="modal-overlay" id="qr-modal">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal()">✕</button>
-    <h3 id="modal-title"></h3>
-    <div class="modal-url" id="modal-url"></div>
+    <button class="modal-close" onclick="closeQR()">✕</button>
+    <h3 id="qr-title"></h3>
+    <div class="modal-url" id="qr-url"></div>
     <div id="qr-container"></div>
     <div class="modal-actions">
-      <button class="btn btn-dark" onclick="downloadQR()">⬇ PNG</button>
+      <button class="btn btn-dark" onclick="dlQR()">⬇ PNG</button>
       <button class="btn btn-outline" onclick="copyURL()">🔗 URL 복사</button>
-      <button class="btn btn-outline" onclick="closeModal()">닫기</button>
+      <button class="btn btn-outline" onclick="closeQR()">닫기</button>
     </div>
   </div>
 </div>
@@ -319,8 +284,8 @@
   <div class="modal detail-modal">
     <button class="modal-close" onclick="document.getElementById('detail-modal').classList.remove('open')">✕</button>
     <h3 id="d-name"></h3>
-    <p style="font-size:.76rem;color:#7a6a50;margin-bottom:12px" id="d-meta"></p>
-    <div id="d-courses-detail" style="margin-bottom:12px"></div>
+    <div class="d-info" id="d-info"></div>
+    <div class="d-courses" id="d-courses"></div>
     <div style="text-align:right"><button class="btn btn-outline btn-sm" onclick="document.getElementById('detail-modal').classList.remove('open')">닫기</button></div>
   </div>
 </div>
@@ -328,390 +293,300 @@
 <div class="toast" id="toast"></div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, collection, collectionGroup, writeBatch, increment } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{getFirestore,doc,getDoc,getDocs,setDoc,updateDoc,deleteDoc,collection,collectionGroup,writeBatch}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const cfg={apiKey:"AIzaSyAW13Cf2qQnsGWYiAdz9rF3TrWkGR_lLNg",authDomain:"stemp-tour.firebaseapp.com",projectId:"stemp-tour",storageBucket:"stemp-tour.firebasestorage.app",messagingSenderId:"823116268455",appId:"1:823116268455:web:4b060bf808eae664f62c82"};
+const app=initializeApp(cfg);
+const db=getFirestore(app);
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAW13Cf2qQnsGWYiAdz9rF3TrWkGR_lLNg",
-  authDomain: "stemp-tour.firebaseapp.com",
-  projectId: "stemp-tour",
-  storageBucket: "stemp-tour.firebasestorage.app",
-  messagingSenderId: "823116268455",
-  appId: "1:823116268455:web:4b060bf808eae664f62c82"
-};
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const BASE_URL=location.origin+location.pathname.replace('admin.html','')+'stamp.html';
+const COLORS=['#c0392b','#b8860b','#2d6a4f','#1565c0','#6a1b9a','#e65100','#00838f','#37474f'];
 
-const BASE_URL = location.origin + location.pathname.replace('admin.html','') + 'stamp.html';
-const COURSE_COLORS=['#c0392b','#b8860b','#2d6a4f','#1565c0','#6a1b9a','#e65100','#00838f','#37474f'];
+let locations=[],courses=[],participants=[],allStamps={},selCourse=null,curQRUrl='';
 
-let locations=[], courses=[], participants=[], allStamps={};
-let selectedCourseId=null;
-let currentQRUrl='';
-
-// Utils
-function esc(s){return String(s||'').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
-function formatDate(iso){if(!iso)return'-';const d=new Date(iso);return `${d.getFullYear()}.${d.getMonth()+1}.${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
+function fmtDate(iso){if(!iso)return'-';const d=new Date(iso);return`${d.getFullYear()}.${d.getMonth()+1}.${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;}
+function fmtPhone(p){if(!p)return'-';const s=String(p).replace(/[^0-9]/g,'');if(s.length===11)return s.replace(/(\d{3})(\d{4})(\d{4})/,'$1-$2-$3');if(s.length===10)return s.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3');return p;}
 function genId(){return Math.random().toString(36).substr(2,8).toUpperCase();}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3200);}
 window.sw=function(id,el){document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.page-section').forEach(s=>s.classList.remove('active'));el.classList.add('active');document.getElementById('section-'+id).classList.add('active');};
-window.closeModal=function(){document.getElementById('modal').classList.remove('open');};
-document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)window.closeModal();});
-document.getElementById('detail-modal').addEventListener('click',function(e){if(e.target===this)e.target.classList.remove('open');});
 
-// ── Load ──
 async function loadAll(){
   document.getElementById('page-loading').style.display='flex';
   try{
-    const [locsSnap,coursesSnap,partsSnap,stampsSnap]=await Promise.all([
-      getDocs(collection(db,'locations')),
-      getDocs(collection(db,'courses')),
-      getDocs(collection(db,'participants')),
-      getDocs(collectionGroup(db,'stamps'))
-    ]);
-    locations=[]; locsSnap.forEach(d=>locations.push({id:d.id,...d.data()}));
-    locations.sort((a,b)=>(a.order||0)-(b.order||0));
-    courses=[]; coursesSnap.forEach(d=>courses.push({id:d.id,...d.data()}));
-    courses.sort((a,b)=>(a.order||0)-(b.order||0));
-    participants=[]; partsSnap.forEach(d=>participants.push({uid:d.id,...d.data()}));
-    allStamps={}; stampsSnap.forEach(d=>{const uid=d.ref.parent.parent.id;if(!allStamps[uid])allStamps[uid]={};allStamps[uid][d.id]=d.data();});
-
-    // Visit count per location
-    const lvc={};
-    Object.values(allStamps).forEach(s=>Object.keys(s).forEach(id=>{lvc[id]=(lvc[id]||0)+1;}));
+    const[lS,cS,pS,stS]=await Promise.all([getDocs(collection(db,'locations')),getDocs(collection(db,'courses')),getDocs(collection(db,'participants')),getDocs(collectionGroup(db,'stamps'))]);
+    locations=[];lS.forEach(d=>locations.push({id:d.id,...d.data()}));locations.sort((a,b)=>(a.order||0)-(b.order||0));
+    courses=[];cS.forEach(d=>courses.push({id:d.id,...d.data()}));courses.sort((a,b)=>(a.order||0)-(b.order||0));
+    participants=[];pS.forEach(d=>participants.push({uid:d.id,...d.data()}));
+    allStamps={};stS.forEach(d=>{const uid=d.ref.parent.parent.id;if(!allStamps[uid])allStamps[uid]={};allStamps[uid][d.id]=d.data();});
+    // Visit counts
+    const lvc={};Object.values(allStamps).forEach(s=>Object.keys(s).forEach(id=>{lvc[id]=(lvc[id]||0)+1;}));
     locations.forEach(l=>l.visitCount=lvc[l.id]||0);
-
-    updateBadges();renderOverview();renderCourseList();renderLocations();renderParticipants();renderCompletions();
-    await setDoc(doc(db,'meta','config'),{locationCount:locations.length,courseCount:courses.length},{merge:true});
-  } catch(e){console.error(e);showToast('로드 실패: '+e.message);}
+    updateBadges();renderOverview();renderCourseList();renderLocations();renderParts();renderComps();
+  }catch(e){console.error(e);showToast('로드 실패: '+e.message);}
   document.getElementById('page-loading').style.display='none';
 }
 window.loadAll=loadAll;
 
 function updateBadges(){
+  const comps=participants.filter(p=>p.applied).length;
   document.getElementById('nb-locs').textContent=locations.length;
   document.getElementById('nb-courses').textContent=courses.length;
   document.getElementById('nb-parts').textContent=participants.length;
-  const applied=participants.filter(p=>p.applied).length;
-  document.getElementById('nb-comps').textContent=applied;
+  document.getElementById('nb-comps').textContent=comps;
   document.getElementById('s-locs').textContent=locations.length;
   document.getElementById('s-courses').textContent=courses.length;
   document.getElementById('s-parts').textContent=participants.length;
   document.getElementById('s-stamps').textContent=Object.values(allStamps).reduce((s,m)=>s+Object.keys(m).length,0);
-  document.getElementById('s-comps').textContent=applied;
+  document.getElementById('s-comps').textContent=comps;
 }
 
-// ── Overview ──
+function getCompletedCourses(uid){const s=allStamps[uid]||{};return courses.filter(c=>{const ids=c.locationIds||[];return ids.length>0&&ids.every(id=>s[id]);});}
+
 function renderOverview(){
-  const tbody=document.getElementById('ov-locs');
-  tbody.innerHTML='';
-  // loc->courses map
-  const locCourseMap={};
-  courses.forEach(c=>(c.locationIds||[]).forEach(id=>{if(!locCourseMap[id])locCourseMap[id]=[];locCourseMap[id].push(c.name);}));
-  const sorted=[...locations].sort((a,b)=>(b.visitCount||0)-(a.visitCount||0));
-  sorted.slice(0,15).forEach((l,i)=>{
-    const courseNames=(locCourseMap[l.id]||[]).join(', ')||'-';
+  const lcm={};courses.forEach(c=>(c.locationIds||[]).forEach(id=>{if(!lcm[id])lcm[id]=[];lcm[id].push(c.name);}));
+  const tbody=document.getElementById('ov-locs');tbody.innerHTML='';
+  [...locations].sort((a,b)=>(b.visitCount||0)-(a.visitCount||0)).slice(0,15).forEach((l,i)=>{
     const tr=document.createElement('tr');
-    tr.innerHTML=`<td style="color:#bbb;font-size:.74rem">${i+1}</td><td style="font-weight:500">${esc(l.name)}</td><td style="font-family:'Noto Serif KR',serif;font-size:.95rem;font-weight:700">${l.visitCount||0}</td><td style="font-size:.72rem;color:#7a6a50">${esc(courseNames)}</td>`;
+    tr.innerHTML=`<td style="color:#bbb;font-size:.72rem">${i+1}</td><td style="font-weight:500">${esc(l.name)}</td><td style="font-family:'Noto Serif KR',serif;font-size:.95rem;font-weight:700">${l.visitCount||0}</td><td style="font-size:.7rem;color:#7a6a50">${esc((lcm[l.id]||[]).join(', '))||'-'}</td>`;
     tbody.appendChild(tr);
   });
-  if(!sorted.length) tbody.innerHTML='<tr class="empty-row"><td colspan="4">지점 없음</td></tr>';
+  if(!locations.length)tbody.innerHTML='<tr class="empty-row"><td colspan="4">지점 없음</td></tr>';
 
-  // Course completion
-  const ovc=document.getElementById('ov-courses'); ovc.innerHTML='';
-  const totalParts=participants.length||1;
+  const total=participants.length||1;
+  const ovc=document.getElementById('ov-courses');ovc.innerHTML='';
   courses.forEach((c,ci)=>{
-    const locIds=c.locationIds||[];
-    const completedCount=participants.filter(p=>{const s=allStamps[p.uid]||{};return locIds.length>0&&locIds.every(id=>s[id]);}).length;
-    const pct=Math.round(completedCount/totalParts*100);
-    const color=COURSE_COLORS[ci%COURSE_COLORS.length];
-    ovc.innerHTML+=`<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:.77rem;margin-bottom:4px"><span style="font-weight:500;display:flex;align-items:center;gap:5px"><span style="width:8px;height:8px;border-radius:50%;background:${color};display:inline-block"></span>${esc(c.name)}</span><span style="color:#7a6a50">${completedCount}명 완주</span></div><div style="height:5px;background:var(--aged);border-radius:3px;overflow:hidden"><div style="height:100%;width:${pct}%;background:${color};border-radius:3px"></div></div></div>`;
+    const ids=c.locationIds||[];const cnt=participants.filter(p=>{const s=allStamps[p.uid]||{};return ids.length>0&&ids.every(id=>s[id]);}).length;
+    const pct=Math.round(cnt/total*100);const color=COLORS[ci%COLORS.length];
+    ovc.innerHTML+=`<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:.76rem;margin-bottom:3px"><span style="display:flex;align-items:center;gap:5px"><span style="width:8px;height:8px;border-radius:50%;background:${color};display:inline-block"></span>${esc(c.name)}</span><span style="color:#7a6a50">${cnt}명</span></div><div style="height:5px;background:var(--aged);border-radius:3px;overflow:hidden"><div style="height:100%;width:${pct}%;background:${color};border-radius:3px"></div></div></div>`;
   });
-  if(!courses.length) ovc.innerHTML='<p style="font-size:.79rem;color:#bbb">코스 없음</p>';
+  if(!courses.length)ovc.innerHTML='<p style="font-size:.78rem;color:#bbb">코스 없음</p>';
 
-  // Recent activity
-  const acts=[];
-  Object.entries(allStamps).forEach(([uid,stampsMap])=>{
-    const p=participants.find(p=>p.uid===uid);
-    Object.values(stampsMap).forEach(s=>acts.push({name:p?.name||'익명',locName:s.locName,visitedAt:s.visitedAt}));
-  });
+  const acts=[];Object.entries(allStamps).forEach(([uid,sm])=>{const p=participants.find(p=>p.uid===uid);Object.values(sm).forEach(s=>acts.push({name:p?.name||'익명',locName:s.locName,visitedAt:s.visitedAt}));});
   acts.sort((a,b)=>new Date(b.visitedAt)-new Date(a.visitedAt));
-  const ovr=document.getElementById('ov-recent'); ovr.innerHTML='';
-  acts.slice(0,8).forEach(a=>{
-    ovr.innerHTML+=`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--aged);font-size:.79rem"><span>📍</span><span style="flex:1"><strong>${esc(a.name)}</strong> → ${esc(a.locName)}</span><span style="font-size:.7rem;color:#aaa;white-space:nowrap">${formatDate(a.visitedAt)}</span></div>`;
-  });
-  if(!acts.length) ovr.innerHTML='<span style="font-size:.79rem;color:#bbb">방문 기록 없음</span>';
+  const ovr=document.getElementById('ov-recent');ovr.innerHTML='';
+  acts.slice(0,8).forEach(a=>{ovr.innerHTML+=`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--aged);font-size:.78rem"><span>📍</span><span style="flex:1"><strong>${esc(a.name)}</strong> → ${esc(a.locName)}</span><span style="font-size:.69rem;color:#aaa;white-space:nowrap">${fmtDate(a.visitedAt)}</span></div>`;});
+  if(!acts.length)ovr.innerHTML='<p style="font-size:.78rem;color:#bbb">방문 기록 없음</p>';
 }
 
-// ── Course Management ──
+// ── Courses ──
 function renderCourseList(){
+  document.getElementById('course-cnt-label').textContent=`${courses.length}개`;
   const el=document.getElementById('course-list-items');
-  document.getElementById('course-count-label').textContent=`${courses.length}개`;
-  if(!courses.length){el.innerHTML='<div style="padding:32px;text-align:center;color:#bbb;font-size:.81rem">코스를 추가하세요</div>';return;}
+  if(!courses.length){el.innerHTML='<div style="padding:26px;text-align:center;color:#bbb;font-size:.8rem">코스를 추가하세요</div>';return;}
   el.innerHTML='';
   courses.forEach((c,ci)=>{
-    const locIds=c.locationIds||[];
-    const color=COURSE_COLORS[ci%COURSE_COLORS.length];
-    const div=document.createElement('div');
-    div.className='course-item'+(selectedCourseId===c.id?' active':'');
-    div.onclick=()=>selectCourse(c.id);
-    div.innerHTML=`<div class="course-color-dot" style="background:${color}"></div><span class="course-item-name">${esc(c.name)}</span><span class="course-item-count">${locIds.length}개 지점</span>`;
+    const div=document.createElement('div');div.className='course-item'+(selCourse===c.id?' active':'');
+    div.onclick=()=>{selCourse=c.id;renderCourseList();renderCourseDetail();};
+    div.innerHTML=`<div class="cdot" style="background:${COLORS[ci%COLORS.length]}"></div><span class="ci-name">${esc(c.name)}</span><span class="ci-cnt">${(c.locationIds||[]).length}개</span>`;
     el.appendChild(div);
   });
 }
-function selectCourse(id){
-  selectedCourseId=id;
-  renderCourseList();
-  renderCourseDetail();
-}
 function renderCourseDetail(){
-  const course=courses.find(c=>c.id===selectedCourseId);
-  document.getElementById('detail-empty').style.display=course?'none':'block';
-  document.getElementById('detail-content').style.display=course?'block':'none';
-  if(!course) return;
-  document.getElementById('edit-course-name').value=course.name;
-  const assignedIds=new Set(course.locationIds||[]);
-
-  // Available pool (not in course)
-  const avail=document.getElementById('pool-available'); avail.innerHTML='';
-  locations.forEach(l=>{
-    if(assignedIds.has(l.id)) return;
-    const div=document.createElement('div'); div.className='loc-pool-item';
-    div.innerHTML=`<div class="lp-dot"></div><span style="flex:1">${esc(l.name)}</span><span class="loc-pool-arrow">+</span>`;
-    div.onclick=()=>assignLocToCourse(selectedCourseId,l.id);
-    avail.appendChild(div);
+  const c=courses.find(c=>c.id===selCourse);
+  document.getElementById('det-empty').style.display=c?'none':'block';
+  document.getElementById('det-content').style.display=c?'block':'none';
+  if(!c)return;
+  document.getElementById('edit-course-name').value=c.name;
+  const assigned=new Set(c.locationIds||[]);
+  const avail=document.getElementById('pool-avail');avail.innerHTML='';
+  locations.filter(l=>!assigned.has(l.id)).forEach(l=>{
+    const div=document.createElement('div');div.className='lp-item';
+    div.innerHTML=`<div class="lp-dot"></div><span style="flex:1">${esc(l.name)}</span><span class="lp-arr">+</span>`;
+    div.onclick=()=>assignLoc(selCourse,l.id);avail.appendChild(div);
   });
-  if(!locations.length) avail.innerHTML='<div style="padding:16px;font-size:.78rem;color:#bbb;text-align:center">지점을 먼저 추가하세요</div>';
-
-  // Assigned pool
-  const assigned=document.getElementById('pool-assigned'); assigned.innerHTML='';
-  const assignedLocs=locations.filter(l=>assignedIds.has(l.id));
-  // preserve course order
-  const orderedLocs=(course.locationIds||[]).map(id=>locations.find(l=>l.id===id)).filter(Boolean);
-  orderedLocs.forEach(l=>{
-    const div=document.createElement('div'); div.className='loc-pool-item in-course';
-    div.innerHTML=`<div class="lp-dot"></div><span style="flex:1">${esc(l.name)}</span><span class="loc-pool-arrow" style="color:#e74c3c">✕</span>`;
-    div.onclick=()=>removeLocFromCourse(selectedCourseId,l.id);
-    assigned.appendChild(div);
+  if(!locations.length)avail.innerHTML='<div style="padding:14px;font-size:.77rem;color:#bbb;text-align:center">지점 없음</div>';
+  const assignedEl=document.getElementById('pool-assigned');assignedEl.innerHTML='';
+  (c.locationIds||[]).map(id=>locations.find(l=>l.id===id)).filter(Boolean).forEach(l=>{
+    const div=document.createElement('div');div.className='lp-item assigned';
+    div.innerHTML=`<div class="lp-dot"></div><span style="flex:1">${esc(l.name)}</span><span class="lp-arr" style="color:#e74c3c">✕</span>`;
+    div.onclick=()=>removeLoc(selCourse,l.id);assignedEl.appendChild(div);
   });
-  if(!orderedLocs.length) assigned.innerHTML='<div style="padding:16px;font-size:.78rem;color:#bbb;text-align:center">지점을 추가하세요 →</div>';
+  if(!(c.locationIds||[]).length)assignedEl.innerHTML='<div style="padding:14px;font-size:.77rem;color:#bbb;text-align:center">지점을 추가하세요</div>';
 }
-
 window.addCourse=async function(){
-  const name=document.getElementById('new-course-name').value.trim();
-  if(!name){showToast('코스 이름을 입력해주세요');return;}
-  const id=genId(), desc=document.getElementById('new-course-desc').value.trim();
+  const name=document.getElementById('new-course-name').value.trim();if(!name){showToast('코스 이름을 입력하세요');return;}
+  const id=genId(),desc=document.getElementById('new-course-desc').value.trim();
   await setDoc(doc(db,'courses',id),{name,desc,locationIds:[],order:courses.length});
   courses.push({id,name,desc,locationIds:[],order:courses.length});
-  document.getElementById('new-course-name').value=''; document.getElementById('new-course-desc').value='';
-  updateBadges(); renderCourseList(); renderOverview();
-  showToast('✓ 코스 추가됨');
+  document.getElementById('new-course-name').value='';document.getElementById('new-course-desc').value='';
+  updateBadges();renderCourseList();renderOverview();showToast('✓ 코스 추가됨');
 };
-window.saveCourseNameEdit=async function(){
-  const course=courses.find(c=>c.id===selectedCourseId); if(!course)return;
-  const newName=document.getElementById('edit-course-name').value.trim(); if(!newName)return;
-  course.name=newName;
-  await updateDoc(doc(db,'courses',selectedCourseId),{name:newName});
-  renderCourseList(); showToast('✓ 저장됨');
+window.saveCourseEdit=async function(){
+  const c=courses.find(c=>c.id===selCourse);if(!c)return;
+  const n=document.getElementById('edit-course-name').value.trim();if(!n)return;
+  c.name=n;await updateDoc(doc(db,'courses',selCourse),{name:n});renderCourseList();showToast('✓ 저장됨');
 };
 window.deleteCourse=async function(){
-  const course=courses.find(c=>c.id===selectedCourseId); if(!course)return;
-  if(!confirm(`"${course.name}" 코스를 삭제할까요?`))return;
-  await deleteDoc(doc(db,'courses',selectedCourseId));
-  courses=courses.filter(c=>c.id!==selectedCourseId); selectedCourseId=null;
-  updateBadges(); renderCourseList(); renderCourseDetail(); renderOverview();
-  showToast('삭제됨');
+  const c=courses.find(c=>c.id===selCourse);if(!c)return;
+  if(!confirm(`"${c.name}" 삭제?`))return;
+  await deleteDoc(doc(db,'courses',selCourse));
+  courses=courses.filter(c=>c.id!==selCourse);selCourse=null;
+  updateBadges();renderCourseList();renderCourseDetail();renderOverview();showToast('삭제됨');
 };
-async function assignLocToCourse(courseId,locId){
-  const course=courses.find(c=>c.id===courseId); if(!course)return;
-  if(!course.locationIds) course.locationIds=[];
-  if(course.locationIds.includes(locId))return;
-  course.locationIds.push(locId);
-  await updateDoc(doc(db,'courses',courseId),{locationIds:course.locationIds});
-  renderCourseDetail(); renderLocations();
-}
-async function removeLocFromCourse(courseId,locId){
-  const course=courses.find(c=>c.id===courseId); if(!course)return;
-  course.locationIds=(course.locationIds||[]).filter(id=>id!==locId);
-  await updateDoc(doc(db,'courses',courseId),{locationIds:course.locationIds});
-  renderCourseDetail(); renderLocations();
-}
+async function assignLoc(cid,lid){const c=courses.find(c=>c.id===cid);if(!c)return;if(!c.locationIds)c.locationIds=[];if(c.locationIds.includes(lid))return;c.locationIds.push(lid);await updateDoc(doc(db,'courses',cid),{locationIds:c.locationIds});renderCourseDetail();renderLocations();}
+async function removeLoc(cid,lid){const c=courses.find(c=>c.id===cid);if(!c)return;c.locationIds=(c.locationIds||[]).filter(i=>i!==lid);await updateDoc(doc(db,'courses',cid),{locationIds:c.locationIds});renderCourseDetail();renderLocations();}
 
 // ── Locations ──
 function renderLocations(){
   const tbody=document.getElementById('loc-tbody');
-  const locCourseMap={};
-  courses.forEach(c=>(c.locationIds||[]).forEach(id=>{if(!locCourseMap[id])locCourseMap[id]=[];locCourseMap[id].push(c.name);}));
-  if(!locations.length){tbody.innerHTML='<tr class="empty-row"><td colspan="8">지점 없음</td></tr>';document.getElementById('loc-count-label').textContent='0개';return;}
+  const lcm={};courses.forEach(c=>(c.locationIds||[]).forEach(id=>{if(!lcm[id])lcm[id]=[];lcm[id].push(c.name);}));
+  if(!locations.length){tbody.innerHTML='<tr class="empty-row"><td colspan="7">지점 없음</td></tr>';document.getElementById('loc-cnt-label').textContent='0개';return;}
   tbody.innerHTML='';
   locations.forEach((l,i)=>{
-    const courseNames=(locCourseMap[l.id]||[]).map(n=>`<span style="background:#e8f5e9;color:var(--green);border:1px solid #a5d6a7;border-radius:3px;padding:1px 6px;font-size:.68rem">${esc(n)}</span>`).join(' ')||'<span style="color:#bbb;font-size:.74rem">미배정</span>';
+    const cn=(lcm[l.id]||[]).map(n=>`<span style="background:#e8f5e9;color:var(--green);border:1px solid #a5d6a7;border-radius:3px;padding:1px 5px;font-size:.66rem">${esc(n)}</span>`).join(' ')||'<span style="color:#bbb;font-size:.72rem">미배정</span>';
     const tr=document.createElement('tr');
-    tr.innerHTML=`<td style="color:#bbb;font-size:.74rem">${i+1}</td>
-      <td><input type="text" value="${esc(l.name)}" onchange="updateLoc('${l.id}','name',this.value)"/></td>
-      <td><input type="text" value="${esc(l.desc||'')}" onchange="updateLoc('${l.id}','desc',this.value)" placeholder="설명 없음"/></td>
-      <td><input type="text" value="${esc(l.address||'')}" onchange="updateLoc('${l.id}','address',this.value)" placeholder="주소 입력"/></td>
-      <td><input type="text" value="${esc(l.imageUrl||'')}" onchange="updateLoc('${l.id}','imageUrl',this.value)" placeholder="https://..."/></td>
-      <td>${courseNames}</td>
+    tr.innerHTML=`<td style="color:#bbb;font-size:.72rem">${i+1}</td>
+      <td><input type="text" value="${esc(l.name)}" onchange="updLoc('${l.id}','name',this.value)"/></td>
+      <td><input type="text" value="${esc(l.desc||'')}" onchange="updLoc('${l.id}','desc',this.value)" placeholder="설명 없음"/></td>
+      <td><input type="text" value="${esc(l.address||'')}" onchange="updLoc('${l.id}','address',this.value)" placeholder="주소 입력"/></td>
+      <td>${cn}</td>
       <td><span class="loc-id">${l.id}</span></td>
-      <td><div class="row-actions"><button class="btn btn-outline btn-sm" onclick="showQR('${l.id}',${i})">QR</button><button class="btn btn-danger btn-sm" onclick="removeLoc('${l.id}','${esc(l.name)}')">삭제</button></div></td>`;
+      <td><div class="row-actions"><button class="btn btn-outline btn-sm" onclick="showQR('${l.id}',${i})">QR</button><button class="btn btn-danger btn-sm" onclick="delLoc('${l.id}','${esc(l.name)}')">삭제</button></div></td>`;
     tbody.appendChild(tr);
   });
-  document.getElementById('loc-count-label').textContent=`${locations.length}개`;
+  document.getElementById('loc-cnt-label').textContent=`${locations.length}개`;
 }
+window.updLoc=async function(id,key,val){const l=locations.find(l=>l.id===id);if(!l)return;l[key]=val;await updateDoc(doc(db,'locations',id),{[key]:val});};
 window.addLocation=async function(){
-  const name=document.getElementById('new-name').value.trim(); if(!name){showToast('지점명을 입력해주세요');return;}
-  const id=genId(), desc=document.getElementById('new-desc').value.trim(), address=document.getElementById('new-addr').value.trim(), imageUrl=document.getElementById('new-img').value.trim();
-  await setDoc(doc(db,'locations',id),{name,desc,address,imageUrl,order:locations.length});
-  locations.push({id,name,desc,address,imageUrl,order:locations.length,visitCount:0});
-  document.getElementById('new-name').value=''; document.getElementById('new-desc').value=''; document.getElementById('new-addr').value=''; document.getElementById('new-img').value='';
+  const name=document.getElementById('new-name').value.trim();if(!name){showToast('지점명을 입력하세요');return;}
+  const id=genId(),desc=document.getElementById('new-desc').value.trim(),address=document.getElementById('new-addr').value.trim();
+  await setDoc(doc(db,'locations',id),{name,desc,address,order:locations.length});
+  locations.push({id,name,desc,address,order:locations.length,visitCount:0});
+  document.getElementById('new-name').value='';document.getElementById('new-desc').value='';document.getElementById('new-addr').value='';
   await setDoc(doc(db,'meta','config'),{locationCount:locations.length},{merge:true});
-  updateBadges(); renderLocations(); renderCourseDetail();
-  showToast('✓ 지점 추가됨');
+  updateBadges();renderLocations();renderCourseDetail();showToast('✓ 지점 추가됨');
 };
-window.updateLoc=async function(id,key,val){const l=locations.find(l=>l.id===id);if(!l)return;l[key]=val;await updateDoc(doc(db,'locations',id),{[key]:val});};
-window.removeLoc=async function(id,name){
+window.delLoc=async function(id,name){
   if(!confirm(`"${name}" 삭제?`))return;
   await deleteDoc(doc(db,'locations',id));
-  // Remove from courses
   for(const c of courses){if((c.locationIds||[]).includes(id)){c.locationIds=c.locationIds.filter(i=>i!==id);await updateDoc(doc(db,'courses',c.id),{locationIds:c.locationIds});}}
   locations=locations.filter(l=>l.id!==id);
   await setDoc(doc(db,'meta','config'),{locationCount:locations.length},{merge:true});
-  updateBadges(); renderLocations(); renderCourseDetail();
+  updateBadges();renderLocations();renderCourseDetail();
 };
 window.clearAllLocs=async function(){
   if(!confirm('모든 지점을 삭제할까요?'))return;
-  const batch=writeBatch(db);
-  locations.forEach(l=>batch.delete(doc(db,'locations',l.id)));
-  await batch.commit();
-  locations=[]; await setDoc(doc(db,'meta','config'),{locationCount:0},{merge:true});
-  updateBadges(); renderLocations();
+  const b=writeBatch(db);locations.forEach(l=>b.delete(doc(db,'locations',l.id)));await b.commit();
+  locations=[];await setDoc(doc(db,'meta','config'),{locationCount:0},{merge:true});
+  updateBadges();renderLocations();
 };
-
-// File upload
-window.handleFileUpload=function(e){
-  const file=e.target.files[0]; if(!file)return;
-  const ext=file.name.split('.').pop().toLowerCase();
-  if(ext==='csv'){const r=new FileReader();r.onload=ev=>parseCSV(ev.target.result);r.readAsText(file,'UTF-8');}
-  else if(ext==='xlsx'||ext==='xls'){const r=new FileReader();r.onload=ev=>parseExcel(ev.target.result);r.readAsArrayBuffer(file);}
-  else showToast('CSV 또는 Excel 파일만 지원합니다');
-  e.target.value='';
+window.handleFile=function(e){
+  const f=e.target.files[0];if(!f)return;
+  const ext=f.name.split('.').pop().toLowerCase();
+  if(ext==='csv'){const r=new FileReader();r.onload=ev=>parseCSV(ev.target.result);r.readAsText(f,'UTF-8');}
+  else if(['xlsx','xls'].includes(ext)){const r=new FileReader();r.onload=ev=>parseXLSX(ev.target.result);r.readAsArrayBuffer(f);}
+  else showToast('CSV 또는 Excel만 지원합니다');e.target.value='';
 };
-async function bulkAddLocations(rows){
-  const batch=writeBatch(db); let added=0; const base=locations.length;
+async function bulkAdd(rows){
+  const b=writeBatch(db);let n=0;const base=locations.length;
   rows.forEach(([name,desc,address],i)=>{
-    if(!name||!name.trim())return;
+    if(!name?.trim())return;
     const id=genId();
-    batch.set(doc(db,'locations',id),{name:name.trim(),desc:(desc||'').trim(),address:(address||'').trim(),order:base+i});
-    locations.push({id,name:name.trim(),desc:(desc||'').trim(),address:(address||'').trim(),order:base+i,visitCount:0}); added++;
+    b.set(doc(db,'locations',id),{name:name.trim(),desc:(desc||'').trim(),address:(address||'').trim(),order:base+i});
+    locations.push({id,name:name.trim(),desc:(desc||'').trim(),address:(address||'').trim(),order:base+i,visitCount:0});n++;
   });
-  await batch.commit();
+  await b.commit();
   await setDoc(doc(db,'meta','config'),{locationCount:locations.length},{merge:true});
-  updateBadges(); renderLocations(); renderCourseDetail(); showToast(`✓ ${added}개 지점 업로드 완료`);
+  updateBadges();renderLocations();renderCourseDetail();showToast(`✓ ${n}개 지점 업로드 완료`);
 }
-function parseCSV(text){const lines=text.trim().split('\n');bulkAddLocations(lines.slice(1).map(l=>l.split(',').map(c=>c.replace(/^"|"$/g,'').trim())));}
-function parseExcel(buf){const wb=XLSX.read(buf,{type:'arraybuffer'});const ws=wb.Sheets[wb.SheetNames[0]];const rows=XLSX.utils.sheet_to_json(ws,{header:1});bulkAddLocations(rows.slice(1).map(r=>[String(r[0]||'').trim(),String(r[1]||'').trim(),String(r[2]||'').trim()]));}
-window.downloadTemplate=function(){const csv='지점명,설명,주소\n경복궁,조선 최대 법궁,서울시 종로구 사직로 161\n창덕궁,유네스코 세계유산,서울시 종로구 율곡로 99\n남산타워,서울 랜드마크,서울시 용산구 남산공원길 105';const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='stamp_template.csv';a.click();};
+function parseCSV(t){const lines=t.trim().split('\n');bulkAdd(lines.slice(1).map(l=>l.split(',').map(c=>c.replace(/^"|"$/g,'').trim())));}
+function parseXLSX(buf){const wb=XLSX.read(buf,{type:'arraybuffer'});const ws=wb.Sheets[wb.SheetNames[0]];const rows=XLSX.utils.sheet_to_json(ws,{header:1});bulkAdd(rows.slice(1).map(r=>[String(r[0]||'').trim(),String(r[1]||'').trim(),String(r[2]||'').trim()]));}
+window.dlTemplate=function(){const c='지점명,설명,주소\n경복궁,조선 최대 법궁,서울시 종로구 사직로 161\n창덕궁,유네스코 세계유산,서울시 종로구 율곡로 99\n남산타워,서울 랜드마크,서울시 용산구 남산공원길 105';const blob=new Blob(['\uFEFF'+c],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='stamp_template.csv';a.click();};
 window.exportLocCSV=function(){
-  const locCourseMap={};courses.forEach(c=>(c.locationIds||[]).forEach(id=>{if(!locCourseMap[id])locCourseMap[id]=[];locCourseMap[id].push(c.name);}));
-  let csv='번호,지점명,설명,주소,코스,방문수,ID\n';
-  locations.forEach((l,i)=>{csv+=`${i+1},"${l.name}","${l.desc||''}","${l.address||''}","${(locCourseMap[l.id]||[]).join('/')}","${l.visitCount||0}","${l.id}"\n`;});
-  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='stamp_locations.csv';a.click();
+  const lcm={};courses.forEach(c=>(c.locationIds||[]).forEach(id=>{if(!lcm[id])lcm[id]=[];lcm[id].push(c.name);}));
+  let c='번호,지점명,설명,주소,코스,방문수\n';locations.forEach((l,i)=>{c+=`${i+1},"${l.name}","${l.desc||''}","${l.address||''}","${(lcm[l.id]||[]).join('/')}","${l.visitCount||0}"\n`;});
+  const blob=new Blob(['\uFEFF'+c],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='stamp_locations.csv';a.click();
 };
+const zone=document.getElementById('upload-zone');
+zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag-over');});
+zone.addEventListener('dragleave',()=>zone.classList.remove('drag-over'));
+zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('drag-over');const f=e.dataTransfer.files[0];if(f)window.handleFile({target:{files:[f],value:''}});});
 
-// QR
-function getStampURL(loc,idx){return `${BASE_URL}?id=${loc.id}&name=${encodeURIComponent(loc.name)}&idx=${idx}`;}
+// ── QR ──
+function stampURL(loc,idx){return`${BASE_URL}?id=${loc.id}&name=${encodeURIComponent(loc.name)}&idx=${idx}`;}
 window.showQR=function(id,idx){
-  const loc=locations.find(l=>l.id===id); if(!loc)return;
-  currentQRUrl=getStampURL(loc,idx);
-  document.getElementById('modal-title').textContent=loc.name;
-  document.getElementById('modal-url').textContent=currentQRUrl;
+  const loc=locations.find(l=>l.id===id);if(!loc)return;
+  curQRUrl=stampURL(loc,idx);
+  document.getElementById('qr-title').textContent=loc.name;
+  document.getElementById('qr-url').textContent=curQRUrl;
   document.getElementById('qr-container').innerHTML='';
-  new QRCode(document.getElementById('qr-container'),{text:currentQRUrl,width:190,height:190,colorDark:'#1a1208',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.H});
-  document.getElementById('modal').classList.add('open');
+  new QRCode(document.getElementById('qr-container'),{text:curQRUrl,width:190,height:190,colorDark:'#1a1208',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.H});
+  document.getElementById('qr-modal').classList.add('open');
 };
-window.downloadQR=function(){setTimeout(()=>{const c=document.querySelector('#qr-container canvas');if(!c){showToast('잠시 후 다시 시도');return;}const a=document.createElement('a');a.download=`QR_${document.getElementById('modal-title').textContent}.png`;a.href=c.toDataURL();a.click();},100);};
-window.copyURL=function(){navigator.clipboard.writeText(currentQRUrl).then(()=>showToast('✓ URL 복사됨'));};
+window.closeQR=function(){document.getElementById('qr-modal').classList.remove('open');};
+document.getElementById('qr-modal').addEventListener('click',function(e){if(e.target===this)window.closeQR();});
+window.dlQR=function(){setTimeout(()=>{const c=document.querySelector('#qr-container canvas');if(!c){showToast('잠시 후 다시 시도');return;}const a=document.createElement('a');a.download=`QR_${document.getElementById('qr-title').textContent}.png`;a.href=c.toDataURL();a.click();},100);};
+window.copyURL=function(){navigator.clipboard.writeText(curQRUrl).then(()=>showToast('✓ URL 복사됨'));};
 
-// Participants
-window.renderParticipants=function(){
+// ── Participants ──
+window.renderParts=function(){
   const q=document.getElementById('p-search').value.toLowerCase();
   const f=document.getElementById('p-filter').value;
-  const totalLocs=locations.length;
   let list=participants.filter(p=>{
-    const mq=!q||p.name.toLowerCase().includes(q);
-    if(f==='applied') return mq&&p.applied;
-    if(f==='active') return mq&&Object.keys(allStamps[p.uid]||{}).length>0;
+    const mq=!q||(p.name||'').toLowerCase().includes(q)||(p.phone||'').includes(q.replace(/-/g,''));
+    if(f==='applied')return mq&&p.applied;
+    if(f==='active')return mq&&Object.keys(allStamps[p.uid]||{}).length>0;
     return mq;
-  });
-  list.sort((a,b)=>new Date(b.updatedAt||0)-new Date(a.updatedAt||0));
-  const tbody=document.getElementById('p-tbody'); tbody.innerHTML='';
-  if(!list.length){tbody.innerHTML='<tr class="empty-row"><td colspan="7">참여자 없음</td></tr>';return;}
+  }).sort((a,b)=>new Date(b.updatedAt||0)-new Date(a.updatedAt||0));
+  const tbody=document.getElementById('p-tbody');tbody.innerHTML='';
+  if(!list.length){tbody.innerHTML='<tr class="empty-row"><td colspan="8">참여자 없음</td></tr>';return;}
   list.forEach((p,i)=>{
-    const stamps=allStamps[p.uid]||{};
-    const v=Object.keys(stamps).length;
-    const pct=totalLocs>0?Math.round(v/totalLocs*100):0;
-    const completedCourses=courses.filter(c=>{const ids=c.locationIds||[];return ids.length>0&&ids.every(id=>stamps[id]);});
+    const s=allStamps[p.uid]||{};const v=Object.keys(s).length;const tot=locations.length;
+    const pct=tot?Math.round(v/tot*100):0;
+    const cc=getCompletedCourses(p.uid);
     const tr=document.createElement('tr');
-    tr.innerHTML=`<td style="color:#bbb;font-size:.74rem">${i+1}</td>
-      <td><div class="p-name">${esc(p.name)}</div></td>
-      <td><div style="font-size:.75rem;color:#7a6a50">${v}/${totalLocs}곳</div><div class="pm-bar"><div class="pm-fill" style="width:${pct}%"></div></div></td>
-      <td style="font-size:.8rem">${completedCourses.length>0?completedCourses.map(c=>`<span style="background:#e8f5e9;color:var(--green);border:1px solid #a5d6a7;border-radius:3px;padding:1px 5px;font-size:.67rem">${esc(c.name)}</span>`).join(' '):'<span style="color:#bbb;font-size:.73rem">없음</span>'}</td>
-      <td><div class="p-time">${formatDate(p.updatedAt)}</div></td>
-      <td>${p.applied?'<span class="sb sb-applied">완주신청</span>':completedCourses.length>0?'<span class="sb sb-full">완주</span>':'<span class="sb sb-partial">진행중</span>'}</td>
+    tr.innerHTML=`<td style="color:#bbb;font-size:.72rem">${i+1}</td>
+      <td><div style="font-weight:500">${esc(p.name)}</div></td>
+      <td style="font-size:.78rem;color:#7a6a50">${fmtPhone(p.phone)}</td>
+      <td><div style="font-size:.74rem;color:#7a6a50">${v}/${tot}곳</div><div class="pm-bar"><div class="pm-fill" style="width:${pct}%"></div></div></td>
+      <td style="font-size:.75rem">${cc.length?cc.map(c=>`<span style="background:#e8f5e9;color:var(--green);border:1px solid #a5d6a7;border-radius:3px;padding:1px 5px;font-size:.66rem">${esc(c.name)}</span>`).join(' '):'<span style="color:#bbb">없음</span>'}</td>
+      <td style="font-size:.71rem;color:#aaa">${fmtDate(p.updatedAt)}</td>
+      <td>${p.applied?'<span class="sb sb-applied">완주신청</span>':cc.length?'<span class="sb sb-complete">완주</span>':'<span class="sb sb-active">진행중</span>'}</td>
+      <td><button class="btn btn-outline btn-sm" onclick="showDetail('${p.uid}')">상세</button></td>`;
+    tbody.appendChild(tr);
+  });
+};
+
+// ── Completions ──
+window.renderComps=function(){
+  const q=document.getElementById('c-search').value.toLowerCase();
+  const list=participants.filter(p=>p.applied&&(!q||(p.name||'').toLowerCase().includes(q)||(p.applyPhone||p.phone||'').includes(q.replace(/-/g,'')))).sort((a,b)=>new Date(b.appliedAt||0)-new Date(a.appliedAt||0));
+  const tbody=document.getElementById('c-tbody');tbody.innerHTML='';
+  if(!list.length){tbody.innerHTML='<tr class="empty-row"><td colspan="8">완주 신청 없음</td></tr>';return;}
+  list.forEach((p,i)=>{
+    const s=allStamps[p.uid]||{};const v=Object.keys(s).length;
+    const cc=getCompletedCourses(p.uid);
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td style="color:#bbb;font-size:.72rem">${i+1}</td>
+      <td style="font-weight:500">${esc(p.name)}</td>
+      <td>${esc(p.applyName||p.name)}</td>
+      <td style="color:#7a6a50">${fmtPhone(p.applyPhone||p.phone)}</td>
+      <td style="font-size:.72rem;color:#aaa">${fmtDate(p.appliedAt)}</td>
+      <td style="font-weight:600">${v}/${locations.length}</td>
+      <td style="font-size:.74rem">${cc.length?cc.map(c=>`<span style="background:#e8f5e9;color:var(--green);border:1px solid #a5d6a7;border-radius:3px;padding:1px 5px;font-size:.66rem">${esc(c.name)}</span>`).join(' '):'<span style="color:#bbb">없음</span>'}</td>
       <td><button class="btn btn-outline btn-sm" onclick="showDetail('${p.uid}')">상세</button></td>`;
     tbody.appendChild(tr);
   });
 };
 
 window.showDetail=function(uid){
-  const p=participants.find(p=>p.uid===uid); if(!p)return;
-  const stamps=allStamps[uid]||{};
-  document.getElementById('d-name').textContent=p.name+' 님의 방문 기록';
-  const completedCourses=courses.filter(c=>{const ids=c.locationIds||[];return ids.length>0&&ids.every(id=>stamps[id]);});
-  document.getElementById('d-meta').textContent=`방문: ${Object.keys(stamps).length}/${locations.length}곳 · 완주 코스: ${completedCourses.length}개 · 마지막: ${formatDate(p.updatedAt)}${p.contact?' · 연락처: '+p.contact:''}`;
-  const dcd=document.getElementById('d-courses-detail'); dcd.innerHTML='';
+  const p=participants.find(p=>p.uid===uid);if(!p)return;
+  const s=allStamps[uid]||{};const cc=getCompletedCourses(uid);
+  document.getElementById('d-name').textContent=p.name+' 님';
+  document.getElementById('d-info').innerHTML=`전화: ${fmtPhone(p.phone)} · 방문: ${Object.keys(s).length}/${locations.length}곳 · 가입: ${fmtDate(p.createdAt)}<br>${p.applied?`✓ 완주신청: ${fmtDate(p.appliedAt)} / 신청이름: ${p.applyName||'-'} / 신청전화: ${fmtPhone(p.applyPhone)}`:''} `;
+  const dc=document.getElementById('d-courses');dc.innerHTML='';
   courses.forEach((c,ci)=>{
-    const locIds=c.locationIds||[];
-    const count=locIds.filter(id=>stamps[id]).length;
-    const total=locIds.length;
-    const color=COURSE_COLORS[ci%COURSE_COLORS.length];
-    const spotsHtml=`<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:7px">${locIds.map(id=>{const l=locations.find(l=>l.id===id);const done=stamps[id];return `<div class="d-spot${done?' visited':''}">${l?.name||id}</div>`;}).join('')}</div>`;
-    dcd.innerHTML+=`<div style="margin-bottom:12px;padding:10px;background:var(--paper);border-radius:6px;border:1px solid var(--aged)"><div style="display:flex;align-items:center;gap:7px;margin-bottom:6px"><div style="width:8px;height:8px;border-radius:50%;background:${color}"></div><strong style="font-size:.84rem">${esc(c.name)}</strong><span style="margin-left:auto;font-size:.74rem;color:#7a6a50">${count}/${total}</span>${count>=total&&total>0?'<span style="background:var(--gold);color:white;border-radius:8px;padding:1px 7px;font-size:.67rem">완주</span>':''}</div>${spotsHtml}</div>`;
+    const ids=c.locationIds||[];const cnt=ids.filter(id=>s[id]).length;const color=COLORS[ci%COLORS.length];
+    const spots=ids.map(id=>{const l=locations.find(l=>l.id===id);const done=s[id];return`<div class="d-spot${done?' v':''}">${l?.name||id}</div>`;}).join('');
+    dc.innerHTML+=`<div class="d-cb"><div class="d-ch"><div style="width:8px;height:8px;border-radius:50%;background:${color}"></div><strong style="font-size:.82rem">${esc(c.name)}</strong><span style="margin-left:auto;font-size:.72rem;color:#7a6a50">${cnt}/${ids.length}</span>${cnt>=ids.length&&ids.length>0?'<span style="background:var(--gold);color:white;border-radius:8px;padding:1px 7px;font-size:.65rem">완주</span>':''}</div><div class="d-spots">${spots}</div></div>`;
   });
   document.getElementById('detail-modal').classList.add('open');
 };
+document.getElementById('detail-modal').addEventListener('click',function(e){if(e.target===this)e.target.classList.remove('open');});
 
-window.renderCompletions=function(){
-  const q=document.getElementById('c-search').value.toLowerCase();
-  const applied=participants.filter(p=>p.applied&&(!q||(p.name.toLowerCase().includes(q)||(p.contact||'').includes(q))));
-  applied.sort((a,b)=>new Date(b.appliedAt||0)-new Date(a.appliedAt||0));
-  const tbody=document.getElementById('c-tbody'); tbody.innerHTML='';
-  if(!applied.length){tbody.innerHTML='<tr class="empty-row"><td colspan="7">완주 신청 없음</td></tr>';return;}
-  applied.forEach((p,i)=>{
-    const stamps=allStamps[p.uid]||{};
-    const v=Object.keys(stamps).length;
-    const completedCourses=courses.filter(c=>{const ids=c.locationIds||[];return ids.length>0&&ids.every(id=>stamps[id]);});
-    const tr=document.createElement('tr');
-    tr.innerHTML=`<td style="color:#bbb;font-size:.74rem">${i+1}</td>
-      <td><div class="p-name">${esc(p.name)}</div></td>
-      <td style="font-size:.79rem;color:#7a6a50">${esc(p.contact||'-')}</td>
-      <td><div class="p-time">${formatDate(p.appliedAt)}</div></td>
-      <td style="font-weight:600">${v}/${locations.length}</td>
-      <td style="font-size:.76rem">${completedCourses.length>0?completedCourses.map(c=>`<span style="background:#e8f5e9;color:var(--green);border:1px solid #a5d6a7;border-radius:3px;padding:1px 5px;font-size:.67rem">${esc(c.name)}</span>`).join(' '):'<span style="color:#bbb">없음</span>'}</td>
-      <td><button class="btn btn-outline btn-sm" onclick="showDetail('${p.uid}')">상세</button></td>`;
-    tbody.appendChild(tr);
-  });
-};
-
-window.exportPartsCSV=function(){let csv='이름,방문수,전체지점,완주코스,마지막방문\n';participants.forEach(p=>{const v=Object.keys(allStamps[p.uid]||{}).length;const cc=courses.filter(c=>{const ids=c.locationIds||{};const s=allStamps[p.uid]||{};return ids.length>0&&ids.every(id=>s[id]);}).map(c=>c.name).join('/');csv+=`"${p.name}","${v}","${locations.length}","${cc}","${formatDate(p.updatedAt)}"\n`;});const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`참여자_${new Date().toLocaleDateString('ko')}.csv`;a.click();};
-window.exportCompsCSV=function(){const applied=participants.filter(p=>p.applied);let csv='이름,연락처,신청시각,방문수,완주코스\n';applied.forEach(p=>{const v=Object.keys(allStamps[p.uid]||{}).length;const cc=courses.filter(c=>{const ids=c.locationIds||[];const s=allStamps[p.uid]||{};return ids.length>0&&ids.every(id=>s[id]);}).map(c=>c.name).join('/');csv+=`"${p.name}","${p.contact||''}","${formatDate(p.appliedAt)}","${v}","${cc}"\n`;});const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`완주신청_${new Date().toLocaleDateString('ko')}.csv`;a.click();};
-
-// Drag drop
-const zone=document.getElementById('upload-zone');
-zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag-over');});
-zone.addEventListener('dragleave',()=>zone.classList.remove('drag-over'));
-zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('drag-over');const f=e.dataTransfer.files[0];if(f)window.handleFileUpload({target:{files:[f],value:''}});});
+window.exportPartsCSV=function(){let c='이름,전화번호,방문수,완주코스,가입일\n';participants.forEach(p=>{const v=Object.keys(allStamps[p.uid]||{}).length;const cc=getCompletedCourses(p.uid).map(c=>c.name).join('/');c+=`"${p.name}","${fmtPhone(p.phone)}","${v}","${cc}","${fmtDate(p.createdAt)}"\n`;});const blob=new Blob(['\uFEFF'+c],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`참여자_${new Date().toLocaleDateString('ko')}.csv`;a.click();};
+window.exportCompsCSV=function(){const ap=participants.filter(p=>p.applied);let c='계정이름,신청이름,신청전화번호,신청시각,방문수,완주코스\n';ap.forEach(p=>{const v=Object.keys(allStamps[p.uid]||{}).length;const cc=getCompletedCourses(p.uid).map(c=>c.name).join('/');c+=`"${p.name}","${p.applyName||p.name}","${fmtPhone(p.applyPhone||p.phone)}","${fmtDate(p.appliedAt)}","${v}","${cc}"\n`;});const blob=new Blob(['\uFEFF'+c],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`완주신청_${new Date().toLocaleDateString('ko')}.csv`;a.click();};
 
 loadAll();
 </script>
