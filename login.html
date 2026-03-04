@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>로그인 · 스탬프 투어</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#1a1208;--paper:#f5efe3;--aged:#e8dcc8;--seal:#c0392b;--gold:#b8860b;--green:#2d6a4f;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{min-height:100vh;background:linear-gradient(160deg,#1a3a2a 0%,#0f2a1e 55%,#2c1f0e 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Noto Sans KR',sans-serif;padding:24px 16px;position:relative;overflow:hidden;}
+  body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 14px,rgba(255,255,255,.007) 14px,rgba(255,255,255,.007) 15px);pointer-events:none;}
+
+  .back-link{position:fixed;top:20px;left:20px;color:rgba(232,220,200,.45);font-size:.78rem;text-decoration:none;display:flex;align-items:center;gap:5px;transition:color .2s;z-index:10;}
+  .back-link:hover{color:rgba(232,220,200,.85);}
+
+  .card{background:white;border-radius:16px;padding:44px 36px 40px;max-width:400px;width:100%;box-shadow:0 24px 80px rgba(0,0,0,.5),0 0 0 1px rgba(184,134,11,.2);position:relative;animation:rise .65s cubic-bezier(.16,1,.3,1) both;}
+  @keyframes rise{from{opacity:0;transform:translateY(28px) scale(.97)}to{opacity:1;transform:none}}
+  .card::before{content:'';position:absolute;top:10px;left:10px;right:10px;bottom:10px;border:1px solid rgba(232,220,200,.35);border-radius:10px;pointer-events:none;}
+
+  .logo{text-align:center;margin-bottom:28px;}
+  .logo-emblem{font-size:2.6rem;display:block;filter:drop-shadow(0 2px 8px rgba(184,134,11,.3));margin-bottom:7px;}
+  .logo-title{font-family:'Noto Serif KR',serif;font-size:1.3rem;color:var(--ink);font-weight:700;letter-spacing:.04em;}
+  .logo-line{width:44px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:9px auto 0;}
+
+  .tab-switcher{display:flex;background:var(--paper);border:1px solid var(--aged);border-radius:8px;padding:3px;margin-bottom:24px;gap:3px;}
+  .tab-btn{flex:1;padding:9px;border:none;background:transparent;border-radius:6px;font-family:'Noto Sans KR',sans-serif;font-size:.84rem;color:#7a6a50;cursor:pointer;transition:all .2s;letter-spacing:.03em;}
+  .tab-btn.active{background:var(--ink);color:white;font-weight:500;}
+
+  .form-section{display:none;animation:fadeIn .3s both;}
+  .form-section.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  .form-group{margin-bottom:16px;}
+  .form-group label{font-size:.73rem;color:#7a6a50;letter-spacing:.05em;display:block;margin-bottom:5px;}
+  .form-group input{width:100%;padding:12px 14px;border:1.5px solid var(--aged);border-radius:8px;font-family:'Noto Sans KR',sans-serif;font-size:.95rem;color:var(--ink);background:var(--paper);transition:border-color .2s,background .2s;}
+  .form-group input:focus{outline:none;border-color:var(--gold);background:white;}
+  .form-group input.error{border-color:var(--seal);}
+  .field-error{font-size:.72rem;color:var(--seal);margin-top:4px;display:none;}
+
+  .btn-main{width:100%;padding:14px;background:var(--seal);color:white;border:none;border-radius:8px;font-family:'Noto Serif KR',serif;font-size:1rem;font-weight:600;cursor:pointer;letter-spacing:.05em;transition:all .2s;margin-top:4px;}
+  .btn-main:hover:not(:disabled){background:#a93226;transform:translateY(-1px);}
+  .btn-main:active{transform:translateY(0);}
+  .btn-main:disabled{background:#ccc;cursor:not-allowed;transform:none;}
+  .form-note{font-size:.74rem;color:#aaa;text-align:center;margin-top:14px;line-height:1.6;}
+  .form-note a,.form-note span{color:var(--gold);cursor:pointer;text-decoration:none;}
+  .form-note span:hover,.form-note a:hover{text-decoration:underline;}
+
+  /* States */
+  .state{display:none;}.state.active{display:block;}
+  .checking-wrap{text-align:center;padding:24px 0;}
+  .spinner{width:36px;height:36px;border:3px solid var(--aged);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .checking-wrap p{font-size:.85rem;color:#7a6a50;}
+
+  .success-wrap{text-align:center;padding:16px 0;}
+  .success-icon{font-size:2.8rem;margin-bottom:12px;display:block;animation:pop .5s cubic-bezier(.34,1.56,.64,1) both;}
+  @keyframes pop{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:scale(1)}}
+  .success-name{font-family:'Noto Serif KR',serif;font-size:1.1rem;color:var(--ink);margin-bottom:4px;}
+  .success-sub{font-size:.81rem;color:#7a6a50;margin-bottom:20px;}
+  .btn-goto{display:block;width:100%;padding:13px;background:var(--ink);color:white;border:none;border-radius:8px;font-family:'Noto Serif KR',serif;font-size:.95rem;font-weight:600;cursor:pointer;letter-spacing:.04em;transition:background .2s;text-decoration:none;text-align:center;}
+  .btn-goto:hover{background:var(--seal);}
+
+  .error-box{background:#fff5f5;border:1px solid #fecaca;border-radius:6px;padding:10px 14px;font-size:.79rem;color:var(--seal);margin-bottom:14px;display:none;line-height:1.5;}
+</style>
+</head>
+<body>
+
+<a class="back-link" href="index.html">← 메인으로</a>
+
+<div class="card">
+  <div class="state active" id="state-form">
+    <div class="logo">
+      <span class="logo-emblem">🗺️</span>
+      <div class="logo-title">스탬프 투어</div>
+      <div class="logo-line"></div>
+    </div>
+
+    <div class="tab-switcher">
+      <button class="tab-btn active" id="tab-login-btn" onclick="switchTab('login')">로그인</button>
+      <button class="tab-btn" id="tab-reg-btn" onclick="switchTab('register')">회원가입</button>
+    </div>
+
+    <div class="error-box" id="global-error"></div>
+
+    <!-- Login -->
+    <div class="form-section active" id="section-login">
+      <div class="form-group">
+        <label>휴대폰 번호</label>
+        <input type="tel" id="login-phone" placeholder="010-0000-0000" maxlength="13" oninput="fmtPhone(this)" onkeydown="if(event.key==='Enter')doLogin()"/>
+        <div class="field-error" id="login-phone-err"></div>
+      </div>
+      <button class="btn-main" id="btn-login" onclick="doLogin()">로그인</button>
+      <p class="form-note">처음이세요? <span onclick="switchTab('register')">회원가입하기</span></p>
+    </div>
+
+    <!-- Register -->
+    <div class="form-section" id="section-register">
+      <div class="form-group">
+        <label>이름 *</label>
+        <input type="text" id="reg-name" placeholder="홍길동" maxlength="20" onkeydown="if(event.key==='Enter')document.getElementById('reg-phone').focus()"/>
+        <div class="field-error" id="reg-name-err"></div>
+      </div>
+      <div class="form-group">
+        <label>휴대폰 번호 *</label>
+        <input type="tel" id="reg-phone" placeholder="010-0000-0000" maxlength="13" oninput="fmtPhone(this)" onkeydown="if(event.key==='Enter')doRegister()"/>
+        <div class="field-error" id="reg-phone-err"></div>
+      </div>
+      <button class="btn-main" id="btn-reg" onclick="doRegister()">가입하기</button>
+      <p class="form-note">이미 계정이 있나요? <span onclick="switchTab('login')">로그인</span></p>
+    </div>
+  </div>
+
+  <div class="state" id="state-checking">
+    <div class="checking-wrap">
+      <div class="spinner"></div>
+      <p id="checking-msg">확인 중...</p>
+    </div>
+  </div>
+
+  <div class="state" id="state-success">
+    <div class="success-wrap">
+      <span class="success-icon">🎉</span>
+      <div class="success-name" id="success-name"></div>
+      <div class="success-sub" id="success-sub"></div>
+      <a class="btn-goto" id="btn-goto" href="mypage.html">마이페이지로 이동 →</a>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig={apiKey:"AIzaSyAW13Cf2qQnsGWYiAdz9rF3TrWkGR_lLNg",authDomain:"stemp-tour.firebaseapp.com",projectId:"stemp-tour",storageBucket:"stemp-tour.firebasestorage.app",messagingSenderId:"823116268455",appId:"1:823116268455:web:4b060bf808eae664f62c82"};
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
+
+// If already logged in, redirect
+if(localStorage.getItem('stampUID')){
+  const redirect=new URLSearchParams(location.search).get('redirect');
+  location.href=redirect?decodeURIComponent(redirect):'mypage.html';
+}
+
+// Hash-based tab open (#register)
+if(location.hash==='#register') switchTab('register');
+
+function showState(id){document.querySelectorAll('.state').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function showGlobalErr(msg){const e=document.getElementById('global-error');e.textContent=msg;e.style.display='block';}
+function hideGlobalErr(){document.getElementById('global-error').style.display='none';}
+function fieldErr(id,msg){const e=document.getElementById(id);if(msg){e.textContent=msg;e.style.display='block';}else{e.style.display='none';}}
+function cleanPhone(p){return p.replace(/[^0-9]/g,'');}
+function validPhone(p){return /^01[016789]\d{7,8}$/.test(cleanPhone(p));}
+function phoneToUID(p){return 'P'+cleanPhone(p);}
+
+window.fmtPhone=function(input){
+  let v=input.value.replace(/[^0-9]/g,'');
+  if(v.length<=3)input.value=v;
+  else if(v.length<=7)input.value=v.slice(0,3)+'-'+v.slice(3);
+  else input.value=v.slice(0,3)+'-'+v.slice(3,7)+'-'+v.slice(7,11);
+};
+
+window.switchTab=function(tab){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.form-section').forEach(s=>s.classList.remove('active'));
+  hideGlobalErr();
+  if(tab==='login'){
+    document.getElementById('tab-login-btn').classList.add('active');
+    document.getElementById('section-login').classList.add('active');
+  }else{
+    document.getElementById('tab-reg-btn').classList.add('active');
+    document.getElementById('section-register').classList.add('active');
+  }
+};
+
+window.doLogin=async function(){
+  const phone=document.getElementById('login-phone').value.trim();
+  if(!validPhone(phone)){fieldErr('login-phone-err','올바른 휴대폰 번호를 입력해주세요.');return;}
+  fieldErr('login-phone-err',''); hideGlobalErr();
+  document.getElementById('btn-login').disabled=true;
+  document.getElementById('checking-msg').textContent='로그인 중...';
+  showState('state-checking');
+  try{
+    const uid=phoneToUID(phone);
+    const snap=await getDoc(doc(db,'participants',uid));
+    if(!snap.exists()){
+      showState('state-form'); switchTab('register');
+      document.getElementById('reg-phone').value=phone;
+      window.fmtPhone(document.getElementById('reg-phone'));
+      showGlobalErr('가입된 번호가 없어요. 회원가입을 먼저 해주세요.');
+      document.getElementById('btn-login').disabled=false; return;
+    }
+    const data=snap.data();
+    localStorage.setItem('stampUID',uid);
+    localStorage.setItem('stampVisitorName',data.name);
+    localStorage.setItem('stampPhone',cleanPhone(phone));
+    document.getElementById('success-name').textContent=data.name+' 님, 환영합니다!';
+    document.getElementById('success-sub').textContent='기존 기록이 불러와졌어요.';
+    const redirect=new URLSearchParams(location.search).get('redirect');
+    document.getElementById('btn-goto').href=redirect?decodeURIComponent(redirect):'mypage.html';
+    showState('state-success');
+  }catch(e){
+    showState('state-form'); showGlobalErr('오류가 발생했습니다. 다시 시도해주세요.');
+    document.getElementById('btn-login').disabled=false;
+  }
+};
+
+window.doRegister=async function(){
+  const name=document.getElementById('reg-name').value.trim();
+  const phone=document.getElementById('reg-phone').value.trim();
+  let ok=true;
+  if(!name){fieldErr('reg-name-err','이름을 입력해주세요.');ok=false;}else fieldErr('reg-name-err','');
+  if(!validPhone(phone)){fieldErr('reg-phone-err','올바른 휴대폰 번호를 입력해주세요.');ok=false;}else fieldErr('reg-phone-err','');
+  if(!ok)return;
+  hideGlobalErr();
+  document.getElementById('btn-reg').disabled=true;
+  document.getElementById('checking-msg').textContent='가입 처리 중...';
+  showState('state-checking');
+  try{
+    const uid=phoneToUID(phone);
+    const snap=await getDoc(doc(db,'participants',uid));
+    if(snap.exists()){
+      showState('state-form'); switchTab('login');
+      document.getElementById('login-phone').value=phone;
+      window.fmtPhone(document.getElementById('login-phone'));
+      showGlobalErr('이미 가입된 번호예요. 로그인해주세요.');
+      document.getElementById('btn-reg').disabled=false; return;
+    }
+    const now=new Date().toISOString();
+    await setDoc(doc(db,'participants',uid),{uid,name,phone:cleanPhone(phone),createdAt:now,updatedAt:now,visitCount:0,applied:false});
+    localStorage.setItem('stampUID',uid);
+    localStorage.setItem('stampVisitorName',name);
+    localStorage.setItem('stampPhone',cleanPhone(phone));
+    document.getElementById('success-name').textContent=name+' 님, 가입 완료!';
+    document.getElementById('success-sub').textContent='스탬프 투어에 오신 것을 환영합니다 🎉';
+    const redirect=new URLSearchParams(location.search).get('redirect');
+    document.getElementById('btn-goto').href=redirect?decodeURIComponent(redirect):'mypage.html';
+    showState('state-success');
+  }catch(e){
+    showState('state-form'); showGlobalErr('오류가 발생했습니다. 다시 시도해주세요.');
+    document.getElementById('btn-reg').disabled=false;
+  }
+};
+</script>
+</body>
+</html>
