@@ -26,6 +26,9 @@
   .tab-switcher{display:flex;background:var(--paper);border:1px solid var(--aged);border-radius:8px;padding:3px;margin-bottom:24px;gap:3px;}
   .tab-btn{flex:1;padding:9px;border:none;background:transparent;border-radius:6px;font-family:'Noto Sans KR',sans-serif;font-size:.84rem;color:#7a6a50;cursor:pointer;transition:all .2s;letter-spacing:.03em;}
   .tab-btn.active{background:var(--ink);color:white;font-weight:500;}
+  /* 회원가입 전용 모드일 때 탭 숨김 */
+  body.register-mode .tab-switcher{display:none;}
+  body.register-mode .form-note{display:none;}
 
   .form-section{display:none;animation:fadeIn .3s both;}
   .form-section.active{display:block;}
@@ -67,6 +70,23 @@
 <body>
 
 <a class="back-link" href="index.html">← 메인으로</a>
+
+<!-- 해시 즉시 처리 (모듈 로드 전에 실행) -->
+<script>
+  if(location.hash==='#register'){
+    document.body.classList.add('register-mode');
+    // DOM 준비 후 탭 전환
+    document.addEventListener('DOMContentLoaded', function(){
+      document.getElementById('tab-login-btn').classList.remove('active');
+      document.getElementById('tab-reg-btn').classList.add('active');
+      document.getElementById('section-login').classList.remove('active');
+      document.getElementById('section-register').classList.add('active');
+      // 제목도 회원가입으로 변경
+      const logoTitle = document.querySelector('.logo-title');
+      if(logoTitle) logoTitle.textContent = '회원가입';
+    });
+  }
+</script>
 
 <div class="card">
   <div class="state active" id="state-form">
@@ -151,9 +171,6 @@ if(localStorage.getItem('stampUID')){
   const redirect=new URLSearchParams(location.search).get('redirect');
   location.href=redirect?decodeURIComponent(redirect):'mypage.html';
 }
-
-// Hash-based tab open (#register)
-if(location.hash==='#register') switchTab('register');
 
 function showState(id){document.querySelectorAll('.state').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
 function showGlobalErr(msg){const e=document.getElementById('global-error');e.textContent=msg;e.style.display='block';}
