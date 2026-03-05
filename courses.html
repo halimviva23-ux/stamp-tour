@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>코스 안내 · 스탬프 투어</title>
+<title>코스 안내 · 전주시 자전거 여권</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root{--ink:#1a1208;--paper:#f5efe3;--aged:#e8dcc8;--seal:#c0392b;--gold:#b8860b;--green:#2d6a4f;}
@@ -98,8 +98,8 @@
 
 <div class="hero">
   <div class="hero-nav"><a class="back-btn" href="index.html">← 메인</a></div>
-  <span class="hero-emblem">🗺️</span>
-  <div class="hero-label">STAMP TOUR</div>
+  <span class="hero-emblem">🚲</span>
+  <div class="hero-label">JEONJU CYCLING PASSPORT</div>
   <div class="hero-title">코스 안내</div>
   <div class="hero-sub">방문할 지점의 위치와 정보를 확인하세요</div>
   <div class="hero-line"></div>
@@ -133,7 +133,7 @@ async function load(){
     document.getElementById('h-locs').textContent=lSnap.size;
 
     if(!courses.length){
-      document.getElementById('main-content').innerHTML='<div class="empty-state"><span class="icon">🗺️</span><p>등록된 코스가 없습니다.</p></div>';
+      document.getElementById('main-content').innerHTML='<div class="empty-state"><span class="icon">🚲</span><p>등록된 코스가 없습니다.</p></div>';
       document.getElementById('page-loading').style.display='none';return;
     }
 
@@ -193,7 +193,7 @@ function buildCard(course,ci,locs){
             </div>
           </div>
           ${hasAddr?`<div class="map-btns">
-            <a class="map-btn map-btn-kakao" href="https://map.kakao.com/link/search/${encodeURIComponent(loc.address)}" target="_blank" rel="noopener">🗺️ 카카오맵</a>
+            <a class="map-btn map-btn-kakao" href="https://map.kakao.com/link/search/${encodeURIComponent(loc.address)}" target="_blank" rel="noopener">🚲 카카오맵</a>
             <a class="map-btn map-btn-google" href="https://www.google.com/maps/search/${encodeURIComponent(loc.address)}" target="_blank" rel="noopener">🌐 Google Maps</a>
           </div>`:''}
         </div>
