@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>스탬프 투어</title>
+<title>전주시 자전거 여권</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@300;400;500&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
 <style>
   :root{--ink:#1a1208;--paper:#f5efe3;--aged:#e8dcc8;--seal:#c0392b;--gold:#b8860b;--green:#2d6a4f;--light-gold:rgba(184,134,11,.12);}
@@ -130,7 +130,18 @@
 
 <!-- Nav -->
 <nav>
-  <div class="nav-logo"><span>🗺️</span> 스탬프 투어</div>
+  <div class="nav-logo">
+    <!-- =============================================
+      🖼️ [로고 이미지] 수정 구역 — index.html 상단 네비게이션
+      이미지를 쓰려면 아래 <img> 태그의 주석을 해제하고
+      src 안에 이미지 경로를 입력하세요.
+      같은 폴더: src="images/logo.png"
+      외부 URL:  src="https://your-server.com/logo.png"
+      이미지를 쓰지 않으면 아래 텍스트가 그대로 표시돼요.
+    ============================================= -->
+    <!-- <img src="여기에_로고_이미지_경로" alt="전주시 자전거 여권 로고" style="height:32px;"/> -->
+    <span>🚲</span> 전주시 자전거 여권
+  </div>
   <div class="nav-actions">
     <!-- 비로그인 -->
     <a class="nav-btn nav-btn-outline logged-out-only" href="login.html">로그인</a>
@@ -144,9 +155,19 @@
 <!-- Hero -->
 <section class="hero">
   <div class="hero-frame"></div>
-  <div class="hero-eyebrow">STAMP TOUR · 스탬프 투어</div>
-  <h1 class="hero-title">발걸음마다<br><em>특별한 기억</em>을 새기다</h1>
-  <p class="hero-sub">각 지점을 방문하고 QR코드를 스캔해<br>나만의 스탬프 여권을 완성해보세요.</p>
+  <!-- =============================================
+    🖼️ [메인 배너 이미지] 수정 구역 — index.html 히어로 섹션
+    배너 이미지를 넣으려면 아래 <img> 주석을 해제하세요.
+    배경 이미지로 표시됩니다. (텍스트는 그 위에 겹쳐서 표시)
+    권장 크기: 1920 x 800px 이상
+    같은 폴더: src="images/banner.jpg"
+    외부 URL:  src="https://your-server.com/banner.jpg"
+  ============================================= -->
+  <!-- <img src="여기에_배너_이미지_경로" alt="메인 배너"
+    style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.18;pointer-events:none;"/> -->
+  <div class="hero-eyebrow">JEONJU CYCLING PASSPORT</div>
+  <h1 class="hero-title">페달을 밟으며<br><em>전주를 기록</em>하다</h1>
+  <p class="hero-sub">자전거로 전주 곳곳을 누비고 QR코드를 스캔해<br>나만의 자전거 여권을 완성해보세요.</p>
   <div class="hero-cta logged-out-only">
     <a class="btn-hero-main" href="login.html#register">지금 시작하기</a>
     <a class="btn-hero-sub" href="courses.html">코스 둘러보기</a>
@@ -164,23 +185,23 @@
 <!-- About -->
 <section class="section">
   <div class="section-label">ABOUT</div>
-  <h2 class="section-title">스탬프 투어란?</h2>
-  <p class="section-desc">도시 곳곳에 숨겨진 특별한 장소들을 찾아다니며<br>QR코드로 방문을 인증하는 도보 여행 프로그램입니다.</p>
+  <h2 class="section-title">전주시 자전거 여권이란?</h2>
+  <p class="section-desc">자전거를 타고 전주 곳곳의 명소를 방문하며<br>QR코드로 방문을 인증하는 자전거 여행 프로그램입니다.</p>
   <div class="about-grid">
     <div class="about-card">
-      <span class="about-card-icon">📍</span>
-      <div class="about-card-title">장소 발견</div>
-      <div class="about-card-desc">숨겨진 명소와 이야기가 담긴 장소들을 직접 발로 찾아다녀요.</div>
+      <span class="about-card-icon">🚲</span>
+      <div class="about-card-title">자전거로 떠나요</div>
+      <div class="about-card-desc">전주의 아름다운 명소들을 자전거를 타고 직접 찾아다녀요.</div>
     </div>
     <div class="about-card">
       <span class="about-card-icon">📖</span>
       <div class="about-card-title">여권 수집</div>
-      <div class="about-card-desc">방문할 때마다 디지털 여권에 스탬프가 찍혀 나만의 기록이 쌓여요.</div>
+      <div class="about-card-desc">방문할 때마다 디지털 여권에 도장이 찍혀 나만의 기록이 쌓여요.</div>
     </div>
     <div class="about-card">
       <span class="about-card-icon">🏆</span>
       <div class="about-card-title">코스 완주</div>
-      <div class="about-card-desc">코스의 모든 지점을 방문하면 완주 신청을 하고 기념품을 받아요.</div>
+      <div class="about-card-desc">코스의 모든 지점을 완주하면 신청을 통해 기념품을 받을 수 있어요.</div>
     </div>
   </div>
 </section>
@@ -221,8 +242,8 @@
 <!-- CTA -->
 <section class="cta-section">
   <div class="cta-box">
-    <span class="cta-box-emblem">🗺️</span>
-    <div class="cta-box-title">지금 여정을 시작하세요</div>
+    <span class="cta-box-emblem">🚲</span>
+    <div class="cta-box-title">지금 라이딩을 시작하세요</div>
     <p class="cta-box-sub logged-out-only">회원가입은 이름과 휴대폰 번호만 있으면 돼요.<br>어느 기기에서든 같은 계정으로 접속할 수 있어요.</p>
     <p class="cta-box-sub logged-in-only">마이페이지에서 코스 진행 현황을<br>확인하고 완주에 도전해보세요!</p>
     <div class="cta-btns logged-out-only">
@@ -242,7 +263,7 @@
     <a href="login.html">로그인</a>
     <a href="admin.html">관리자</a>
   </p>
-  <p style="margin-top:12px">© 2025 스탬프 투어. All rights reserved.</p>
+  <p style="margin-top:12px">© 2025 전주시 자전거 여권. All rights reserved.</p>
 </footer>
 
 <script>
