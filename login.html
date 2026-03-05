@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>로그인 · 스탬프 투어</title>
+<title>로그인 · 전주시 자전거 여권</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root{--ink:#1a1208;--paper:#f5efe3;--aged:#e8dcc8;--seal:#c0392b;--gold:#b8860b;--green:#2d6a4f;}
@@ -71,8 +71,18 @@
 <div class="card">
   <div class="state active" id="state-form">
     <div class="logo">
-      <span class="logo-emblem">🗺️</span>
-      <div class="logo-title">스탬프 투어</div>
+      <!-- =============================================
+        🖼️ [로그인 로고 이미지] 수정 구역 — login.html
+        이미지를 쓰려면 아래 <img> 주석을 해제하고
+        이모지 줄(<span class="logo-emblem">)은 삭제하거나 주석 처리하세요.
+        권장 크기: 200 x 200px (정사각형 또는 원형)
+        같은 폴더: src="images/logo.png"
+        외부 URL:  src="https://your-server.com/logo.png"
+      ============================================= -->
+      <!-- <img src="여기에_로고_이미지_경로" alt="전주시 자전거 여권 로고"
+        style="width:80px;height:80px;object-fit:contain;margin-bottom:8px;display:block;margin-left:auto;margin-right:auto;"/> -->
+      <span class="logo-emblem">🚲</span>
+      <div class="logo-title">전주시 자전거 여권</div>
       <div class="logo-line"></div>
     </div>
 
@@ -232,7 +242,7 @@ window.doRegister=async function(){
     localStorage.setItem('stampVisitorName',name);
     localStorage.setItem('stampPhone',cleanPhone(phone));
     document.getElementById('success-name').textContent=name+' 님, 가입 완료!';
-    document.getElementById('success-sub').textContent='스탬프 투어에 오신 것을 환영합니다 🎉';
+    document.getElementById('success-sub').textContent='전주시 자전거 여권에 오신 것을 환영합니다 🎉';
     const redirect=new URLSearchParams(location.search).get('redirect');
     document.getElementById('btn-goto').href=redirect?decodeURIComponent(redirect):'mypage.html';
     showState('state-success');
