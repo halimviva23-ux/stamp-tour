@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>마이페이지 · 스탬프 투어</title>
+<title>마이페이지 · 전주시 자전거 여권</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@300;400;500&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
 <style>
   :root{--ink:#1a1208;--paper:#f5efe3;--aged:#e8dcc8;--seal:#c0392b;--gold:#b8860b;--green:#2d6a4f;}
@@ -175,9 +175,20 @@
       <a class="btn-home" href="index.html">← 메인</a>
       <button class="btn-logout" onclick="logout()">로그아웃</button>
     </div>
-    <span class="cover-emblem">🗺️</span>
-    <div class="cover-title">스탬프 투어 · 마이페이지</div>
-    <div class="cover-main">My Passport</div>
+    <span class="cover-emblem">🚲</span>
+    <!-- =============================================
+      🖼️ [여권 커버 이미지] 수정 구역 — mypage.html
+      여권 커버 상단에 로고/이미지를 넣으려면
+      위 이모지(<span class="cover-emblem">)를 지우고
+      아래 <img> 주석을 해제하세요.
+      권장 크기: 200 x 80px (가로형 로고)
+      같은 폴더: src="images/logo.png"
+      외부 URL:  src="https://your-server.com/logo.png"
+    ============================================= -->
+    <!-- <img src="여기에_여권커버_로고_이미지_경로" alt="전주시 자전거 여권"
+      style="height:60px;object-fit:contain;display:block;margin:0 auto 10px;filter:brightness(0) invert(1);"/> -->
+    <div class="cover-title">전주시 자전거 여권 · 마이페이지</div>
+    <div class="cover-main">나의 여권</div>
     <div class="cover-visitor" id="cover-visitor">-</div>
     <div class="cover-phone" id="cover-phone"></div>
     <div class="cover-line"></div>
@@ -217,6 +228,12 @@
 <div class="modal-overlay" id="loc-modal-overlay">
   <div class="loc-modal">
     <button class="loc-modal-close" onclick="closeLocModal()">✕</button>
+    <!-- 지점 이미지 표시 영역 (imageUrl이 있을 때만 보임) -->
+    <div id="lm-img-wrap" style="display:none">
+      <img id="lm-img" src="" alt="지점 이미지"
+        style="width:100%;height:190px;object-fit:cover;border-radius:12px 12px 0 0;display:block;"
+        onerror="document.getElementById('lm-img-wrap').style.display='none'"/>
+    </div>
     <div class="loc-modal-header">
       <span class="loc-modal-emoji" id="lm-emoji">🏛️</span>
       <div class="stamp-status-badge" id="lm-status-badge"></div>
@@ -330,7 +347,7 @@ async function load(){
     // Courses tab
     const coursesList=document.getElementById('courses-list');
     if(!courses.length){
-      coursesList.innerHTML='<div class="empty-state"><span class="icon">🗺️</span><p>등록된 코스가 없습니다.</p></div>';
+      coursesList.innerHTML='<div class="empty-state"><span class="icon">🚲</span><p>등록된 코스가 없습니다.</p></div>';
     }else{
       coursesList.innerHTML='';
       courses.forEach((course,ci)=>{
@@ -388,7 +405,7 @@ async function load(){
     const entries=Object.entries(stamps).sort((a,b)=>new Date(b[1].visitedAt)-new Date(a[1].visitedAt));
     const visitList=document.getElementById('visit-list');
     if(!entries.length){
-      visitList.innerHTML='<div class="empty-state"><span class="icon">🗺️</span><p>아직 방문한 지점이 없어요.<br>QR코드를 스캔해보세요!</p></div>';
+      visitList.innerHTML='<div class="empty-state"><span class="icon">🚲</span><p>아직 방문한 지점이 없어요.<br>QR코드를 스캔해보세요!</p></div>';
     }else{
       visitList.innerHTML='';
       entries.forEach(([locId,data],i)=>{
@@ -426,6 +443,11 @@ window.openLocModal=function(locId,locIdx){
   const loc=_locs[locId];if(!loc)return;
   const visited=_stamps[locId];
   const emoji=EMOJIS[(locIdx||0)%EMOJIS.length];
+  // 지점 이미지
+  const imgWrap=document.getElementById('lm-img-wrap');
+  const imgEl=document.getElementById('lm-img');
+  if(loc.imageUrl){imgEl.src=loc.imageUrl;imgWrap.style.display='block';}
+  else{imgWrap.style.display='none';imgEl.src='';}
   document.getElementById('lm-emoji').textContent=emoji;
   document.getElementById('lm-name').textContent=loc.name;
   document.getElementById('lm-desc').textContent=loc.desc||'';
@@ -438,7 +460,7 @@ window.openLocModal=function(locId,locIdx){
   if(loc.address){
     addrEl.innerHTML=`<span class="info-text">${loc.address}</span>`;
     document.getElementById('lm-map-btns').innerHTML=`
-      <a class="map-btn map-btn-kakao" href="https://map.kakao.com/link/search/${encodeURIComponent(loc.address)}" target="_blank" rel="noopener">🗺️ 카카오맵</a>
+      <a class="map-btn map-btn-kakao" href="https://map.kakao.com/link/search/${encodeURIComponent(loc.address)}" target="_blank" rel="noopener">🚲 카카오맵</a>
       <a class="map-btn map-btn-google" href="https://www.google.com/maps/search/${encodeURIComponent(loc.address)}" target="_blank" rel="noopener">🌐 Google Maps</a>`;
   }else{
     addrEl.innerHTML='<span class="info-no-data">주소 정보가 없습니다</span>';
