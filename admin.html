@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>관리자 · 스탬프 투어</title>
+<title>관리자 · 전주시 자전거 여권</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
@@ -136,7 +136,7 @@
 <div class="loading-overlay" id="page-loading"><div class="sp"></div><p>데이터 불러오는 중...</p></div>
 
 <header>
-  <h1>스탬프 투어 관리자</h1>
+  <h1>전주시 자전거 여권 관리자</h1>
   <p><span class="live-dot"></span>Firebase 연동 · stemp-tour</p>
 </header>
 
@@ -217,10 +217,11 @@
   </div>
   <div class="card">
     <div class="card-title">✏️ 지점 직접 추가</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1.5fr auto;gap:8px;align-items:flex-end">
-      <div><label>지점명 *</label><input type="text" id="new-name" placeholder="예: 경복궁" onkeydown="if(event.key==='Enter')addLocation()"/></div>
-      <div><label>설명 (선택)</label><input type="text" id="new-desc" placeholder="예: 조선 최대 법궁"/></div>
-      <div><label>주소 (선택)</label><input type="text" id="new-addr" placeholder="서울시 종로구 사직로 161"/></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1.5fr 1.5fr auto;gap:8px;align-items:flex-end">
+      <div><label>지점명 *</label><input type="text" id="new-name" placeholder="예: 한옥마을" onkeydown="if(event.key==='Enter')addLocation()"/></div>
+      <div><label>설명 (선택)</label><input type="text" id="new-desc" placeholder="예: 전주 대표 명소"/></div>
+      <div><label>주소 (선택)</label><input type="text" id="new-addr" placeholder="전북 전주시 완산구 기린대로 99"/></div>
+      <div><label>🖼️ 이미지 URL (선택)</label><input type="text" id="new-img" placeholder="https://... 이미지 주소 입력"/></div>
       <button class="btn btn-dark" onclick="addLocation()" style="align-self:flex-end">추가</button>
     </div>
   </div>
@@ -232,7 +233,7 @@
         <button class="btn btn-danger btn-sm" onclick="clearAllLocs()">전체 삭제</button>
       </div>
     </div>
-    <div class="table-wrap"><table><thead><tr><th style="width:30px">#</th><th>지점명</th><th>설명</th><th>주소</th><th>배정 코스</th><th style="width:80px">ID</th><th style="width:120px">작업</th></tr></thead><tbody id="loc-tbody"></tbody></table></div>
+    <div class="table-wrap"><table><thead><tr><th style="width:30px">#</th><th>지점명</th><th>설명</th><th>주소</th><th>🖼️ 이미지 URL</th><th>배정 코스</th><th style="width:80px">ID</th><th style="width:120px">작업</th></tr></thead><tbody id="loc-tbody"></tbody></table></div>
   </div>
 </div>
 
@@ -445,6 +446,7 @@ function renderLocations(){
       <td><input type="text" value="${esc(l.name)}" onchange="updLoc('${l.id}','name',this.value)"/></td>
       <td><input type="text" value="${esc(l.desc||'')}" onchange="updLoc('${l.id}','desc',this.value)" placeholder="설명 없음"/></td>
       <td><input type="text" value="${esc(l.address||'')}" onchange="updLoc('${l.id}','address',this.value)" placeholder="주소 입력"/></td>
+      <td><input type="text" value="${esc(l.imageUrl||'')}" onchange="updLoc('${l.id}','imageUrl',this.value)" placeholder="https://... 이미지 URL" style="min-width:180px"/></td>
       <td>${cn}</td>
       <td><span class="loc-id">${l.id}</span></td>
       <td><div class="row-actions"><button class="btn btn-outline btn-sm" onclick="showQR('${l.id}',${i})">QR</button><button class="btn btn-danger btn-sm" onclick="delLoc('${l.id}','${esc(l.name)}')">삭제</button></div></td>`;
@@ -455,10 +457,10 @@ function renderLocations(){
 window.updLoc=async function(id,key,val){const l=locations.find(l=>l.id===id);if(!l)return;l[key]=val;await updateDoc(doc(db,'locations',id),{[key]:val});};
 window.addLocation=async function(){
   const name=document.getElementById('new-name').value.trim();if(!name){showToast('지점명을 입력하세요');return;}
-  const id=genId(),desc=document.getElementById('new-desc').value.trim(),address=document.getElementById('new-addr').value.trim();
-  await setDoc(doc(db,'locations',id),{name,desc,address,order:locations.length});
-  locations.push({id,name,desc,address,order:locations.length,visitCount:0});
-  document.getElementById('new-name').value='';document.getElementById('new-desc').value='';document.getElementById('new-addr').value='';
+  const id=genId(),desc=document.getElementById('new-desc').value.trim(),address=document.getElementById('new-addr').value.trim(),imageUrl=document.getElementById('new-img').value.trim();
+  await setDoc(doc(db,'locations',id),{name,desc,address,imageUrl,order:locations.length});
+  locations.push({id,name,desc,address,imageUrl,order:locations.length,visitCount:0});
+  document.getElementById('new-name').value='';document.getElementById('new-desc').value='';document.getElementById('new-addr').value='';document.getElementById('new-img').value='';
   await setDoc(doc(db,'meta','config'),{locationCount:locations.length},{merge:true});
   updateBadges();renderLocations();renderCourseDetail();showToast('✓ 지점 추가됨');
 };
