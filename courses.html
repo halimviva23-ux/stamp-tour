@@ -173,8 +173,8 @@ function buildCard(course,ci,locs){
     const loc=locs[id];
     const emoji=EMOJIS[li%EMOJIS.length];
     const hasAddr=loc?.address?.trim();
-    return`<div class="loc-item" id="li-${ci}-${li}">
-      <div class="loc-summary" onclick="toggleLoc('li-${ci}-${li}')">
+    return`<div class="loc-item">
+      <div class="loc-summary" onclick="toggleLoc(this)">
         <span class="loc-num" style="color:${color}">${String(li+1).padStart(2,'0')}</span>
         <span class="loc-emoji">${emoji}</span>
         <div class="loc-info">
@@ -220,8 +220,10 @@ window.showSection=function(idx,btn){
   document.querySelectorAll('.course-section').forEach(s=>s.classList.remove('active'));
   document.getElementById(idx===-1?'sec-all':`sec-${idx}`).classList.add('active');
 };
-window.toggleLoc=function(id){
-  const item=document.getElementById(id);const was=item.classList.contains('open');
+window.toggleLoc=function(summaryEl){
+  const item=summaryEl.closest('.loc-item');
+  const was=item.classList.contains('open');
+  // 같은 카드 안의 다른 지점 닫기
   item.closest('.loc-list').querySelectorAll('.loc-item.open').forEach(i=>i.classList.remove('open'));
   if(!was)item.classList.add('open');
 };
