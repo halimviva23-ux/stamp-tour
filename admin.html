@@ -133,6 +133,78 @@
 </style>
 </head>
 <body>
+
+<!-- =============================================
+  🔒 관리자 비밀번호 설정
+  ADMIN_PASSWORD 값을 원하는 비밀번호로 바꾸세요!
+============================================= -->
+<script>
+const ADMIN_PASSWORD = 'wkwjsrjdurnjs0218!!';  // ← 여기에 비밀번호를 입력하세요
+
+const SESSION_KEY = 'adminAuth';
+const SESSION_EXPIRE = 1000 * 60 * 60 * 8; // 8시간 유지
+
+function checkAuth() {
+  const saved = sessionStorage.getItem(SESSION_KEY);
+  if (saved) {
+    const { pw, time } = JSON.parse(saved);
+    if (pw === ADMIN_PASSWORD && Date.now() - time < SESSION_EXPIRE) return true;
+  }
+  return false;
+}
+
+function showLock() {
+  document.getElementById('lock-screen').style.display = 'flex';
+  document.getElementById('admin-wrap').style.display = 'none';
+}
+
+function showAdmin() {
+  document.getElementById('lock-screen').style.display = 'none';
+  document.getElementById('admin-wrap').style.display = 'block';
+}
+
+function tryLogin() {
+  const input = document.getElementById('pw-input').value;
+  if (input === ADMIN_PASSWORD) {
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify({ pw: input, time: Date.now() }));
+    showAdmin();
+    loadAll();
+  } else {
+    const errEl = document.getElementById('pw-error');
+    errEl.style.display = 'block';
+    document.getElementById('pw-input').value = '';
+    document.getElementById('pw-input').focus();
+    setTimeout(() => errEl.style.display = 'none', 2500);
+  }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  if (checkAuth()) { showAdmin(); }
+  else { showLock(); }
+  document.getElementById('pw-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') tryLogin();
+  });
+});
+</script>
+
+<!-- 잠금 화면 -->
+<div id="lock-screen" style="display:none;position:fixed;inset:0;background:linear-gradient(160deg,#1a2744 0%,#0f1e38 100%);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:white;border-radius:12px;padding:40px 32px;max-width:360px;width:90%;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,.5);">
+    <div style="font-size:2.8rem;margin-bottom:12px;">🔒</div>
+    <div style="font-family:'Noto Serif KR',serif;font-size:1.2rem;font-weight:700;color:#1a1208;margin-bottom:4px;">관리자 페이지</div>
+    <div style="font-size:.8rem;color:#7a6a50;margin-bottom:24px;">비밀번호를 입력하세요</div>
+    <input id="pw-input" type="password" placeholder="비밀번호"
+      style="width:100%;padding:11px 14px;border:1.5px solid #e8dcc8;border-radius:8px;font-size:.95rem;font-family:'Noto Sans KR',sans-serif;color:#1a1208;background:#f5efe3;margin-bottom:10px;text-align:center;letter-spacing:.2em;outline:none;"/>
+    <div id="pw-error" style="display:none;font-size:.76rem;color:#c0392b;margin-bottom:10px;">❌ 비밀번호가 틀렸어요.</div>
+    <button onclick="tryLogin()"
+      style="width:100%;padding:12px;background:#1a2744;color:white;border:none;border-radius:8px;font-family:'Noto Serif KR',serif;font-size:.95rem;font-weight:600;cursor:pointer;letter-spacing:.05em;">
+      입장하기
+    </button>
+  </div>
+</div>
+
+<!-- 관리자 본문 -->
+<div id="admin-wrap" style="display:none;">
 <div class="loading-overlay" id="page-loading"><div class="sp"></div><p>데이터 불러오는 중...</p></div>
 
 <header>
@@ -595,7 +667,8 @@ document.getElementById('detail-modal').addEventListener('click',function(e){if(
 window.exportPartsCSV=function(){let c='이름,전화번호,방문수,완주코스,가입일\n';participants.forEach(p=>{const v=Object.keys(allStamps[p.uid]||{}).length;const cc=getCompletedCourses(p.uid).map(c=>c.name).join('/');c+=`"${p.name}","${fmtPhone(p.phone)}","${v}","${cc}","${fmtDate(p.createdAt)}"\n`;});const blob=new Blob(['\uFEFF'+c],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`참여자_${new Date().toLocaleDateString('ko')}.csv`;a.click();};
 window.exportCompsCSV=function(){const ap=participants.filter(p=>p.applied);let c='계정이름,신청이름,신청전화번호,신청시각,방문수,완주코스\n';ap.forEach(p=>{const v=Object.keys(allStamps[p.uid]||{}).length;const cc=getCompletedCourses(p.uid).map(c=>c.name).join('/');c+=`"${p.name}","${p.applyName||p.name}","${fmtPhone(p.applyPhone||p.phone)}","${fmtDate(p.appliedAt)}","${v}","${cc}"\n`;});const blob=new Blob(['\uFEFF'+c],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`완주신청_${new Date().toLocaleDateString('ko')}.csv`;a.click();};
 
-loadAll();
+// loadAll은 비밀번호 인증 후 자동 호출됩니다
 </script>
+</div><!-- /admin-wrap -->
 </body>
 </html>
