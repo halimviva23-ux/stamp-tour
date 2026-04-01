@@ -264,6 +264,18 @@ window.addEventListener('DOMContentLoaded', () => {
               <button class="btn btn-gold btn-sm" onclick="saveCourseEdit()">저장</button>
               <button class="btn btn-danger btn-sm" onclick="deleteCourse()">삭제</button>
             </div>
+            <!-- 필수 코스 토글 -->
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 13px;background:var(--paper);border-radius:6px;border:1px solid var(--aged);margin-bottom:13px;">
+              <span style="font-size:.82rem;font-weight:500;color:var(--ink);flex:1">⭐ 필수 코스 (완주 신청 조건)</span>
+              <label style="display:flex;align-items:center;gap:7px;cursor:pointer;margin-bottom:0;">
+                <span style="font-size:.76rem;color:#aaa" id="required-label">선택</span>
+                <div style="position:relative;width:44px;height:24px;" onclick="toggleRequired()">
+                  <input type="checkbox" id="required-toggle" style="opacity:0;width:0;height:0;position:absolute"/>
+                  <div id="required-track" style="position:absolute;inset:0;border-radius:12px;background:#ccc;transition:background .2s;cursor:pointer;"></div>
+                  <div id="required-thumb" style="position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:white;transition:transform .2s;box-shadow:0 1px 4px rgba(0,0,0,.2);"></div>
+                </div>
+              </label>
+            </div>
             <div class="loc-assign">
               <div class="loc-pool-wrap"><h4>전체 지점 (클릭하여 추가)</h4><div class="loc-pool" id="pool-avail"></div></div>
               <div class="loc-pool-wrap"><h4>배정된 지점 (클릭하여 제거)</h4><div class="loc-pool" id="pool-assigned"></div></div>
@@ -420,6 +432,7 @@ function updateBadges(){
 }
 
 function getCompletedCourses(uid){const s=allStamps[uid]||{};return courses.filter(c=>{const ids=c.locationIds||[];return ids.length>0&&ids.every(id=>s[id]);});}
+function getRequiredCompleted(uid){const s=allStamps[uid]||{};const req=courses.filter(c=>c.required);const done=req.filter(c=>{const ids=c.locationIds||[];return ids.length>0&&ids.every(id=>s[id]);});return{req,done,allDone:req.length>0&&done.length>=req.length};}
 
 function renderOverview(){
   const lcm={};courses.forEach(c=>(c.locationIds||[]).forEach(id=>{if(!lcm[id])lcm[id]=[];lcm[id].push(c.name);}));
@@ -456,7 +469,7 @@ function renderCourseList(){
   courses.forEach((c,ci)=>{
     const div=document.createElement('div');div.className='course-item'+(selCourse===c.id?' active':'');
     div.onclick=()=>{selCourse=c.id;renderCourseList();renderCourseDetail();};
-    div.innerHTML=`<div class="cdot" style="background:${COLORS[ci%COLORS.length]}"></div><span class="ci-name">${esc(c.name)}</span><span class="ci-cnt">${(c.locationIds||[]).length}개</span>`;
+    div.innerHTML=`<div class="cdot" style="background:${COLORS[ci%COLORS.length]}"></div><span class="ci-name">${esc(c.name)}</span>${c.required?'<span style="background:#b8860b;color:white;border-radius:8px;padding:1px 7px;font-size:.62rem;font-weight:600">필수</span>':''}<span class="ci-cnt">${(c.locationIds||[]).length}개</span>`;
     el.appendChild(div);
   });
 }
@@ -466,6 +479,13 @@ function renderCourseDetail(){
   document.getElementById('det-content').style.display=c?'block':'none';
   if(!c)return;
   document.getElementById('edit-course-name').value=c.name;
+  // 필수 토글 상태 반영
+  const isReq=!!c.required;
+  document.getElementById('required-toggle').checked=isReq;
+  document.getElementById('required-track').style.background=isReq?'#b8860b':'#ccc';
+  document.getElementById('required-thumb').style.transform=isReq?'translateX(20px)':'translateX(0)';
+  document.getElementById('required-label').textContent=isReq?'필수':'선택';
+  document.getElementById('required-label').style.color=isReq?'#b8860b':'#aaa';
   const assigned=new Set(c.locationIds||[]);
   const avail=document.getElementById('pool-avail');avail.innerHTML='';
   locations.filter(l=>!assigned.has(l.id)).forEach(l=>{
@@ -494,6 +514,13 @@ window.saveCourseEdit=async function(){
   const c=courses.find(c=>c.id===selCourse);if(!c)return;
   const n=document.getElementById('edit-course-name').value.trim();if(!n)return;
   c.name=n;await updateDoc(doc(db,'courses',selCourse),{name:n});renderCourseList();showToast('✓ 저장됨');
+};
+window.toggleRequired=async function(){
+  const c=courses.find(c=>c.id===selCourse);if(!c)return;
+  c.required=!c.required;
+  await updateDoc(doc(db,'courses',selCourse),{required:c.required});
+  renderCourseDetail();renderCourseList();
+  showToast(c.required?'⭐ 필수 코스로 설정됨':'선택 코스로 변경됨');
 };
 window.deleteCourse=async function(){
   const c=courses.find(c=>c.id===selCourse);if(!c)return;
@@ -614,14 +641,15 @@ window.renderParts=function(){
     const s=allStamps[p.uid]||{};const v=Object.keys(s).length;const tot=locations.length;
     const pct=tot?Math.round(v/tot*100):0;
     const cc=getCompletedCourses(p.uid);
+    const {req,done,allDone}=getRequiredCompleted(p.uid);
     const tr=document.createElement('tr');
     tr.innerHTML=`<td style="color:#bbb;font-size:.72rem">${i+1}</td>
       <td><div style="font-weight:500">${esc(p.name)}</div></td>
       <td style="font-size:.78rem;color:#7a6a50">${fmtPhone(p.phone)}</td>
       <td><div style="font-size:.74rem;color:#7a6a50">${v}/${tot}곳</div><div class="pm-bar"><div class="pm-fill" style="width:${pct}%"></div></div></td>
-      <td style="font-size:.75rem">${cc.length?cc.map(c=>`<span style="background:#e8f5e9;color:var(--green);border:1px solid #a5d6a7;border-radius:3px;padding:1px 5px;font-size:.66rem">${esc(c.name)}</span>`).join(' '):'<span style="color:#bbb">없음</span>'}</td>
+      <td style="font-size:.75rem">${cc.length?cc.map(c=>`<span style="background:${c.required?'#fff3e0':'#e8f5e9'};color:${c.required?'#e65100':'var(--green)'};border:1px solid ${c.required?'#ffcc80':'#a5d6a7'};border-radius:3px;padding:1px 5px;font-size:.66rem">${c.required?'⭐ ':''} ${esc(c.name)}</span>`).join(' '):'<span style="color:#bbb">없음</span>'}</td>
       <td style="font-size:.71rem;color:#aaa">${fmtDate(p.updatedAt)}</td>
-      <td>${p.applied?'<span class="sb sb-applied">완주신청</span>':cc.length?'<span class="sb sb-complete">완주</span>':'<span class="sb sb-active">진행중</span>'}</td>
+      <td>${p.applied?'<span class="sb sb-applied">완주신청</span>':allDone?'<span class="sb sb-complete">신청가능</span>':'<span class="sb sb-active">진행중</span>'} ${req.length?`<div style="font-size:.65rem;color:#aaa;margin-top:2px">필수 ${done.length}/${req.length}</div>`:''}</td>
       <td><button class="btn btn-outline btn-sm" onclick="showDetail('${p.uid}')">상세</button></td>`;
     tbody.appendChild(tr);
   });

@@ -328,6 +328,10 @@ async function load(){
     const visitedCount=Object.keys(stamps).length;
     const participatingCourses=courses.filter(c=>(c.locationIds||[]).some(id=>stamps[id]));
     const completedCourses=courses.filter(c=>{const ids=c.locationIds||[];return ids.length>0&&ids.every(id=>stamps[id]);});
+    // 필수 코스만 따로 분류
+    const requiredCourses=courses.filter(c=>c.required);
+    const completedRequired=requiredCourses.filter(c=>{const ids=c.locationIds||[];return ids.length>0&&ids.every(id=>stamps[id]);});
+    const allRequiredDone=requiredCourses.length>0&&completedRequired.length>=requiredCourses.length;
 
     // Cover
     document.getElementById('cover-visitor').textContent=pData.name+' 님';
@@ -336,12 +340,18 @@ async function load(){
     document.getElementById('s-courses').textContent=participatingCourses.length;
     document.getElementById('s-completed').textContent=completedCourses.length;
 
-    // CTA
-    if(completedCourses.length>0){
+    // 완주 신청 CTA — 필수 코스 모두 완주 시 표시
+    if(allRequiredDone){
       document.getElementById('completion-cta').style.display='block';
-      document.getElementById('cta-title').textContent=`${completedCourses.length}개 코스 완주 달성!`;
+      document.getElementById('cta-title').textContent=`필수 코스 ${completedRequired.length}개 완주 달성! 🎉`;
       document.getElementById('cta-desc').textContent='완주 신청을 하고 기념품을 받아보세요.';
       if(pData.applied)document.getElementById('cta-btn-wrap').innerHTML='<div class="applied-notice">✓ 완주 신청 완료</div>';
+    } else if(requiredCourses.length>0){
+      // 필수 코스가 있지만 아직 미완주 → 진행 현황 표시
+      document.getElementById('completion-cta').style.display='block';
+      document.getElementById('cta-title').textContent=`필수 코스 ${completedRequired.length}/${requiredCourses.length} 완주 중`;
+      document.getElementById('cta-desc').textContent=`필수 코스를 모두 완주하면 신청할 수 있어요. (${requiredCourses.filter(c=>{const ids=c.locationIds||[];return!(ids.length>0&&ids.every(id=>stamps[id]));}).map(c=>c.name).join(', ')})`;
+      document.getElementById('cta-btn-wrap').innerHTML='<button class="btn-apply" disabled style="opacity:.4;cursor:not-allowed">완주 신청하기</button>';
     }
 
     // Courses tab
@@ -420,7 +430,7 @@ async function load(){
       });
     }
 
-    window._myData={pData,visitedCount,uid,completedCourses};
+    window._myData={pData,visitedCount,uid,completedCourses,completedRequired,allRequiredDone};
   }catch(e){console.error(e);}
   document.getElementById('page-loading').style.display='none';
   const pw=document.getElementById('passport-wrap');pw.style.opacity='1';pw.style.transition='opacity .4s';
@@ -478,8 +488,9 @@ document.getElementById('loc-modal-overlay').addEventListener('click',function(e
 // Apply modal
 window.openApplyModal=function(){
   const d=window._myData;if(!d)return;
+  if(!d.allRequiredDone){showToast('필수 코스를 모두 완주해야 신청할 수 있어요!');return;}
   document.getElementById('apply-summary').innerHTML=
-    `완주 코스: <strong>${d.completedCourses.map(c=>c.name).join(', ')}</strong><br>총 방문 지점: <strong>${d.visitedCount}곳</strong>`;
+    `완주 필수 코스: <strong>${d.completedRequired.map(c=>c.name).join(', ')}</strong><br>총 방문 지점: <strong>${d.visitedCount}곳</strong>`;
   document.getElementById('apply-name').value=d.pData.name||'';
   const ph=d.pData.phone||'';
   document.getElementById('apply-phone').value=ph?ph.replace(/(\d{3})(\d{4})(\d{4})/,'$1-$2-$3'):'';
