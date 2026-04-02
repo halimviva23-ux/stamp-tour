@@ -403,7 +403,7 @@ let locations=[], courses=[], participants=[], allStamps={}, selCourse=null, cur
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     // ⚠️ "halimviva23@gmail.com" 부분을 실제 구글 메일로 수정하세요!
-    if (user.email === "하림님의이메일@gmail.com") { 
+    if (user.email === "halimviva23@gmail.com") { 
       document.getElementById('admin-wrap').style.display = "block";
       document.getElementById('lock-screen').style.display = "none";
       loadAll(); // 하림님이면 데이터 로드 시작!
