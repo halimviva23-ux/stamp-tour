@@ -308,29 +308,32 @@ document.querySelectorAll('.about-card,.step').forEach(el=>{
 });
 </script>
 
-<!-- 공지사항 로드 -->
-<script type="module">
-import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import{getFirestore,getDocs,collection,query,where,orderBy}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-const cfg={apiKey:"AIzaSyAW13Cf2qQnsGWYiAdz9rF3TrWkGR_lLNg",authDomain:"stemp-tour.firebaseapp.com",projectId:"stemp-tour",storageBucket:"stemp-tour.firebasestorage.app",messagingSenderId:"823116268455",appId:"1:823116268455:web:4b060bf808eae664f62c82"};
-const db=getFirestore(initializeApp(cfg));
-const COLORS={'info':['#1a2744','#d4af37'],'event':['#2d6a4f','#d4af37'],'warning':['#7a3a00','#ffcc80']};
-try{
-  const snap=await getDocs(collection(db,'notices'));
-  const notices=[];
-  snap.forEach(d=>notices.push({id:d.id,...d.data()}));
-  const active=notices.filter(n=>n.active&&(n.page==='all'||n.page==='main')).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
-  if(active.length){
-    const n=active[0];
-    const [bg,color]=COLORS[n.type]||COLORS.info;
-    const typeIcon={'info':'📢','event':'🎉','warning':'⚠️'};
-    const banner=document.getElementById('notice-banner');
-    document.getElementById('notice-banner-text').textContent=`${typeIcon[n.type]||'📢'} ${n.title} — ${n.content}`;
-    banner.style.background=bg;banner.style.color=color;banner.style.display='block';
-    // nav 아래로 밀리게 body padding 추가
-    document.body.style.paddingTop='44px';
+// 공지사항 로드 부분 (index.html / mypage.html 공통)
+try {
+  const snap = await getDocs(collection(db, 'notices'));
+  const notices = [];
+  snap.forEach(d => notices.push({ id: d.id, ...d.data() }));
+  
+  // 현재 페이지에 맞는 활성화된 공지 중 가장 최근 것 하나만 선택
+  const active = notices.filter(n => n.active && (n.page === 'all' || n.page === 'main')) // mypage면 'mypage'로 수정
+                 .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+  if (active.length) {
+    const n = active[0];
+    const COLORS = { 'info': ['#1a2744', '#d4af37'], 'event': ['#2d6a4f', '#d4af37'], 'warning': ['#7a3a00', '#ffcc80'] };
+    const [bg, color] = COLORS[n.type] || COLORS.info;
+    const typeIcon = { 'info': '📢', 'event': '🎉', 'warning': '⚠️' };
+    
+    const banner = document.getElementById('notice-banner');
+    // 💡 아래 줄에서 n.content를 제거하고 제목(n.title)만 넣었습니다.
+    document.getElementById('notice-banner-text').textContent = `${typeIcon[n.type] || '📢'} [${n.type.toUpperCase()}] ${n.title}`;
+    
+    banner.style.background = bg;
+    banner.style.color = color;
+    banner.style.display = 'block';
+    document.body.style.paddingTop = '44px';
   }
-}catch(e){console.log('notice load error',e);}
+} catch (e) { console.log('notice load error', e); }
 </script>
 </body>
 </html>
