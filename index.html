@@ -306,45 +306,51 @@ new IntersectionObserver(entries=>{
 document.querySelectorAll('.about-card,.step').forEach(el=>{
   new IntersectionObserver(([e])=>{if(e.isIntersecting){el.style.opacity='1';el.style.transform='none';}},{threshold:0.1}).observe(el);
 });
-</script>
 
-try {
-  const snap = await getDocs(collection(db, 'notices'));
-  const notices = [];
-  snap.forEach(d => notices.push({ id: d.id, ...d.data() }));
+try {const snap = await getDocs(collection(db, 'notices')); const notices = [];
+  snap.forEach(function(d) {
+    notices.push({ id: d.id, ...d.data() });
+  });
   
-  // 현재 페이지(main 또는 all)에 맞는 활성화된 공지 필터링
-  const active = notices.filter(n => n.active && (n.page === 'all' || n.page === 'main'))
-                 .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  // 2. 활성화된 공지만 골라내기 (시간순 정렬)
+  const active = notices.filter(function(n) {
+    return n.active && (n.page === 'all' || n.page === 'main');
+  }).sort(function(a, b) {
+    return new Date(b.createdAt) - new Date(a.createdAt);
+  });
 
-  if (active.length) {
+  // 3. 공지가 있다면 배너에 표시하기
+  if (active.length > 0) {
     const n = active[0];
+    const typeIcon = { 'info': '📢', 'event': '🎉', 'warning': '⚠️' };
     const COLORS = { 
       'info': ['#1a2744', '#d4af37'], 
       'event': ['#2d6a4f', '#d4af37'], 
       'warning': ['#7a3a00', '#ffcc80'] 
     };
-    const [bg, color] = COLORS[n.type] || COLORS.info;
-    const typeIcon = { 'info': '📢', 'event': '🎉', 'warning': '⚠️' };
     
     const banner = document.getElementById('notice-banner');
     const bannerText = document.getElementById('notice-banner-text');
     
     if (banner && bannerText) {
-      // 💡 백틱(`) 기호를 사용하여 정확하게 문구 설정
-      bannerText.textContent = typeIcon[n.type] + " [" + n.type.toUpperCase() + "] " + n.title;
+      // 💡 오류 방지를 위해 가장 단순한 더하기(+) 방식으로 문구 작성
+      const icon = typeIcon[n.type] || '📢';
+      const typeLabel = n.type.toUpperCase();
+      bannerText.textContent = icon + " [" + typeLabel + "] " + n.title;
       
-      banner.style.background = bg;
-      banner.style.color = color;
+      const config = COLORS[n.type] || COLORS.info;
+      banner.style.background = config[0];
+      banner.style.color = config[1];
       banner.style.display = 'block';
       
-      // 배너가 보이도록 본문 상단 여백 조절
+      // 본문 상단 여백 확보
       document.body.style.paddingTop = '44px';
     }
   }
 } catch (e) { 
-  console.error('공지사항 데이터 로드 실패:', e); 
+  console.log('공지사항 로딩 실패:', e); 
 }
+  
   
 </script>
 </body>
