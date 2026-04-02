@@ -169,13 +169,20 @@
   <p>여권 불러오는 중...</p>
 </div>
 
+<!-- 공지사항 배너 -->
+<div id="notice-banner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:999;padding:10px 20px;text-align:center;font-size:.82rem;font-family:'Noto Sans KR',sans-serif;">
+  <span id="notice-banner-text"></span>
+  <button onclick="document.getElementById('notice-banner').style.display='none'" style="background:none;border:none;color:inherit;margin-left:12px;cursor:pointer;font-size:1rem;opacity:.7;">✕</button>
+</div>
+
 <div class="passport" id="passport-wrap" style="opacity:0">
   <div class="passport-cover">
     <div class="cover-top">
       <a class="btn-home" href="index.html">← 메인</a>
       <button class="btn-logout" onclick="logout()">로그아웃</button>
     </div>
-        <!-- =============================================
+    <span class="cover-emblem">🚲</span>
+    <!-- =============================================
       🖼️ [여권 커버 이미지] 수정 구역 — mypage.html
       여권 커버 상단에 로고/이미지를 넣으려면
       위 이모지(<span class="cover-emblem">)를 지우고
@@ -184,10 +191,10 @@
       같은 폴더: src="images/logo.png"
       외부 URL:  src="https://your-server.com/logo.png"
     ============================================= -->
-   <img src="https://raw.githubusercontent.com/halimviva23-ux/stamp-tour/main/Main%20logo.png" alt="전주시 자전거 여권"
-  style="height:60px;object-fit:contain;display:block;margin:0 auto 10px;"/>
-    <div class="cover-title">전주시 자전거 여권</div>
-    <div class="cover-main">마이페이지</div>
+    <!-- <img src="여기에_여권커버_로고_이미지_경로" alt="전주시 자전거 여권"
+      style="height:60px;object-fit:contain;display:block;margin:0 auto 10px;filter:brightness(0) invert(1);"/> -->
+    <div class="cover-title">전주시 자전거 여권 · 마이페이지</div>
+    <div class="cover-main">나의 여권</div>
     <div class="cover-visitor" id="cover-visitor">-</div>
     <div class="cover-phone" id="cover-phone"></div>
     <div class="cover-line"></div>
@@ -433,6 +440,23 @@ async function load(){
   }catch(e){console.error(e);}
   document.getElementById('page-loading').style.display='none';
   const pw=document.getElementById('passport-wrap');pw.style.opacity='1';pw.style.transition='opacity .4s';
+
+  // 공지사항 로드
+  try{
+    const nSnap=await getDocs(collection(db,'notices'));
+    const notices=[];nSnap.forEach(d=>notices.push({id:d.id,...d.data()}));
+    const active=notices.filter(n=>n.active&&(n.page==='all'||n.page==='mypage')).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+    if(active.length){
+      const n=active[0];
+      const COLORS={'info':['#1a2744','#d4af37'],'event':['#2d6a4f','#d4af37'],'warning':['#7a3a00','#ffcc80']};
+      const [bg,color]=COLORS[n.type]||COLORS.info;
+      const typeIcon={'info':'📢','event':'🎉','warning':'⚠️'};
+      const banner=document.getElementById('notice-banner');
+      document.getElementById('notice-banner-text').textContent=`${typeIcon[n.type]||'📢'} ${n.title} — ${n.content}`;
+      banner.style.background=bg;banner.style.color=color;banner.style.display='block';
+      document.body.style.paddingTop='44px';
+    }
+  }catch(e){console.log('notice error',e);}
 }
 
 window.toggleCourse=function(el){

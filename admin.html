@@ -218,6 +218,7 @@ window.addEventListener('DOMContentLoaded', () => {
   <div class="nav-tab" onclick="sw('locations',this)">📍 지점 관리 <span class="nb" id="nb-locs">0</span></div>
   <div class="nav-tab" onclick="sw('participants',this)">👥 참여자 <span class="nb" id="nb-parts">0</span></div>
   <div class="nav-tab" onclick="sw('completions',this)">🏆 완주 신청 <span class="nb green" id="nb-comps">0</span></div>
+  <div class="nav-tab" onclick="sw('notices',this)">📢 공지사항 <span class="nb" style="background:#6a1b9a" id="nb-notices">0</span></div>
 </div>
 
 <!-- 현황 -->
@@ -349,6 +350,40 @@ window.addEventListener('DOMContentLoaded', () => {
   </div>
 </div>
 
+<!-- 공지사항 -->
+<div class="page-section" id="section-notices">
+  <div class="card">
+    <div class="card-title">📢 공지사항 작성</div>
+    <div style="display:grid;gap:10px;margin-bottom:14px;">
+      <div><label>제목 *</label><input type="text" id="notice-title" placeholder="예: 자전거 여권 이벤트 안내"/></div>
+      <div><label>내용 *</label><textarea id="notice-content" placeholder="공지 내용을 입력하세요..." style="width:100%;padding:9px 12px;border:1px solid var(--aged);border-radius:4px;font-family:'Noto Sans KR',sans-serif;font-size:.84rem;color:var(--ink);background:var(--paper);resize:vertical;min-height:90px;"></textarea></div>
+      <div style="display:flex;gap:10px;align-items:flex-end;">
+        <div style="flex:1"><label>유형</label>
+          <select id="notice-type" style="width:100%;padding:8px 11px;border:1px solid var(--aged);border-radius:4px;font-family:'Noto Sans KR',sans-serif;font-size:.84rem;background:var(--paper);">
+            <option value="info">📢 일반 공지</option>
+            <option value="event">🎉 이벤트</option>
+            <option value="warning">⚠️ 주의사항</option>
+          </select>
+        </div>
+        <div style="flex:1"><label>노출 위치</label>
+          <select id="notice-page" style="width:100%;padding:8px 11px;border:1px solid var(--aged);border-radius:4px;font-family:'Noto Sans KR',sans-serif;font-size:.84rem;background:var(--paper);">
+            <option value="all">전체 페이지</option>
+            <option value="main">메인 페이지만</option>
+            <option value="mypage">마이페이지만</option>
+          </select>
+        </div>
+        <button class="btn btn-dark" onclick="addNotice()" style="align-self:flex-end">공지 등록</button>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="toolbar">
+      <div class="card-title" style="margin-bottom:0">📋 등록된 공지사항 <span style="font-size:.74rem;color:#aaa;font-weight:400" id="notice-cnt-label">0개</span></div>
+    </div>
+    <div id="notice-list"></div>
+  </div>
+</div>
+
 <!-- QR Modal -->
 <div class="modal-overlay" id="qr-modal">
   <div class="modal">
@@ -413,6 +448,7 @@ async function loadAll(){
     const lvc={};Object.values(allStamps).forEach(s=>Object.keys(s).forEach(id=>{lvc[id]=(lvc[id]||0)+1;}));
     locations.forEach(l=>l.visitCount=lvc[l.id]||0);
     updateBadges();renderOverview();renderCourseList();renderLocations();renderParts();renderComps();
+    await loadNotices();
   }catch(e){console.error(e);showToast('로드 실패: '+e.message);}
   document.getElementById('page-loading').style.display='none';
 }
@@ -694,6 +730,74 @@ document.getElementById('detail-modal').addEventListener('click',function(e){if(
 
 window.exportPartsCSV=function(){let c='이름,전화번호,방문수,완주코스,가입일\n';participants.forEach(p=>{const v=Object.keys(allStamps[p.uid]||{}).length;const cc=getCompletedCourses(p.uid).map(c=>c.name).join('/');c+=`"${p.name}","${fmtPhone(p.phone)}","${v}","${cc}","${fmtDate(p.createdAt)}"\n`;});const blob=new Blob(['\uFEFF'+c],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`참여자_${new Date().toLocaleDateString('ko')}.csv`;a.click();};
 window.exportCompsCSV=function(){const ap=participants.filter(p=>p.applied);let c='계정이름,신청이름,신청전화번호,신청시각,방문수,완주코스\n';ap.forEach(p=>{const v=Object.keys(allStamps[p.uid]||{}).length;const cc=getCompletedCourses(p.uid).map(c=>c.name).join('/');c+=`"${p.name}","${p.applyName||p.name}","${fmtPhone(p.applyPhone||p.phone)}","${fmtDate(p.appliedAt)}","${v}","${cc}"\n`;});const blob=new Blob(['\uFEFF'+c],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`완주신청_${new Date().toLocaleDateString('ko')}.csv`;a.click();};
+
+// ── 공지사항 ──
+let notices=[];
+async function loadNotices(){
+  const snap=await getDocs(collection(db,'notices'));
+  notices=[];snap.forEach(d=>notices.push({id:d.id,...d.data()}));
+  notices.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+  renderNotices();
+  document.getElementById('nb-notices').textContent=notices.filter(n=>n.active).length;
+}
+function renderNotices(){
+  const el=document.getElementById('notice-list');
+  document.getElementById('notice-cnt-label').textContent=`${notices.length}개`;
+  if(!notices.length){el.innerHTML='<div style="padding:28px;text-align:center;color:#bbb;font-size:.81rem">등록된 공지사항이 없어요</div>';return;}
+  const typeIcon={'info':'📢','event':'🎉','warning':'⚠️'};
+  const pageLabel={'all':'전체','main':'메인','mypage':'마이페이지'};
+  el.innerHTML='';
+  notices.forEach(n=>{
+    const div=document.createElement('div');
+    div.style.cssText='padding:14px 16px;border-bottom:1px solid var(--aged);display:flex;align-items:flex-start;gap:12px;';
+    div.innerHTML=`
+      <div style="flex:1;min-width:0;">
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;flex-wrap:wrap;">
+          <span style="font-size:.82rem;font-weight:600;color:var(--ink)">${typeIcon[n.type]||'📢'} ${esc(n.title)}</span>
+          <span style="font-size:.66rem;padding:1px 7px;border-radius:8px;background:${n.active?'#e8f5e9':'#f5f5f5'};color:${n.active?'var(--green)':'#aaa'};border:1px solid ${n.active?'#a5d6a7':'#ddd'}">${n.active?'노출중':'숨김'}</span>
+          <span style="font-size:.66rem;padding:1px 7px;border-radius:8px;background:#e3f2fd;color:var(--blue);border:1px solid #90caf9">${pageLabel[n.page]||'전체'}</span>
+        </div>
+        <div style="font-size:.79rem;color:#7a6a50;line-height:1.6;margin-bottom:4px;">${esc(n.content)}</div>
+        <div style="font-size:.69rem;color:#bbb;">${fmtDate(n.createdAt)}</div>
+      </div>
+      <div style="display:flex;gap:5px;flex-shrink:0;">
+        <button class="btn btn-outline btn-sm" onclick="toggleNotice('${n.id}',${!n.active})">${n.active?'숨기기':'노출'}</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteNotice('${n.id}')">삭제</button>
+      </div>`;
+    el.appendChild(div);
+  });
+}
+window.addNotice=async function(){
+  const title=document.getElementById('notice-title').value.trim();
+  const content=document.getElementById('notice-content').value.trim();
+  if(!title||!content){showToast('제목과 내용을 입력해주세요');return;}
+  const type=document.getElementById('notice-type').value;
+  const page=document.getElementById('notice-page').value;
+  const id=genId();
+  const now=new Date().toISOString();
+  await setDoc(doc(db,'notices',id),{title,content,type,page,active:true,createdAt:now});
+  notices.unshift({id,title,content,type,page,active:true,createdAt:now});
+  document.getElementById('notice-title').value='';
+  document.getElementById('notice-content').value='';
+  renderNotices();
+  document.getElementById('nb-notices').textContent=notices.filter(n=>n.active).length;
+  showToast('✓ 공지사항 등록됨');
+};
+window.toggleNotice=async function(id,active){
+  await updateDoc(doc(db,'notices',id),{active});
+  const n=notices.find(n=>n.id===id);if(n)n.active=active;
+  renderNotices();
+  document.getElementById('nb-notices').textContent=notices.filter(n=>n.active).length;
+  showToast(active?'✓ 공지 노출됨':'공지 숨김 처리됨');
+};
+window.deleteNotice=async function(id){
+  if(!confirm('공지사항을 삭제할까요?'))return;
+  await deleteDoc(doc(db,'notices',id));
+  notices=notices.filter(n=>n.id!==id);
+  renderNotices();
+  document.getElementById('nb-notices').textContent=notices.filter(n=>n.active).length;
+  showToast('삭제됨');
+};
 
 // loadAll은 비밀번호 인증 후 자동 호출됩니다
 </script>
