@@ -308,32 +308,44 @@ document.querySelectorAll('.about-card,.step').forEach(el=>{
 });
 </script>
 
-// 공지사항 로드 부분 (index.html / mypage.html 공통)
 try {
   const snap = await getDocs(collection(db, 'notices'));
   const notices = [];
   snap.forEach(d => notices.push({ id: d.id, ...d.data() }));
   
-  // 현재 페이지에 맞는 활성화된 공지 중 가장 최근 것 하나만 선택
-  const active = notices.filter(n => n.active && (n.page === 'all' || n.page === 'main')) // mypage면 'mypage'로 수정
+  // 현재 페이지(main 또는 all)에 맞는 활성화된 공지 필터링
+  const active = notices.filter(n => n.active && (n.page === 'all' || n.page === 'main'))
                  .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
   if (active.length) {
     const n = active[0];
-    const COLORS = { 'info': ['#1a2744', '#d4af37'], 'event': ['#2d6a4f', '#d4af37'], 'warning': ['#7a3a00', '#ffcc80'] };
+    const COLORS = { 
+      'info': ['#1a2744', '#d4af37'], 
+      'event': ['#2d6a4f', '#d4af37'], 
+      'warning': ['#7a3a00', '#ffcc80'] 
+    };
     const [bg, color] = COLORS[n.type] || COLORS.info;
     const typeIcon = { 'info': '📢', 'event': '🎉', 'warning': '⚠️' };
     
     const banner = document.getElementById('notice-banner');
-    // 💡 아래 줄에서 n.content를 제거하고 제목(n.title)만 넣었습니다.
-    document.getElementById('notice-banner-text').textContent = `${typeIcon[n.type] || '📢'} [${n.type.toUpperCase()}] ${n.title}`;
+    const bannerText = document.getElementById('notice-banner-text');
     
-    banner.style.background = bg;
-    banner.style.color = color;
-    banner.style.display = 'block';
-    document.body.style.paddingTop = '44px';
+    if (banner && bannerText) {
+      // 💡 백틱(`) 기호를 사용하여 정확하게 문구 설정
+      bannerText.textContent = typeIcon[n.type] + " [" + n.type.toUpperCase() + "] " + n.title;
+      
+      banner.style.background = bg;
+      banner.style.color = color;
+      banner.style.display = 'block';
+      
+      // 배너가 보이도록 본문 상단 여백 조절
+      document.body.style.paddingTop = '44px';
+    }
   }
-} catch (e) { console.log('notice load error', e); }
+} catch (e) { 
+  console.error('공지사항 데이터 로드 실패:', e); 
+}
+  
 </script>
 </body>
 </html>
