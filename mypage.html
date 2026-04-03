@@ -33,17 +33,14 @@
   .stat-label{font-size:.62rem;color:rgba(232,220,200,.45);letter-spacing:.1em;margin-top:3px;}
   .stat-divider{width:1px;background:rgba(232,220,200,.12);align-self:stretch;}
 
-  /* Body */
   .passport-body{background:var(--paper);border-radius:0 0 12px 12px;border:1px solid rgba(184,134,11,.3);border-top:none;padding:24px 24px 32px;box-shadow:0 20px 60px rgba(0,0,0,.4);animation:slideUp .7s .1s cubic-bezier(.16,1,.3,1) both;}
   @keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 
-  /* Tabs */
   .tabs{display:flex;border-bottom:2px solid var(--aged);margin-bottom:20px;}
   .tab{padding:9px 14px;font-size:.81rem;color:#7a6a50;cursor:pointer;letter-spacing:.04em;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s;white-space:nowrap;}
   .tab.active{color:var(--seal);border-bottom-color:var(--seal);font-weight:500;}
   .tab-content{display:none;}.tab-content.active{display:block;}
 
-  /* CTA */
   .completion-cta{background:linear-gradient(135deg,#1a3a2a,#0f2a1e);border:1px solid rgba(184,134,11,.4);border-radius:10px;padding:20px;text-align:center;margin-bottom:20px;}
   .c-emoji{font-size:1.9rem;margin-bottom:7px;}
   .completion-cta h3{font-family:'Noto Serif KR',serif;color:#d4af37;font-size:.92rem;margin-bottom:4px;}
@@ -52,7 +49,6 @@
   .btn-apply:hover{background:#f0cc55;transform:translateY(-1px);}
   .applied-notice{display:inline-flex;align-items:center;gap:6px;background:rgba(45,106,79,.3);border:1px solid rgba(165,214,167,.4);border-radius:20px;padding:6px 14px;color:#a5d6a7;font-size:.79rem;}
 
-  /* Course accordion */
   .courses-list{display:flex;flex-direction:column;gap:10px;}
   .course-row{background:white;border:1px solid var(--aged);border-radius:10px;overflow:hidden;transition:box-shadow .2s;animation:fadeUp .4s both;}
   .course-row.open{border-color:rgba(184,134,11,.4);box-shadow:0 4px 20px rgba(26,18,8,.08);}
@@ -74,7 +70,6 @@
   .detail-tab.active{color:var(--seal);border-bottom-color:var(--seal);font-weight:500;}
   .detail-tab-content{display:none;padding:14px 16px;}.detail-tab-content.active{display:block;}
 
-  /* Stamp grid */
   .stamp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:8px;}
   .stamp-cell{border-radius:8px;padding:10px 6px;text-align:center;border:1.5px solid var(--aged);background:white;cursor:pointer;transition:all .18s;}
   .stamp-cell:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 4px 12px rgba(26,18,8,.1);}
@@ -86,17 +81,6 @@
   .stamp-cell.visited .stamp-cell-name{color:var(--green);font-weight:500;}
   .stamp-cell-time{font-size:.55rem;color:#aaa;margin-top:2px;display:block;}
 
-  /* Remaining list */
-  .remaining-list{display:flex;flex-direction:column;gap:6px;}
-  .remaining-item{display:flex;align-items:center;gap:10px;padding:9px 12px;background:white;border:1px dashed var(--aged);border-radius:7px;cursor:pointer;transition:border-color .15s;}
-  .remaining-item:hover{border-color:var(--gold);}
-  .ri-num{font-family:monospace;font-size:.68rem;color:#ccc;width:20px;flex-shrink:0;text-align:center;}
-  .ri-name{flex:1;font-weight:500;color:var(--ink);font-size:.83rem;}
-  .ri-desc{font-size:.7rem;color:#aaa;}
-  .all-done{text-align:center;padding:22px;color:var(--green);font-size:.83rem;}
-  .all-done .icon{font-size:1.8rem;display:block;margin-bottom:6px;}
-
-  /* Visit list */
   .visit-list{display:flex;flex-direction:column;gap:8px;}
   .visit-item{display:flex;align-items:center;gap:12px;background:white;border:1px solid var(--aged);border-radius:8px;padding:11px 13px;animation:fadeUp .3s both;cursor:pointer;transition:border-color .15s;}
   .visit-item:hover{border-color:var(--gold);}
@@ -106,7 +90,6 @@
   .v-course{font-size:.68rem;color:#7a6a50;margin-top:1px;}
   .v-time{font-size:.68rem;color:#aaa;margin-top:1px;}
 
-  /* Location modal */
   .modal-overlay{display:none;position:fixed;inset:0;background:rgba(26,18,8,.75);z-index:100;align-items:center;justify-content:center;padding:20px;}
   .modal-overlay.open{display:flex;}
   .loc-modal{background:white;border-radius:12px;max-width:420px;width:100%;max-height:88vh;overflow-y:auto;position:relative;box-shadow:0 24px 80px rgba(0,0,0,.45);animation:modalPop .3s cubic-bezier(.16,1,.3,1) both;}
@@ -123,7 +106,6 @@
   .info-text-wrap{flex:1;}
   .info-label{font-size:.67rem;color:#aaa;letter-spacing:.06em;margin-bottom:2px;}
   .info-text{font-size:.84rem;color:var(--ink);font-weight:500;line-height:1.45;}
-  .info-no-data{font-size:.81rem;color:#bbb;font-style:italic;}
   .map-btns{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px;}
   .map-btn{display:inline-flex;align-items:center;gap:5px;padding:9px 14px;border-radius:6px;font-size:.79rem;font-weight:500;text-decoration:none;transition:all .2s;border:none;cursor:pointer;font-family:'Noto Sans KR',sans-serif;}
   .map-btn-kakao{background:#f9e000;color:#3a1d1d;}.map-btn-kakao:hover{background:#f0d500;}
@@ -132,34 +114,25 @@
   .ssb-visited{background:#e8f5e9;color:var(--green);border:1px solid #a5d6a7;}
   .ssb-remaining{background:#fff3e0;color:#e65100;border:1px solid #ffcc80;}
 
-  /* Apply modal */
   .apply-modal{background:white;border-radius:12px;padding:30px;max-width:390px;width:92%;position:relative;box-shadow:0 24px 80px rgba(0,0,0,.45);animation:modalPop .3s cubic-bezier(.16,1,.3,1) both;}
   .apply-modal-close{position:absolute;top:12px;right:14px;background:none;border:none;color:#bbb;font-size:1.15rem;cursor:pointer;padding:0;}
   .apply-modal-close:hover{color:var(--ink);}
   .apply-modal h3{font-family:'Noto Serif KR',serif;font-size:1.1rem;color:var(--ink);margin-bottom:5px;}
-  .apply-modal-sub{font-size:.79rem;color:#7a6a50;margin-bottom:16px;line-height:1.6;}
   .summary-box{background:var(--paper);border:1px solid var(--aged);border-radius:6px;padding:10px 13px;margin-bottom:16px;font-size:.8rem;color:#7a6a50;line-height:1.6;}
-  .summary-box strong{color:var(--ink);}
   .form-group{margin-bottom:13px;}
-  .form-group label{font-size:.74rem;color:#7a6a50;letter-spacing:.04em;display:block;margin-bottom:4px;}
-  .form-group input{width:100%;padding:9px 12px;border:1px solid var(--aged);border-radius:4px;font-family:'Noto Sans KR',sans-serif;font-size:.88rem;color:var(--ink);background:var(--paper);}
-  .form-group input:focus{outline:none;border-color:var(--gold);}
-  .btn-submit{width:100%;padding:11px;background:var(--seal);color:white;border:none;border-radius:6px;font-family:'Noto Serif KR',serif;font-size:.92rem;font-weight:600;cursor:pointer;letter-spacing:.05em;transition:all .2s;margin-top:2px;}
+  .form-group label{font-size:.74rem;color:#7a6a50;display:block;margin-bottom:4px;}
+  .form-group input, .form-group textarea{width:100%;padding:9px 12px;border:1px solid var(--aged);border-radius:4px;font-family:'Noto Sans KR',sans-serif;font-size:.88rem;color:var(--ink);background:var(--paper);}
+  .btn-submit{width:100%;padding:11px;background:var(--seal);color:white;border:none;border-radius:6px;font-family:'Noto Serif KR',serif;font-size:.92rem;font-weight:600;cursor:pointer;transition:all .2s;}
   .btn-submit:hover{background:#a93226;}
   .btn-submit:disabled{background:#ccc;cursor:not-allowed;}
-  .form-error{font-size:.72rem;color:var(--seal);margin-top:7px;text-align:center;display:none;}
 
-  /* Loading */
   .page-loading{position:fixed;inset:0;background:rgba(44,31,14,.85);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200;}
   .spinner{width:40px;height:40px;border:3px solid rgba(255,255,255,.18);border-top-color:#d4af37;border-radius:50%;animation:spin .8s linear infinite;margin-bottom:12px;}
   @keyframes spin{to{transform:rotate(360deg)}}
   .page-loading p{color:rgba(232,220,200,.55);font-size:.83rem;}
   .empty-state{text-align:center;padding:36px 20px;color:#bbb;}
-  .empty-state .icon{font-size:2.6rem;margin-bottom:10px;display:block;}
-  .empty-state p{font-size:.82rem;}
   .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:var(--ink);color:white;padding:9px 18px;border-radius:30px;font-size:.79rem;opacity:0;pointer-events:none;transition:opacity .3s;z-index:999;white-space:nowrap;}
   .toast.show{opacity:1;}
-  @media(max-width:480px){.passport-cover,.passport-body{padding:20px 16px}.stat-num{font-size:1.5rem}}
 </style>
 </head>
 <body>
@@ -169,24 +142,22 @@
   <p>여권 불러오는 중...</p>
 </div>
 
-<!-- 공지사항 배너 -->
-<div id="notice-banner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:999;padding:9px 20px;text-align:center;font-size:.8rem;font-family:'Noto Sans KR',sans-serif;">
+<div id="notice-banner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:999;padding:9px 20px;text-align:center;font-size:.8rem;">
   <a id="notice-banner-link" href="notices.html" style="color:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
     <span id="notice-banner-icon"></span>
     <span id="notice-banner-text" style="font-weight:500;"></span>
     <span style="opacity:.6;font-size:.72rem;">자세히 보기 →</span>
   </a>
-  <button onclick="document.getElementById('notice-banner').style.display='none';document.body.style.paddingTop='0'" style="background:none;border:none;color:inherit;margin-left:14px;cursor:pointer;font-size:1rem;opacity:.6;vertical-align:middle;">✕</button>
+  <button onclick="document.getElementById('notice-banner').style.display='none';document.body.style.paddingTop='0'" style="background:none;border:none;color:inherit;margin-left:14px;cursor:pointer;">✕</button>
 </div>
 
 <div class="passport" id="passport-wrap" style="opacity:0">
   <div class="passport-cover">
     <div class="cover-top">
-  <a class="btn-home" href="index.html">← 메인</a>
-  <button class="btn-logout" onclick="logout()">로그아웃</button>
-</div>
-    <img src="https://raw.githubusercontent.com/halimviva23-ux/stamp-tour/main/Main%20logo.png" alt="전주시 자전거 여권"
-      style="height:60px;object-fit:contain;display:block;margin:0 auto 10px;"/>
+      <a class="btn-home" href="index.html">← 메인</a>
+      <button class="btn-logout" onclick="logout()">로그아웃</button>
+    </div>
+    <img src="https://raw.githubusercontent.com/halimviva23-ux/stamp-tour/main/Main%20logo.png" alt="전주시 자전거 여권" style="height:60px;object-fit:contain;display:block;margin:0 auto 10px;"/>
     <div class="cover-title">전주시 자전거 여권 · 마이페이지</div>
     <div class="cover-main">나의 여권</div>
     <div class="cover-visitor" id="cover-visitor">-</div>
@@ -225,7 +196,7 @@
     <div class="tab-content" id="tab-inquiry">
       <div class="summary-box" style="margin-bottom:12px;">궁금한 점이나 건의 사항을 남겨주시면 관리자가 확인 후 답변해 드립니다.</div>
       <div class="form-group">
-        <textarea id="new-inquiry-text" placeholder="문의 내용을 입력하세요 (텍스트만 가능)" style="width:100%; height:100px; padding:10px; border-radius:4px; border:1px solid var(--aged); background:var(--paper); margin-bottom:10px; font-family:'Noto Sans KR',sans-serif; resize:vertical;"></textarea>
+        <textarea id="new-inquiry-text" placeholder="문의 내용을 입력하세요" style="height:100px; resize:vertical;"></textarea>
       </div>
       <button class="btn-submit" style="margin-bottom:20px;" onclick="submitInquiry()">문의 등록하기</button>
       <div id="my-inquiry-list" style="display:flex; flex-direction:column; gap:10px;"></div>
@@ -233,21 +204,17 @@
   </div>
 </div>
 
- <div style="text-align:center; margin-top:40px; padding-bottom:30px;">
-  <button onclick="deleteMyAccount()" style="background:none; border:none; color:rgba(232,220,200,0.7); font-size:0.75rem; text-decoration:underline; cursor:pointer; font-family:'Noto Sans KR',sans-serif; transition:color 0.2s;" onmouseover="this.style.color='rgba(232,220,200,1)'" onmouseout="this.style.color='rgba(232,220,200,0.7)'">
+<div style="text-align:center; margin-top:40px; padding-bottom:30px;">
+  <button onclick="deleteMyAccount()" style="background:none; border:none; color:rgba(232,220,200,0.7); font-size:0.75rem; text-decoration:underline; cursor:pointer;">
     전주시 자전거 여권 서비스 탈퇴하기
   </button>
 </div>
 
-<!-- Location detail modal -->
 <div class="modal-overlay" id="loc-modal-overlay">
   <div class="loc-modal">
     <button class="loc-modal-close" onclick="closeLocModal()">✕</button>
-    <!-- 지점 이미지 표시 영역 (imageUrl이 있을 때만 보임) -->
     <div id="lm-img-wrap" style="display:none">
-      <img id="lm-img" src="" alt="지점 이미지"
-        style="width:100%;height:190px;object-fit:cover;border-radius:12px 12px 0 0;display:block;"
-        onerror="document.getElementById('lm-img-wrap').style.display='none'"/>
+      <img id="lm-img" src="" style="width:100%;height:190px;object-fit:cover;border-radius:12px 12px 0 0;"/>
     </div>
     <div class="loc-modal-header">
       <span class="loc-modal-emoji" id="lm-emoji">🏛️</span>
@@ -256,42 +223,22 @@
       <div class="loc-modal-desc" id="lm-desc"></div>
     </div>
     <div class="loc-modal-body">
-      <div class="info-row">
-        <span class="info-icon">📍</span>
-        <div class="info-text-wrap">
-          <div class="info-label">주소</div>
-          <div id="lm-address-content"></div>
-        </div>
-      </div>
+      <div class="info-row"><span class="info-icon">📍</span><div class="info-text-wrap"><div class="info-label">주소</div><div id="lm-address-content"></div></div></div>
       <div class="map-btns" id="lm-map-btns"></div>
-      <div class="info-row" id="lm-visit-row" style="margin-top:10px;display:none">
-        <span class="info-icon">🕐</span>
-        <div class="info-text-wrap">
-          <div class="info-label">방문 시각</div>
-          <div class="info-text" id="lm-visit-time"></div>
-        </div>
-      </div>
+      <div class="info-row" id="lm-visit-row" style="margin-top:10px;display:none"><span class="info-icon">🕐</span><div class="info-text-wrap"><div class="info-label">방문 시각</div><div class="info-text" id="lm-visit-time"></div></div></div>
     </div>
   </div>
 </div>
 
-<!-- Apply modal -->
 <div class="modal-overlay" id="apply-modal-overlay">
   <div class="apply-modal">
     <button class="apply-modal-close" onclick="closeApplyModal()">✕</button>
     <h3>🏆 완주 신청</h3>
-    <div class="apply-modal-sub">완주 기록이 관리자에게 전달됩니다.<br>정보를 확인하고 신청해주세요.</div>
     <div class="summary-box" id="apply-summary"></div>
-    <div class="form-group">
-      <label>이름 *</label>
-      <input type="text" id="apply-name" placeholder="홍길동" maxlength="20"/>
-    </div>
-    <div class="form-group">
-      <label>휴대폰 번호 *</label>
-      <input type="tel" id="apply-phone" placeholder="010-0000-0000" maxlength="13" oninput="fmtPhone(this)"/>
-    </div>
+    <div class="form-group"><label>이름 *</label><input type="text" id="apply-name" maxlength="20"/></div>
+    <div class="form-group"><label>휴대폰 번호 *</label><input type="tel" id="apply-phone" maxlength="13" oninput="fmtPhone(this)"/></div>
     <button class="btn-submit" id="btn-submit-apply" onclick="submitApplication()">신청 완료</button>
-    <div class="form-error" id="apply-error">이름과 휴대폰 번호를 올바르게 입력해주세요.</div>
+    <div class="form-error" id="apply-error" style="color:var(--seal); text-align:center; display:none; margin-top:10px;">필수 정보를 입력해주세요.</div>
   </div>
 </div>
 
@@ -307,62 +254,30 @@ const db=getFirestore(app);
 const EMOJIS=['🏯','⛩️','🌸','🎋','🎎','🏔️','🗿','🌊','🎏','🏮','🌺','🎐','⚡','🌙','🎍','🔮','🌈','🦋','🐉','🌿','🍃','🔔','🎯','🏺','🎴','⭐','🎑','🌅','🦁','🐯'];
 const COLORS=['#c0392b','#b8860b','#2d6a4f','#1565c0','#6a1b9a','#e65100','#00838f','#37474f'];
 
-const uid=localStorage.getItem('stampUID');
-if(!uid){location.href='login.html?redirect='+encodeURIComponent(location.href);}
+// UID 가져오기 (변수명 통일)
+const uid = localStorage.getItem('stampUID');
+if(!uid){location.href='login.html';}
 
-window.logout=function(){if(!confirm('로그아웃 하시겠어요?'))return;localStorage.removeItem('stampUID');localStorage.removeItem('stampVisitorName');localStorage.removeItem('stampPhone');location.href='index.html';};
-  window.deleteMyAccount = async function() {
-  if(!confirm('정말 탈퇴하시겠습니까? 모든 스탬프 기록이 삭제되며 복구할 수 없습니다.')) return;
-  
-  try {
-    const batch = writeBatch(db);
-    
-    // 1. 내 모든 스탬프 기록 삭제
-    const stampsSnap = await getDocs(collection(db, 'participants', uid, 'stamps'));
-    stampsSnap.forEach(d => batch.delete(d.ref));
-    
-    // 2. 내 계정 정보 삭제
-    batch.delete(doc(db, 'participants', uid));
-    
-    // 일괄 실행
-    await batch.commit();
+let _locs={},_stamps={};
 
-    // 3. 로컬 정보 삭제 및 메인 이동
-    localStorage.removeItem('stampUID');
-    localStorage.removeItem('stampVisitorName');
-    localStorage.removeItem('stampPhone');
-    alert('탈퇴 처리가 완료되었습니다. 이용해 주셔서 감사합니다.');
-    location.href = 'index.html';
-  } catch(e) {
-    console.error(e);
-    showToast('탈퇴 처리 중 오류가 발생했습니다.');
-  }
-};
+// 유틸 함수
+window.logout=function(){if(!confirm('로그아웃 하시겠어요?'))return;localStorage.removeItem('stampUID');location.href='index.html';};
 window.fmtPhone=function(i){let v=i.value.replace(/[^0-9]/g,'');if(v.length<=3)i.value=v;else if(v.length<=7)i.value=v.slice(0,3)+'-'+v.slice(3);else i.value=v.slice(0,3)+'-'+v.slice(3,7)+'-'+v.slice(7,11);};
 function fmtDate(iso){if(!iso)return'';const d=new Date(iso);return`${d.getFullYear()}.${d.getMonth()+1}.${d.getDate()} ${d.getHours()<12?'오전':'오후'} ${d.getHours()%12||12}:${String(d.getMinutes()).padStart(2,'0')}`;}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
 
+// 탭 전환
 window.switchTab=function(id,el){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');document.getElementById('tab-'+id).classList.add('active');
-
-  // 👇 추가: 문의 탭을 누를 때만 내역 로드
-  if(id === 'inquiry') {
-    loadInquiries();
-  }
-};
+  if(id === 'inquiry') loadInquiries();
 };
 
-let _locs={},_stamps={};
-
+// 메인 로드 함수
 async function load(){
-  async function load(){
-  const uid = localStorage.getItem('viva_user_uid'); // 이 줄을 추가해야 합니다!
-  if(!uid) { location.href='index.html'; return; }
-  
-  const loading = document.getElementById('page-loading');
-  try {
+  if(!uid) return;
+  try{
     const[pSnap,stampsSnap,coursesSnap,locsSnap]=await Promise.all([
       getDoc(doc(db,'participants',uid)),
       getDocs(collection(db,'participants',uid,'stamps')),
@@ -371,327 +286,156 @@ async function load(){
     ]);
     if(!pSnap.exists()){location.href='login.html';return;}
     const pData=pSnap.data();
-    const stamps={};stampsSnap.forEach(d=>stamps[d.id]=d.data());
-    const courses=[];coursesSnap.forEach(d=>courses.push({id:d.id,...d.data()}));
+    const stamps={}; stampsSnap.forEach(d=>stamps[d.id]=d.data());
+    const courses=[]; coursesSnap.forEach(d=>courses.push({id:d.id,...d.data()}));
     courses.sort((a,b)=>(a.order||0)-(b.order||0));
-    const locs={};locsSnap.forEach(d=>locs[d.id]={id:d.id,...d.data()});
-    _locs=locs;_stamps=stamps;
+    const locs={}; locsSnap.forEach(d=>locs[d.id]={id:d.id,...d.data()});
+    _locs=locs; _stamps=stamps;
 
     const visitedCount=Object.keys(stamps).length;
-    const participatingCourses=courses.filter(c=>(c.locationIds||[]).some(id=>stamps[id]));
     const completedCourses=courses.filter(c=>{const ids=c.locationIds||[];return ids.length>0&&ids.every(id=>stamps[id]);});
-    // 필수 코스만 따로 분류
     const requiredCourses=courses.filter(c=>c.required);
     const completedRequired=requiredCourses.filter(c=>{const ids=c.locationIds||[];return ids.length>0&&ids.every(id=>stamps[id]);});
     const allRequiredDone=requiredCourses.length>0&&completedRequired.length>=requiredCourses.length;
 
-    // Cover
     document.getElementById('cover-visitor').textContent=pData.name+' 님';
-    if(pData.phone){const p=String(pData.phone);document.getElementById('cover-phone').textContent=p.replace(/(\d{3})(\d{4})(\d{4})/,'$1-$2-$3');}
+    if(pData.phone) document.getElementById('cover-phone').textContent=pData.phone.replace(/(\d{3})(\d{4})(\d{4})/,'$1-$2-$3');
     document.getElementById('s-visited').textContent=visitedCount;
-    document.getElementById('s-courses').textContent=participatingCourses.length;
+    document.getElementById('s-courses').textContent=courses.filter(c=>(c.locationIds||[]).some(id=>stamps[id])).length;
     document.getElementById('s-completed').textContent=completedCourses.length;
 
-    // 완주 신청 CTA — 필수 코스 모두 완주 시 표시
+    // CTA 영역 로직
+    const cta = document.getElementById('completion-cta');
     if(allRequiredDone){
-      document.getElementById('completion-cta').style.display='block';
-      document.getElementById('cta-title').textContent=`필수 코스 ${completedRequired.length}개 완주 달성! 🎉`;
-      document.getElementById('cta-desc').textContent='완주 신청을 하고 기념품을 받아보세요.';
+      cta.style.display='block';
+      document.getElementById('cta-title').textContent=`필수 코스 완주 달성! 🎉`;
+      document.getElementById('cta-desc').textContent='기념품 신청이 가능합니다.';
       if(pData.applied){
-        const status=pData.applyStatus||'pending';
-        const statusHTML={
-          pending:`<div class="applied-notice" style="background:rgba(230,144,0,.2);border-color:rgba(230,144,0,.4);color:#f0a500;">⏳ 완주 신청 검토 중</div>`,
-          approved:`<div class="applied-notice" style="background:rgba(45,106,79,.3);border-color:rgba(165,214,167,.4);color:#a5d6a7;">🎉 완주 신청 승인 완료!</div>`,
-          rejected:`<div style="text-align:center"><div class="applied-notice" style="background:rgba(192,57,43,.2);border-color:rgba(192,57,43,.3);color:#e88;margin-bottom:8px;">❌ 완주 신청 반려${pData.applyMemo?` — ${pData.applyMemo}`:''}</div><button class="btn-apply" onclick="reapplyModal()" style="font-size:.82rem;padding:8px 20px;">재신청하기</button></div>`,
-        };
-        document.getElementById('cta-btn-wrap').innerHTML=statusHTML[status]||statusHTML.pending;
+        document.getElementById('cta-btn-wrap').innerHTML='<div class="applied-notice">⏳ 신청 검토 중</div>';
       }
-    } else if(requiredCourses.length>0){
-      // 필수 코스가 있지만 아직 미완주 → 진행 현황 표시
-      document.getElementById('completion-cta').style.display='block';
-      document.getElementById('cta-title').textContent=`필수 코스 ${completedRequired.length}/${requiredCourses.length} 완주 중`;
-      document.getElementById('cta-desc').textContent=`필수 코스를 모두 완주하면 신청할 수 있어요. (${requiredCourses.filter(c=>{const ids=c.locationIds||[];return!(ids.length>0&&ids.every(id=>stamps[id]));}).map(c=>c.name).join(', ')})`;
-      document.getElementById('cta-btn-wrap').innerHTML='<button class="btn-apply" disabled style="opacity:.4;cursor:not-allowed">완주 신청하기</button>';
+    } else if(requiredCourses.length>0) {
+      cta.style.display='block';
+      document.getElementById('cta-title').textContent=`완주까지 ${requiredCourses.length - completedRequired.length}개 코스 남음`;
+      document.getElementById('cta-desc').textContent='필수 코스를 모두 완료해 보세요.';
     }
 
-    // Courses tab
+    // 코스 목록 렌더링
     const coursesList=document.getElementById('courses-list');
-    if(!courses.length){
-      coursesList.innerHTML='<div class="empty-state"><span class="icon">🚲</span><p>등록된 코스가 없습니다.</p></div>';
-    }else{
-      coursesList.innerHTML='';
-      courses.forEach((course,ci)=>{
-        const color=COLORS[ci%COLORS.length];
-        const locIds=course.locationIds||[];
-        const visitedIds=locIds.filter(id=>stamps[id]);
-        const remainingIds=locIds.filter(id=>!stamps[id]);
-        const total=locIds.length,count=visitedIds.length;
-        const pct=total?Math.round(count/total*100):0;
-        // --- 코스 진행률 알림 로직 시작 ---
-        const notifiedKey = `notified_${course.id}_${uid}`;
-        const lastNotifiedLevel = parseInt(localStorage.getItem(notifiedKey) || '0');
+    coursesList.innerHTML='';
+    courses.forEach((course,ci)=>{
+      const color=COLORS[ci%COLORS.length];
+      const locIds=course.locationIds||[];
+      const count=locIds.filter(id=>stamps[id]).length;
+      const pct=locIds.length?Math.round(count/locIds.length*100):0;
+      const isComplete=count>=locIds.length && locIds.length>0;
 
-        let currentLevel = 0;
-        if (pct >= 90) currentLevel = 90;
-        else if (pct >= 80) currentLevel = 80;
-        else if (pct >= 50) currentLevel = 50;
-
-        // 이전 기록보다 높은 단계에 도달했을 때만 알림 발생
-        if (currentLevel > lastNotifiedLevel) {
-          // 화면 로딩 직후 알림이 여러 개 겹치지 않게 약간의 시차를 두고 실행
-          setTimeout(() => {
-            showToast(`🎉 [${course.name}] 코스 ${currentLevel}% 돌파! 완주가 머지 않았어요!`);
-          }, 1000 + (ci * 200)); 
-          
-          localStorage.setItem(notifiedKey, currentLevel);
-        }
-        // --- 코스 진행률 알림 로직 끝 ---
-        const isComplete=count>=total&&total>0;
-
-        const stampGridHtml=locIds.map((id,li)=>{
-          const loc=locs[id];const v=stamps[id];
-          return`<div class="stamp-cell ${v?'visited':'remaining'}" onclick="openLocModal('${id}',${li})">
-            <span class="stamp-cell-emoji">${EMOJIS[li%EMOJIS.length]}</span>
-            <span class="stamp-cell-name">${loc?.name||id}</span>
-            <span class="stamp-cell-time">${v?fmtDate(v.visitedAt):'미방문'}</span>
-          </div>`;
-        }).join('');
-
-        const remainHtml=remainingIds.length===0
-          ?`<div class="all-done"><span class="icon">🏆</span>모든 지점을 방문했어요!</div>`
-          :remainingIds.map((id,ri)=>{const loc=locs[id];return`<div class="remaining-item" onclick="openLocModal('${id}',${locIds.indexOf(id)})"><span class="ri-num">${String(ri+1).padStart(2,'0')}</span><span class="ri-name">${loc?.name||id}</span><span class="ri-desc">${loc?.desc||''}</span></div>`;}).join('');
-
-        const row=document.createElement('div');
-        row.className='course-row';row.style.animationDelay=(ci*.07)+'s';
-        row.innerHTML=`
-          <div class="course-summary" onclick="toggleCourse(this)">
-            <div class="course-color-dot" style="background:${color}"></div>
-            <div class="course-summary-info">
-              <div class="course-summary-name">${course.name}</div>
-              <div class="course-summary-sub">
-                <span>${count}/${total}곳</span>
-                <div class="mini-bar-wrap"><div class="mini-bar-fill" style="width:${pct}%;background:${color}"></div></div>
-                <span>${pct}%</span>
-              </div>
-            </div>
-            ${isComplete?'<span class="course-badge-complete">🏆 완주</span>':''}
-            <span class="course-chevron">▶</span>
+      const row=document.createElement('div');
+      row.className='course-row';
+      row.innerHTML=`
+        <div class="course-summary" onclick="toggleCourse(this)">
+          <div class="course-color-dot" style="background:${color}"></div>
+          <div class="course-summary-info">
+            <div class="course-summary-name">${course.name}</div>
+            <div class="course-summary-sub"><span>${count}/${locIds.length}</span><div class="mini-bar-wrap"><div class="mini-bar-fill" style="width:${pct}%;background:${color}"></div></div><span>${pct}%</span></div>
           </div>
-          <div class="course-detail">
-            <div class="detail-tabs">
-              <div class="detail-tab active" onclick="switchDetailTab(this,'sd-${ci}')">스탬프 (${count}/${total})</div>
-              <div class="detail-tab" onclick="switchDetailTab(this,'rd-${ci}')">남은 지점 (${remainingIds.length})</div>
-            </div>
-            <div class="detail-tab-content active" id="sd-${ci}"><div class="stamp-grid">${stampGridHtml}</div></div>
-            <div class="detail-tab-content" id="rd-${ci}">${remainHtml}</div>
-          </div>`;
-        coursesList.appendChild(row);
-      });
-    }
+          ${isComplete?'<span class="course-badge-complete">🏆 완주</span>':''}
+          <span class="course-chevron">▶</span>
+        </div>
+        <div class="course-detail">
+          <div class="detail-tabs">
+            <div class="detail-tab active" onclick="switchDetailTab(this,'sd-${ci}')">스탬프</div>
+          </div>
+          <div class="detail-tab-content active" id="sd-${ci}"><div class="stamp-grid">
+            ${locIds.map((id,li)=>`<div class="stamp-cell ${stamps[id]?'visited':'remaining'}" onclick="openLocModal('${id}',${li})"><span class="stamp-cell-emoji">${EMOJIS[li%EMOJIS.length]}</span><span class="stamp-cell-name">${locs[id]?.name||id}</span></div>`).join('')}
+          </div></div>
+        </div>`;
+      coursesList.appendChild(row);
+    });
 
-    // History tab
-    const locCourseMap={};courses.forEach(c=>(c.locationIds||[]).forEach(id=>{if(!locCourseMap[id])locCourseMap[id]=[];locCourseMap[id].push(c.name);}));
+    // 방문 기록 렌더링
     const entries=Object.entries(stamps).sort((a,b)=>new Date(b[1].visitedAt)-new Date(a[1].visitedAt));
     const visitList=document.getElementById('visit-list');
-    if(!entries.length){
-      visitList.innerHTML='<div class="empty-state"><span class="icon">🚲</span><p>아직 방문한 지점이 없어요.<br>QR코드를 스캔해보세요!</p></div>';
-    }else{
-      visitList.innerHTML='';
-      entries.forEach(([locId,data],i)=>{
-        const loc=locs[locId];
-        const courseNames=(locCourseMap[locId]||[]).join(', ');
-        const li=Object.keys(locs).indexOf(locId);
-        const item=document.createElement('div');
-        item.className='visit-item';item.style.animationDelay=(i*.04)+'s';
-        item.onclick=()=>openLocModal(locId,li);
-        item.innerHTML=`<div class="v-badge">${EMOJIS[i%EMOJIS.length]}</div><div class="v-info"><div class="v-name">${loc?.name||data.locName||locId}</div>${courseNames?`<div class="v-course">📍 ${courseNames}</div>`:''}<div class="v-time">${fmtDate(data.visitedAt)}</div></div>`;
-        visitList.appendChild(item);
-      });
-    }
+    visitList.innerHTML=entries.length ? '' : '<div class="empty-state">기록이 없습니다.</div>';
+    entries.forEach(([locId,data],i)=>{
+      const item=document.createElement('div');
+      item.className='visit-item';
+      item.onclick=()=>openLocModal(locId,i);
+      item.innerHTML=`<div class="v-badge">${EMOJIS[i%EMOJIS.length]}</div><div class="v-info"><div class="v-name">${locs[locId]?.name||locId}</div><div class="v-time">${fmtDate(data.visitedAt)}</div></div>`;
+      visitList.appendChild(item);
+    });
 
-    window._myData={pData,visitedCount,uid,completedCourses,completedRequired,allRequiredDone};
+    window._myData={pData,visitedCount,uid,completedRequired,allRequiredDone};
   }catch(e){console.error(e);}
-  loadInquiries();
   document.getElementById('page-loading').style.display='none';
-  const pw=document.getElementById('passport-wrap');pw.style.opacity='1';pw.style.transition='opacity .4s';
-
-  // 공지사항 로드
-  try{
-    const nSnap=await getDocs(collection(db,'notices'));
-    const notices=[];nSnap.forEach(d=>notices.push({id:d.id,...d.data()}));
-    const active=notices.filter(n=>n.active&&(n.page==='all'||n.page==='mypage')).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
-    if(active.length){
-      const n=active[0];
-      const COLORS={'info':['#1a2744','#d4af37'],'event':['#2d6a4f','#d4af37'],'warning':['#7a3a00','#ffcc80']};
-      const [bg,color]=COLORS[n.type]||COLORS.info;
-      const typeIcon={'info':'📢','event':'🎉','warning':'⚠️'};
-      const banner=document.getElementById('notice-banner');
-      document.getElementById('notice-banner-icon').textContent=typeIcon[n.type]||'📢';
-      document.getElementById('notice-banner-text').textContent=n.title;
-      banner.style.background=bg;banner.style.color=color;banner.style.display='block';
-      document.body.style.paddingTop='38px';
-    }
-  }catch(e){console.log('notice error',e);}
+  document.getElementById('passport-wrap').style.opacity='1';
 }
 
-window.toggleCourse=function(el){
-  const row=el.closest('.course-row'),was=row.classList.contains('open');
-  document.querySelectorAll('.course-row.open').forEach(r=>r.classList.remove('open'));
-  if(!was)row.classList.add('open');
-};
-window.switchDetailTab=function(tabEl,cid){
-  const d=tabEl.closest('.course-detail');
-  d.querySelectorAll('.detail-tab').forEach(t=>t.classList.remove('active'));
-  d.querySelectorAll('.detail-tab-content').forEach(t=>t.classList.remove('active'));
-  tabEl.classList.add('active');document.getElementById(cid).classList.add('active');
-};
+// 아코디언 및 기타 UI 함수
+window.toggleCourse=function(el){const row=el.closest('.course-row'),was=row.classList.contains('open');document.querySelectorAll('.course-row.open').forEach(r=>r.classList.remove('open'));if(!was)row.classList.add('open');};
+window.switchDetailTab=function(tabEl,cid){const d=tabEl.closest('.course-detail');d.querySelectorAll('.detail-tab').forEach(t=>t.classList.remove('active'));d.querySelectorAll('.detail-tab-content').forEach(t=>t.classList.remove('active'));tabEl.classList.add('active');document.getElementById(cid).classList.add('active');};
 
-// Location modal
 window.openLocModal=function(locId,locIdx){
-  const loc=_locs[locId];if(!loc)return;
+  const loc=_locs[locId]; if(!loc)return;
   const visited=_stamps[locId];
-  const emoji=EMOJIS[(locIdx||0)%EMOJIS.length];
-  // 지점 이미지
-  const imgWrap=document.getElementById('lm-img-wrap');
-  const imgEl=document.getElementById('lm-img');
-  if(loc.imageUrl){imgEl.src=loc.imageUrl;imgWrap.style.display='block';}
-  else{imgWrap.style.display='none';imgEl.src='';}
-  document.getElementById('lm-emoji').textContent=emoji;
+  document.getElementById('lm-emoji').textContent=EMOJIS[locIdx%EMOJIS.length];
   document.getElementById('lm-name').textContent=loc.name;
   document.getElementById('lm-desc').textContent=loc.desc||'';
-  // Status badge
   const badge=document.getElementById('lm-status-badge');
-  if(visited){badge.className='stamp-status-badge ssb-visited';badge.textContent='✓ 방문 완료';}
-  else{badge.className='stamp-status-badge ssb-remaining';badge.textContent='미방문';}
-  // Address
-  const addrEl=document.getElementById('lm-address-content');
-  if(loc.address){
-    addrEl.innerHTML=`<span class="info-text">${loc.address}</span>`;
-    document.getElementById('lm-map-btns').innerHTML=`
-      <a class="map-btn map-btn-kakao" href="https://map.kakao.com/link/search/${encodeURIComponent(loc.address)}" target="_blank" rel="noopener">🚲 카카오맵</a>
-      <a class="map-btn map-btn-google" href="https://www.google.com/maps/search/${encodeURIComponent(loc.address)}" target="_blank" rel="noopener">🌐 Google Maps</a>`;
-  }else{
-    addrEl.innerHTML='<span class="info-no-data">주소 정보가 없습니다</span>';
-    document.getElementById('lm-map-btns').innerHTML='';
-  }
-  // Visit time
-  const visitRow=document.getElementById('lm-visit-row');
-  if(visited){visitRow.style.display='flex';document.getElementById('lm-visit-time').textContent=fmtDate(visited.visitedAt);}
-  else visitRow.style.display='none';
+  badge.className=visited?'stamp-status-badge ssb-visited':'stamp-status-badge ssb-remaining';
+  badge.textContent=visited?'✓ 방문 완료':'미방문';
+  document.getElementById('lm-address-content').textContent=loc.address||'주소 정보 없음';
+  document.getElementById('lm-map-btns').innerHTML=loc.address?`<a class="map-btn map-btn-kakao" href="https://map.kakao.com/link/search/${encodeURIComponent(loc.address)}" target="_blank">🚲 카카오맵</a>`: '';
+  const vr=document.getElementById('lm-visit-row');
+  if(visited){vr.style.display='flex';document.getElementById('lm-visit-time').textContent=fmtDate(visited.visitedAt);}else{vr.style.display='none';}
   document.getElementById('loc-modal-overlay').classList.add('open');
 };
 window.closeLocModal=function(){document.getElementById('loc-modal-overlay').classList.remove('open');};
-document.getElementById('loc-modal-overlay').addEventListener('click',function(e){if(e.target===this)window.closeLocModal();});
 
-// Apply modal
-window.openApplyModal=function(){
-  const d=window._myData;if(!d)return;
-  if(!d.allRequiredDone){showToast('필수 코스를 모두 완주해야 신청할 수 있어요!');return;}
-  document.getElementById('apply-summary').innerHTML=
-    `완주 필수 코스: <strong>${d.completedRequired.map(c=>c.name).join(', ')}</strong><br>총 방문 지점: <strong>${d.visitedCount}곳</strong>`;
-  document.getElementById('apply-name').value=d.pData.name||'';
-  const ph=d.pData.phone||'';
-  document.getElementById('apply-phone').value=ph?ph.replace(/(\d{3})(\d{4})(\d{4})/,'$1-$2-$3'):'';
-  document.getElementById('apply-error').style.display='none';
-  document.getElementById('btn-submit-apply').disabled=false;
-  document.getElementById('apply-modal-overlay').classList.add('open');
-};
-window.closeApplyModal=function(){document.getElementById('apply-modal-overlay').classList.remove('open');};
-document.getElementById('apply-modal-overlay').addEventListener('click',function(e){if(e.target===this)window.closeApplyModal();});
-
-window.submitApplication=async function(){
-  const name=document.getElementById('apply-name').value.trim();
-  const phone=document.getElementById('apply-phone').value.replace(/[^0-9]/g,'');
-  if(!name||phone.length<10){document.getElementById('apply-error').style.display='block';return;}
-  document.getElementById('btn-submit-apply').disabled=true;
-  document.getElementById('apply-error').style.display='none';
-  const d=window._myData;
-  try{
-    await updateDoc(doc(db,'participants',d.uid),{applied:true,applyName:name,applyPhone:phone,appliedAt:new Date().toISOString(),applyStatus:'pending',applyMemo:''});
-    window.closeApplyModal();
-    document.getElementById('cta-btn-wrap').innerHTML='<div class="applied-notice" style="background:rgba(230,144,0,.2);border-color:rgba(230,144,0,.4);color:#f0a500;">⏳ 완주 신청 검토 중</div>';
-    showToast('✓ 완주 신청이 완료되었습니다!');
-  }catch(e){showToast('오류가 발생했습니다.');document.getElementById('btn-submit-apply').disabled=false;}
-};
-window.reapplyModal=function(){
-  // 반려 후 재신청 — 모달 다시 열기
-  document.getElementById('btn-submit-apply').disabled=false;
-  document.getElementById('apply-error').style.display='none';
-  document.getElementById('apply-modal-overlay').classList.add('open');
-};
-// --- 1:1 문의 기능 최종 통합본 ---
-
-// 1. 문의 등록 함수
+// 문의 기능
 window.submitInquiry = async function() {
   try {
     const text = document.getElementById('new-inquiry-text').value.trim();
-    if(!text) { showToast('내용을 입력하세요.'); return; }
-    
+    if(!text) return;
     const id = Math.random().toString(36).substr(2,9);
-    const now = new Date().toISOString();
-    
-    // 데이터 저장
-    await setDoc(doc(db, 'inquiries', id), {
-      id: id, 
-      uid: window._myData.uid, 
-      name: window._myData.pData.name, 
-      content: text, 
-      answer: '', 
-      status: 'pending', 
-      createdAt: now
-    });
-    
-    document.getElementById('new-inquiry-text').value = ''; 
-    showToast('✓ 문의가 등록되었습니다.');
-    loadInquiries(); // 목록 새로고침
-  } catch(e) {
-    alert('문의 등록 실패: ' + e.message);
-    console.error(e);
-  }
+    await setDoc(doc(db, 'inquiries', id), {id, uid, name: window._myData.pData.name, content: text, answer: '', status: 'pending', createdAt: new Date().toISOString()});
+    document.getElementById('new-inquiry-text').value = '';
+    showToast('✓ 등록되었습니다.');
+    loadInquiries();
+  } catch(e) {alert(e.message);}
 };
 
-// 2. 문의 내역 불러오기 함수
 window.loadInquiries = async function() {
   try {
     const snap = await getDocs(collection(db, 'inquiries'));
-    const list = [];
-    // 본인 글만 필터링
-    snap.forEach(d => { 
-      const data = d.data();
-      if(data.uid === window._myData.uid) list.push(data); 
-    });
-    
+    const list = []; snap.forEach(d => { if(d.data().uid === uid) list.push(d.data()); });
     list.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
-    
-    const esc = (s) => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    
     const html = list.map(iq => `
-      <div style="background:white; border:1px solid var(--aged); padding:14px; border-radius:8px; margin-bottom:10px; position:relative; text-align:left;">
-        <button onclick="deleteMyInquiry('${iq.id}')" style="position:absolute; top:12px; right:12px; background:none; border:none; color:rgba(192,57,43,0.4); cursor:pointer; font-size:0.7rem; text-decoration:underline; font-family:'Noto Sans KR',sans-serif;">삭제</button>
-        <div style="font-size:0.75rem; color:#aaa; margin-bottom:6px;">${fmtDate(iq.createdAt)} <span style="color:${iq.status==='answered'?'var(--green)':'#e65100'}; font-weight:bold;">${iq.status==='answered'?'[답변완료]':'[대기중]'}</span></div>
-        <div style="font-size:0.85rem; color:var(--ink); line-height:1.5;">${esc(iq.content).replace(/\n/g, '<br>')}</div>
-        ${iq.answer ? `<div style="margin-top:10px; padding-top:10px; border-top:1px dashed var(--aged); font-size:0.8rem; color:var(--seal); line-height:1.5;"><strong>관리자 답변:</strong><br>${esc(iq.answer).replace(/\n/g, '<br>')}</div>` : ''}
-      </div>
-    `).join('');
-    
-    document.getElementById('my-inquiry-list').innerHTML = html || '<div class="empty-state" style="padding:20px;"><p>등록된 문의가 없습니다.</p></div>';
-  } catch(e) {
-    console.error('내역 로드 에러:', e);
-  }
+      <div style="background:white; border:1px solid var(--aged); padding:14px; border-radius:8px; position:relative;">
+        <button onclick="deleteMyInquiry('${iq.id}')" style="position:absolute; top:12px; right:12px; background:none; border:none; color:rgba(192,57,43,0.4); text-decoration:underline; font-size:0.7rem; cursor:pointer;">삭제</button>
+        <div style="font-size:0.75rem; color:#aaa; margin-bottom:6px;">${fmtDate(iq.createdAt)} [${iq.status==='answered'?'답변완료':'대기중'}]</div>
+        <div style="font-size:0.85rem;">${iq.content}</div>
+        ${iq.answer ? `<div style="margin-top:10px; padding-top:10px; border-top:1px dashed var(--aged); font-size:0.8rem; color:var(--seal);"><strong>답변:</strong> ${iq.answer}</div>` : ''}
+      </div>`).join('');
+    document.getElementById('my-inquiry-list').innerHTML = html || '문의가 없습니다.';
+  } catch(e) {console.error(e);}
 };
 
-// 3. 내 문의 삭제 함수
 window.deleteMyInquiry = async function(id) {
-  if(!confirm('작성하신 문의글을 삭제하시겠습니까?')) return;
-  try {
-    await deleteDoc(doc(db, 'inquiries', id));
-    showToast('✓ 삭제되었습니다.');
-    loadInquiries();
-  } catch(e) {
-    alert('삭제 실패: ' + e.message);
-  }
+  if(confirm('삭제하시겠습니까?')) { await deleteDoc(doc(db, 'inquiries', id)); loadInquiries(); }
 };
 
+window.deleteMyAccount = async function() {
+  if(!confirm('정말 탈퇴하시겠습니까?')) return;
+  const batch = writeBatch(db);
+  const sSnap = await getDocs(collection(db, 'participants', uid, 'stamps'));
+  sSnap.forEach(d => batch.delete(d.ref));
+  batch.delete(doc(db, 'participants', uid));
+  await batch.commit();
+  localStorage.removeItem('stampUID');
+  location.href = 'index.html';
+};
+
+// 실행
 load();
 </script>
 </body>
