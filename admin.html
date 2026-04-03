@@ -418,6 +418,27 @@ const db=getFirestore(app);
 const auth=getAuth(app);
 const ADMIN_EMAIL='halimviva23@gmail.com';
 
+// 관리자: 참여자 계정 및 데이터 영구 삭제 함수
+window.deleteUserAdmin = async function(uid, name) {
+  if(!confirm(`${name} 님의 계정과 모든 스탬프 기록을 영구 삭제하시겠습니까?`)) return;
+  try {
+    const batch = writeBatch(db);
+    
+    // 1. 하위 스탬프 데이터 먼저 일괄 삭제
+    const stampsSnap = await getDocs(collection(db, 'participants', uid, 'stamps'));
+    stampsSnap.forEach(doc => batch.delete(doc.ref));
+    
+    // 2. 참여자 기본 문서 삭제
+    batch.delete(doc(db, 'participants', uid));
+    
+    await batch.commit();
+    showToast(`✓ ${name} 님의 데이터가 삭제되었습니다.`);
+    loadAll();
+  } catch(e) {
+    showToast('삭제 실패: ' + e.message);
+  }
+};
+  
 // Google 로그인
 window.googleLogin=async function(){
   document.getElementById('google-login-btn').style.display='none';
@@ -787,7 +808,11 @@ window.renderParts=function(){
       <td style="font-size:.75rem">${cc.length?cc.map(c=>`<span style="background:${c.required?'#fff3e0':'#e8f5e9'};color:${c.required?'#e65100':'var(--green)'};border:1px solid ${c.required?'#ffcc80':'#a5d6a7'};border-radius:3px;padding:1px 5px;font-size:.66rem">${c.required?'⭐ ':''} ${esc(c.name)}</span>`).join(' '):'<span style="color:#bbb">없음</span>'}</td>
       <td style="font-size:.71rem;color:#aaa">${fmtDate(p.updatedAt)}</td>
       <td>${p.applied?'<span class="sb sb-applied">완주신청</span>':allDone?'<span class="sb sb-complete">신청가능</span>':'<span class="sb sb-active">진행중</span>'} ${req.length?`<div style="font-size:.65rem;color:#aaa;margin-top:2px">필수 ${done.length}/${req.length}</div>`:''}</td>
-      <td><button class="btn btn-outline btn-sm" onclick="showDetail('${p.uid}')">상세</button></td>`;
+     <td><div style="display:flex;gap:4px;flex-wrap:wrap;"><button class="btn btn-outline btn-sm" onclick="showDetail('${p.uid}')">상세</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteUserAdmin('${p.uid}', '${esc(p.name)}')">탈퇴</button>
+        </div>
+      </td>`;
+    
     tbody.appendChild(tr);
   });
 };
