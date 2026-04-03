@@ -184,6 +184,7 @@
     <div class="cover-top">
       <a class="btn-home" href="index.html">← 메인</a>
       <button class="btn-logout" onclick="logout()">로그아웃</button>
+      <button class="btn-logout" style="color:#e74c3c; border-color:rgba(231,76,60,0.3); margin-left:6px;" onclick="deleteMyAccount()">탈퇴하기</button>
     </div>
     <img src="https://raw.githubusercontent.com/halimviva23-ux/stamp-tour/main/Main%20logo.png" alt="전주시 자전거 여권"
       style="height:60px;object-fit:contain;display:block;margin:0 auto 10px;"/>
@@ -284,7 +285,7 @@
 
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import{getFirestore,doc,getDoc,getDocs,updateDoc,collection}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import{getFirestore,doc,getDoc,getDocs,updateDoc,deleteDoc,writeBatch,collection}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 const cfg={apiKey:"AIzaSyAW13Cf2qQnsGWYiAdz9rF3TrWkGR_lLNg",authDomain:"stemp-tour.firebaseapp.com",projectId:"stemp-tour",storageBucket:"stemp-tour.firebasestorage.app",messagingSenderId:"823116268455",appId:"1:823116268455:web:4b060bf808eae664f62c82"};
 const app=initializeApp(cfg);
 const db=getFirestore(app);
@@ -296,6 +297,33 @@ const uid=localStorage.getItem('stampUID');
 if(!uid){location.href='login.html?redirect='+encodeURIComponent(location.href);}
 
 window.logout=function(){if(!confirm('로그아웃 하시겠어요?'))return;localStorage.removeItem('stampUID');localStorage.removeItem('stampVisitorName');localStorage.removeItem('stampPhone');location.href='index.html';};
+  window.deleteMyAccount = async function() {
+  if(!confirm('정말 탈퇴하시겠습니까? 모든 스탬프 기록이 삭제되며 복구할 수 없습니다.')) return;
+  
+  try {
+    const batch = writeBatch(db);
+    
+    // 1. 내 모든 스탬프 기록 삭제
+    const stampsSnap = await getDocs(collection(db, 'participants', uid, 'stamps'));
+    stampsSnap.forEach(d => batch.delete(d.ref));
+    
+    // 2. 내 계정 정보 삭제
+    batch.delete(doc(db, 'participants', uid));
+    
+    // 일괄 실행
+    await batch.commit();
+
+    // 3. 로컬 정보 삭제 및 메인 이동
+    localStorage.removeItem('stampUID');
+    localStorage.removeItem('stampVisitorName');
+    localStorage.removeItem('stampPhone');
+    alert('탈퇴 처리가 완료되었습니다. 이용해 주셔서 감사합니다.');
+    location.href = 'index.html';
+  } catch(e) {
+    console.error(e);
+    showToast('탈퇴 처리 중 오류가 발생했습니다.');
+  }
+};
 window.fmtPhone=function(i){let v=i.value.replace(/[^0-9]/g,'');if(v.length<=3)i.value=v;else if(v.length<=7)i.value=v.slice(0,3)+'-'+v.slice(3);else i.value=v.slice(0,3)+'-'+v.slice(3,7)+'-'+v.slice(7,11);};
 function fmtDate(iso){if(!iso)return'';const d=new Date(iso);return`${d.getFullYear()}.${d.getMonth()+1}.${d.getDate()} ${d.getHours()<12?'오전':'오후'} ${d.getHours()%12||12}:${String(d.getMinutes()).padStart(2,'0')}`;}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
