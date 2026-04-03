@@ -15,14 +15,97 @@
   body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");pointer-events:none;z-index:0;}
 
   /* ── Nav ── */
-  nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 32px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(to bottom,rgba(15,30,56,.95),rgba(15,30,56,0));backdrop-filter:blur(6px);}
-  .nav-logo{font-family:'Noto Serif KR',serif;font-size:.95rem;font-weight:700;color:#f0e8d4;letter-spacing:.06em;display:flex;align-items:center;gap:8px;}
-  .nav-logo span{font-size:1.2rem;}
-  .nav-actions{display:flex;gap:10px;align-items:center;}
-  .nav-btn{padding:7px 18px;border-radius:20px;font-size:.8rem;font-family:'Noto Sans KR',sans-serif;cursor:pointer;letter-spacing:.03em;transition:all .2s;text-decoration:none;display:inline-block;}
-  .nav-btn-outline{background:transparent;border:1.5px solid rgba(232,220,200,.35);color:rgba(232,220,200,.7);}.nav-btn-outline:hover{border-color:var(--gold);color:var(--gold);}
-  .nav-btn-fill{background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.2);color:white;}.nav-btn-fill:hover{background:var(--seal);border-color:var(--seal);}
-  .nav-btn-mypage{background:var(--gold);border:1.5px solid var(--gold);color:white;display:none;}.nav-btn-mypage:hover{background:#9a7209;}
+ /* 내비게이션 바 레이아웃 최적화 */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 12px 20px; /* 여백을 좁혀서 공간 확보 */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(to bottom, rgba(15, 30, 56, 0.98), rgba(15, 30, 56, 0.8));
+    backdrop-filter: blur(8px);
+    height: 64px;
+  }
+
+  .nav-logo {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #f0e8d4;
+    letter-spacing: .06em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 1; /* 공간 부족 시 로고 영역이 줄어들게 허용 */
+    min-width: 0;
+  }
+
+  .nav-logo img {
+    height: 28px; /* 로고 이미지 크기 최적화 */
+    width: auto;
+  }
+
+  .nav-actions {
+    display: flex;
+    gap: 8px; /* 버튼 간격 좁힘 */
+    align-items: center;
+    flex-shrink: 0; /* 버튼 그룹은 깨지지 않게 보호 */
+  }
+
+  .nav-btn {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer;
+    transition: all .2s;
+    text-decoration: none;
+    display: inline-block;
+    white-space: nowrap; /* 글자 줄바꿈 방지 */
+  }
+
+  .nav-btn-outline {
+    background: transparent;
+    border: 1.2px solid rgba(232, 220, 200, .3);
+    color: rgba(232, 220, 200, .7);
+  }
+
+  .nav-btn-fill {
+    background: rgba(255, 255, 255, .1);
+    border: 1.2px solid rgba(255, 255, 255, .15);
+    color: white;
+  }
+
+  .nav-btn-mypage {
+    background: var(--gold);
+    border: 1.2px solid var(--gold);
+    color: white;
+    display: none; /* 로그인 상태에 따라 JS에서 block 처리됨 */
+  }
+
+  /* 📱 모바일 디바이스(화면 폭 480px 이하) 대응 */
+  @media (max-width: 480px) {
+    nav {
+      padding: 10px 12px; /* 아주 좁은 화면에서도 여백 확보 */
+    }
+    
+    .nav-logo span {
+      display: none; /* 모바일에서는 로고 옆 텍스트 숨김 (이미지만 표시) */
+    }
+
+    .nav-actions {
+      gap: 5px;
+    }
+
+    .nav-btn {
+      padding: 5px 10px;
+      font-size: 0.7rem; /* 모바일용 작은 폰트 */
+    }
+  }
 
   /* ── Hero ── */
   .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:100px 24px 80px;position:relative;text-align:center;background:linear-gradient(160deg,#1a2744 0%,#0f1e38 100%);}
