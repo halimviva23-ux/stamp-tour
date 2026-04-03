@@ -357,8 +357,12 @@ window.switchTab=function(id,el){
 let _locs={},_stamps={};
 
 async function load(){
-  if(!uid)return;
-  try{
+  async function load(){
+  const uid = localStorage.getItem('viva_user_uid'); // 이 줄을 추가해야 합니다!
+  if(!uid) { location.href='index.html'; return; }
+  
+  const loading = document.getElementById('page-loading');
+  try {
     const[pSnap,stampsSnap,coursesSnap,locsSnap]=await Promise.all([
       getDoc(doc(db,'participants',uid)),
       getDocs(collection(db,'participants',uid,'stamps')),
