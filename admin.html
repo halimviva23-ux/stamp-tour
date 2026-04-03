@@ -6,7 +6,7 @@
 <title>관리자 · 전주시 자전거 여권</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root{--ink:#1a1208;--paper:#f5efe3;--aged:#e8dcc8;--seal:#c0392b;--gold:#b8860b;--green:#2d6a4f;--blue:#1565c0;--sh:rgba(26,18,8,.09);}
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -40,7 +40,29 @@
   .det-stat-label{font-size:0.7rem; color:#7a6a50; margin-bottom:5px;}
   .det-stat-value{font-family:'Noto Serif KR'; font-size:1.4rem; font-weight:700;}
 
-  /* 뱃지 및 바 스타일 */
+  .upload-zone{border:2px dashed var(--aged);border-radius:8px;padding:22px 18px;text-align:center;cursor:pointer;transition:all .2s;background:var(--paper);position:relative;}
+  .upload-zone:hover,.upload-zone.drag-over{border-color:var(--gold);background:#fdf8ee;}
+  .upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+  .upload-zone .ui{font-size:1.8rem;margin-bottom:5px;}
+  .upload-zone p{font-size:.82rem;color:#7a6a50;}
+  .csv-hint{display:flex;align-items:center;gap:7px;margin-top:10px;padding:9px 13px;background:var(--paper);border-radius:4px;border:1px solid var(--aged);font-size:.76rem;color:#7a6a50;flex-wrap:wrap;}
+
+  label{font-size:.72rem;color:#7a6a50;display:block;margin-bottom:4px;}
+  input[type=text],input[type=tel]{width:100%;padding:8px 11px;border:1px solid var(--aged);border-radius:4px;background:var(--paper);font-family:'Noto Sans KR',sans-serif;font-size:.84rem;color:var(--ink);}
+  button,.btn{padding:8px 16px;border-radius:4px;border:none;cursor:pointer;font-family:'Noto Sans KR',sans-serif;font-size:.79rem;transition:all .2s;display:inline-flex;align-items:center;gap:4px;text-decoration:none;}
+  .btn-dark{background:var(--ink);color:white;}.btn-dark:hover{background:var(--seal);}
+  .btn-gold{background:var(--gold);color:white;}.btn-gold:hover{background:#9a7209;}
+  .btn-outline{background:transparent;color:var(--ink);border:1px solid var(--aged);}.btn-outline:hover{background:var(--aged);}
+  .btn-danger{background:transparent;color:#e74c3c;border:1px solid #e74c3c;}.btn-danger:hover{background:#e74c3c;color:white;}
+  .btn-sm{padding:4px 10px;font-size:.72rem;}
+
+  .table-wrap{overflow-x:auto;}
+  table{width:100%;border-collapse:collapse;font-size:.81rem;}
+  th{background:var(--ink);color:white;padding:10px 12px;text-align:left;font-weight:500;font-size:.74rem;white-space:nowrap;}
+  td{padding:9px 12px;border-bottom:1px solid var(--aged);vertical-align:middle;}
+  tr:hover td{background:#fdf9f2;}
+  .loc-id{font-family:monospace;background:var(--paper);padding:2px 5px;border-radius:2px;font-size:.72rem;color:var(--seal);border:1px solid var(--aged);}
+
   .sb{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.68rem;font-weight:500;}
   .sb-applied{background:#e3f2fd;color:var(--blue);border:1px solid #90caf9;}
   .sb-complete{background:#e8f5e9;color:var(--green);border:1px solid #a5d6a7;}
@@ -48,41 +70,30 @@
   .pm-bar{height:4px;background:var(--aged);border-radius:2px;margin-top:3px;overflow:hidden;}
   .pm-fill{height:100%;background:var(--green);border-radius:2px;}
 
-  /* 이하 공통 테이블 및 버튼 스타일 - 원본 유지 */
-  .table-wrap{overflow-x:auto;}
-  table{width:100%;border-collapse:collapse;font-size:.81rem;}
-  th{background:var(--ink);color:white;padding:10px 12px;text-align:left;font-weight:500;font-size:.74rem;white-space:nowrap;}
-  td{padding:9px 12px;border-bottom:1px solid var(--aged);vertical-align:middle;}
-  button,.btn{padding:8px 16px;border-radius:4px;border:none;cursor:pointer;font-family:'Noto Sans KR',sans-serif;font-size:.79rem;transition:all .2s;display:inline-flex;align-items:center;gap:4px;text-decoration:none;}
-  .btn-dark{background:var(--ink);color:white;}.btn-dark:hover{background:var(--seal);}
-  .btn-gold{background:var(--gold);color:white;}.btn-gold:hover{background:#9a7209;}
-  .btn-green{background:var(--green);color:white;}.btn-green:hover{background:#1e4d38;}
-  .btn-outline{background:transparent;color:var(--ink);border:1px solid var(--aged);}.btn-outline:hover{background:var(--aged);}
-  .btn-danger{background:transparent;color:#e74c3c;border:1px solid #e74c3c;}.btn-danger:hover{background:#e74c3c;color:white;}
-  .btn-sm{padding:4px 10px;font-size:.72rem;}
-  
+  /* Modal Styles */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(26,18,8,.72);z-index:100;align-items:center;justify-content:center;}
+  .modal-overlay.open{display:flex;}
+  .modal{background:white;border-radius:8px;padding:28px;max-width:540px;width:90%;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.35);max-height:90vh;overflow-y:auto;}
+  .modal-close{position:absolute;top:10px;right:12px;background:none;border:none;color:#bbb;font-size:1.1rem;cursor:pointer;}
+
   .loading-overlay{position:fixed;inset:0;background:rgba(240,232,216,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200;}
-  .loading-overlay .sp{width:38px;height:38px;border:3px solid var(--aged);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:11px;}
+  .sp{width:38px;height:38px;border:3px solid var(--aged);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:11px;}
   @keyframes spin{to{transform:rotate(360deg)}}
   .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:var(--ink);color:white;padding:9px 18px;border-radius:30px;font-size:.78rem;opacity:0;pointer-events:none;transition:opacity .3s;z-index:999;white-space:nowrap;}
   .toast.show{opacity:1;}
-  
-  /* 모달 스타일 생략 없이 원본 유지 */
-  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(26,18,8,.72);z-index:100;align-items:center;justify-content:center;}
-  .modal-overlay.open{display:flex;}
-  .modal{background:white;border-radius:8px;padding:28px;max-width:360px;width:90%;text-align:center;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.35);}
 </style>
 </head>
 <body>
 
 <div id="lock-screen" style="display:none;position:fixed;inset:0;background:linear-gradient(160deg,#1a2744 0%,#0f1e38 100%);z-index:9999;align-items:center;justify-content:center;">
-  <div style="background:white;border-radius:12px;padding:40px 32px;max-width:360px;width:90%;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,.5);">
+  <div style="background:white;border-radius:12px;padding:40px 32px;max-width:360px;width:90%;text-align:center;">
     <div style="font-size:2.8rem;margin-bottom:12px;">🔒</div>
-    <div style="font-family:'Noto Serif KR',serif;font-size:1.2rem;font-weight:700;color:#1a1208;margin-bottom:4px;">관리자 페이지</div>
+    <div style="font-family:'Noto Serif KR',serif;font-size:1.2rem;font-weight:700;margin-bottom:4px;">관리자 페이지</div>
     <div style="font-size:.8rem;color:#7a6a50;margin-bottom:24px;">Google 계정으로 로그인하세요</div>
-    <button id="google-login-btn" onclick="googleLogin()" style="width:100%;padding:12px;background:white;color:#333;border:1.5px solid #ddd;border-radius:8px;font-family:'Noto Sans KR',sans-serif;font-size:.92rem;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s;">
+    <button id="google-login-btn" onclick="googleLogin()" style="width:100%;padding:12px;background:white;color:#333;border:1.5px solid #ddd;border-radius:8px;font-family:'Noto Sans KR',sans-serif;font-size:.92rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;">
       <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:20px;height:20px;"/> Google로 로그인
     </button>
+    <div id="auth-error" style="display:none;font-size:.76rem;color:#c0392b;margin-top:12px;padding:8px;background:#fff5f5;border-radius:6px;">❌ 관리자 계정이 아닙니다.</div>
   </div>
 </div>
 
@@ -116,7 +127,7 @@
   <div class="card" style="margin-bottom:16px; background: #fdfaf5;">
     <div class="card-title">👥 참여자 상세 현황</div>
     <div class="det-stat-grid">
-      <div class="det-stat-item"><div class="det-stat-label">총 참여자</div><div id="det-total-parts" class="det-stat-value" style="color:var(--ink);">-</div></div>
+      <div class="det-stat-item"><div class="det-stat-label">총 참여자</div><div id="det-total-parts" class="det-stat-value">-</div></div>
       <div class="det-stat-item"><div class="det-stat-label">실시간 활동(7일)</div><div id="det-active-parts" class="det-stat-value" style="color:var(--seal);">-</div></div>
       <div class="det-stat-item"><div class="det-stat-label">누적 완주 인원</div><div id="det-comp-parts" class="det-stat-value" style="color:var(--green);">-</div></div>
       <div class="det-stat-item"><div class="det-stat-label">코스 완주율</div><div id="det-comp-rate" class="det-stat-value" style="color:var(--gold);">-</div></div>
@@ -132,19 +143,11 @@
   </div>
 
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-    <div class="card">
-      <div class="card-title">🔥 지점별 방문 순위</div>
-      <div class="table-wrap"><table><thead><tr><th>#</th><th>지점명</th><th>방문수</th><th>코스</th></tr></thead><tbody id="ov-locs"></tbody></table></div>
-    </div>
-    <div class="card">
-      <div class="card-title">🗺️ 코스별 완주 현황</div><div id="ov-courses"></div>
-      <div class="card-title" style="margin-top:16px">🕐 최근 인증</div><div id="ov-recent"></div>
-    </div>
+    <div class="card"><div class="card-title">🔥 지점별 방문 순위</div><div class="table-wrap"><table><thead><tr><th>#</th><th>지점명</th><th>방문수</th><th>코스</th></tr></thead><tbody id="ov-locs"></tbody></table></div></div>
+    <div class="card"><div class="card-title">🗺️ 코스별 완주 현황</div><div id="ov-courses"></div><div class="card-title" style="margin-top:16px">🕐 최근 인증</div><div id="ov-recent"></div></div>
   </div>
 </div>
 
-<div class="page-section" id="section-courses">... (원본 코드와 동일하게 유지) ...</div>
-<div class="page-section" id="section-locations">... (원본 코드와 동일하게 유지) ...</div>
 <div class="page-section" id="section-participants">
   <div class="card">
     <div class="toolbar">
@@ -152,22 +155,23 @@
       <input class="search-input" id="p-search" placeholder="이름/전화 검색…" oninput="renderParts()"/>
       <select class="filter-sel" id="p-filter" onchange="renderParts()"><option value="all">전체</option><option value="applied">완주신청</option><option value="active">진행중</option></select>
     </div>
-    <div class="table-wrap"><table><thead><tr><th>#</th><th>이름</th><th>전화번호</th><th>방문 현황</th><th>완주 코스</th><th>마지막 방문</th><th>상태</th><th>상세</th></tr></thead><tbody id="p-tbody"></tbody></table></div>
+    <div class="table-wrap"><table><thead><tr><th>#</th><th>이름</th><th>전화번호</th><th>방문 현황</th><th>완주 코스</th><th>마지막 방문</th><th>상태</th><th>상세/관리</th></tr></thead><tbody id="p-tbody"></tbody></table></div>
   </div>
 </div>
 
 <div class="page-section" id="section-completions">
   <div class="card">
-    <div class="toolbar">
-      <div class="card-title">🏆 완주 신청 목록</div>
-      <input class="search-input" id="c-search" placeholder="이름/전화 검색…" oninput="renderComps()"/>
-    </div>
-    <div class="table-wrap"><table><thead><tr><th>#</th><th>계정 이름</th><th>신청 이름</th><th>신청 전화번호</th><th>신청 시각</th><th>방문수</th><th>완주 코스</th><th>처리 상태</th><th>처리</th></tr></thead><tbody id="c-tbody"></tbody></table></div>
+    <div class="toolbar"><div class="card-title">🏆 완주 신청 목록</div></div>
+    <div class="table-wrap"><table><thead><tr><th>#</th><th>계정 이름</th><th>신청 이름</th><th>신청 전화번호</th><th>신청 시각</th><th>방문수</th><th>완주코스</th><th>상태</th><th>처리</th></tr></thead><tbody id="c-tbody"></tbody></table></div>
   </div>
 </div>
 
-<div class="page-section" id="section-notices">...</div>
-<div class="page-section" id="section-inquiries">...</div>
+<div class="page-section" id="section-courses">
+  <div class="card"><div class="card-title">🗺️ 코스 관리</div><div id="course-list"></div></div>
+</div>
+<div class="page-section" id="section-locations">
+  <div class="card"><div class="card-title">📍 지점 관리</div><div id="location-list"></div></div>
+</div>
 
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -178,34 +182,51 @@ const cfg={apiKey:"AIzaSyAW13Cf2qQnsGWYiAdz9rF3TrWkGR_lLNg",authDomain:"stemp-to
 const app=initializeApp(cfg);
 const db=getFirestore(app);
 const auth=getAuth(app);
-const ADMIN_EMAIL='halimviva23@gmail.com';
 
-// ── 데이터 로드 및 통계 (원본 100% 복구 버전) ──
+// ✅ 관리자 계정 리스트
+const ADMIN_EMAILS = ['halimviva23@gmail.com', 'newadmin@gmail.com'];
+
+window.googleLogin=async function(){
+  try{
+    const provider=new GoogleAuthProvider(); const result=await signInWithPopup(auth,provider);
+    if(!ADMIN_EMAILS.includes(result.user.email)){ await signOut(auth); alert('관리자 계정 아님'); }
+  }catch(e){console.error(e);}
+};
+
+onAuthStateChanged(auth,user=>{
+  if(user&&ADMIN_EMAILS.includes(user.email)){
+    document.getElementById('lock-screen').style.display='none';
+    document.getElementById('admin-wrap').style.display='block';
+    loadAll();
+  }else{ document.getElementById('lock-screen').style.display='flex'; }
+});
+
 let locations=[],courses=[],participants=[],allStamps={};
 const COLORS=['#c0392b','#b8860b','#2d6a4f','#1565c0','#6a1b9a','#e65100','#00838f','#37474f'];
+
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
+function fmtDate(iso){if(!iso)return'-';return new Date(iso).toLocaleString('ko-KR',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
 
 async function loadAll(){
   document.getElementById('page-loading').style.display='flex';
   try{
     const[lS,cS,pS]=await Promise.all([getDocs(collection(db,'locations')),getDocs(collection(db,'courses')),getDocs(collection(db,'participants'))]);
-    locations=[];lS.forEach(d=>locations.push({id:d.id,...d.data()}));
-    courses=[];cS.forEach(d=>courses.push({id:d.id,...d.data()}));
-    participants=[];pS.forEach(d=>participants.push({uid:d.id,...d.data()}));
-    
+    locations=[]; lS.forEach(d=>locations.push({id:d.id,...d.data()}));
+    courses=[]; cS.forEach(d=>courses.push({id:d.id,...d.data()}));
+    participants=[]; pS.forEach(d=>participants.push({uid:d.id,...d.data()}));
     allStamps={};
     await Promise.all(participants.map(async p=>{
       const sSnap=await getDocs(collection(db,'participants',p.uid,'stamps'));
-      allStamps[p.uid]={};sSnap.forEach(d=>allStamps[p.uid][d.id]=d.data());
+      allStamps[p.uid]={}; sSnap.forEach(d=>allStamps[p.uid][d.id]=d.data());
     }));
-    
-    renderOverview(); renderParts(); renderComps(); // 모든 렌더링 함수 호출
-    updateBadges();
+    renderOverview(); renderParts(); renderComps(); updateBadges();
   }catch(e){console.error(e);}
   document.getElementById('page-loading').style.display='none';
 }
 
 function renderOverview(){
-  // [추가된 상세 현황 계산]
+  // 상세 현황 계산
   const now = new Date();
   const sevenDaysAgo = new Date(now.getTime() - (7 * 24 * 60 * 60 * 1000));
   const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -214,12 +235,10 @@ function renderOverview(){
   Object.entries(allStamps).forEach(([uid, sm]) => {
     Object.values(sm).forEach(s => { if (s.visitedAt && new Date(s.visitedAt) > sevenDaysAgo) activeUserIds.add(uid); });
   });
-
   const completedUserCount = participants.filter(p => {
     const s = allStamps[p.uid] || {};
     return courses.some(c => { const ids = c.locationIds || []; return ids.length > 0 && ids.every(id => s[id]); });
   }).length;
-
   const todayPartsCount = participants.filter(p => p.createdAt && new Date(p.createdAt) >= todayStart).length;
   const completionRate = participants.length > 0 ? ((completedUserCount / participants.length) * 100).toFixed(1) : 0;
 
@@ -229,22 +248,61 @@ function renderOverview(){
   document.getElementById('det-comp-rate').textContent = completionRate + '%';
   document.getElementById('det-today-parts').textContent = '+' + todayPartsCount + '명';
 
-  // [기존 통계/차트 렌더링 원본 복구]
+  // 통계 원본 복구
   const lvc={}; Object.values(allStamps).forEach(s=>Object.keys(s).forEach(id=>{lvc[id]=(lvc[id]||0)+1;}));
   locations.forEach(l=>l.visitCount=lvc[l.id]||0);
-  
   const lcm={}; courses.forEach(c=>(c.locationIds||[]).forEach(id=>{if(!lcm[id])lcm[id]=[];lcm[id].push(c.name);}));
   const tbody=document.getElementById('ov-locs'); tbody.innerHTML='';
   [...locations].sort((a,b)=>(b.visitCount||0)-(a.visitCount||0)).slice(0,15).forEach((l,i)=>{
-    tbody.innerHTML+=`<tr><td>${i+1}</td><td style="font-weight:500">${l.name}</td><td>${l.visitCount||0}</td><td style="font-size:.7rem;color:#7a6a50">${(lcm[l.id]||[]).join(', ')||'-'}</td></tr>`;
+    tbody.innerHTML+=`<tr><td>${i+1}</td><td>${esc(l.name)}</td><td>${l.visitCount||0}</td><td>${(lcm[l.id]||[]).join(', ')||'-'}</td></tr>`;
   });
-  // ... (나머지 차트/최근인증 로직 원본 유지)
+
+  const ocp=document.getElementById('ov-course-parts');ocp.innerHTML='';
+  let courseGrid='<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;">';
+  courses.forEach((c,ci)=>{
+    const ids=c.locationIds||[]; const color=COLORS[ci%COLORS.length];
+    const pc=participants.filter(p=>ids.some(id=>allStamps[p.uid]?.[id])).length;
+    const cc=participants.filter(p=>ids.length>0&&ids.every(id=>allStamps[p.uid]?.[id])).length;
+    courseGrid+=`<div style="padding:14px;background:white;border:1px solid var(--aged);border-left:4px solid ${color};border-radius:8px;">
+      <div style="font-size:.82rem;font-weight:600;margin-bottom:8px;">${c.name}</div>
+      <div style="display:flex;gap:12px;"><div style="text-align:center"><div style="font-size:1.2rem;font-weight:700;color:${color}">${pc}</div><div style="font-size:.65rem;color:#aaa">참여</div></div>
+      <div style="text-align:center"><div style="font-size:1.2rem;font-weight:700;color:var(--gold)">${cc}</div><div style="font-size:.65rem;color:#aaa">완주</div></div></div></div>`;
+  });
+  ocp.innerHTML=courseGrid+'</div>';
+
+  // 차트 렌더링
+  const allActs=[]; Object.entries(allStamps).forEach(([u,sm])=>Object.values(sm).forEach(s=>allActs.push(s.visitedAt)));
+  const dateMap={}; for(let i=13;i>=0;i--){ const d=new Date(); d.setDate(d.getDate()-i); dateMap[`${d.getMonth()+1}/${d.getDate()}`]=0; }
+  allActs.forEach(iso=>{ const d=new Date(iso); const k=`${d.getMonth()+1}/${d.getDate()}`; if(k in dateMap)dateMap[k]++; });
+  const maxV=Math.max(...Object.values(dateMap),1);
+  let cHTML='<div style="display:flex;align-items:flex-end;gap:3px;height:80px;padding-bottom:18px;">';
+  Object.entries(dateMap).forEach(([l,cnt])=>{ const h=Math.max(cnt/maxV*100,2); cHTML+=`<div style="flex:1;display:flex;flex-direction:column;align-items:center;"><div style="width:100%;height:${h}%;background:var(--gold);border-radius:2px 2px 0 0;"></div><span style="font-size:.55rem;color:#bbb">${l}</span></div>`;});
+  document.getElementById('ov-chart').innerHTML=cHTML+'</div>';
+
+  const hourMap={}; for(let i=0;i<24;i++)hourMap[i]=0;
+  allActs.forEach(iso=>{ const h=new Date(iso).getHours(); hourMap[h]++; });
+  const maxH=Math.max(...Object.values(hourMap),1);
+  let hHTML='<div style="display:flex;align-items:flex-end;gap:2px;height:80px;padding-bottom:18px;">';
+  Object.entries(hourMap).forEach(([h,cnt])=>{ const ph=Math.max(cnt/maxH*100,2); hHTML+=`<div style="flex:1;display:flex;flex-direction:column;align-items:center;"><div style="width:100%;height:${ph}%;background:var(--seal);border-radius:1px;"></div><span style="font-size:.45rem;color:#bbb">${h%6===0?h:''}</span></div>`;});
+  document.getElementById('ov-hour-chart').innerHTML=hHTML+'</div>';
+
+  const ovc=document.getElementById('ov-courses');ovc.innerHTML='';
+  courses.forEach((c,ci)=>{
+    const ids=c.locationIds||[];const cnt=participants.filter(p=>{const s=allStamps[p.uid]||{};return ids.length>0&&ids.every(id=>s[id]);}).length;
+    const pct=participants.length?Math.round(cnt/participants.length*100):0; const color=COLORS[ci%COLORS.length];
+    ovc.innerHTML+=`<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:.76rem;margin-bottom:3px"><span>${c.name}</span><span>${cnt}명</span></div><div style="height:5px;background:var(--aged);border-radius:3px;overflow:hidden"><div style="height:100%;width:${pct}%;background:${color}"></div></div></div>`;
+  });
+
+  const acts=[]; Object.entries(allStamps).forEach(([uid,sm])=>{const p=participants.find(p=>p.uid===uid);Object.values(sm).forEach(s=>acts.push({name:p?.name||'익명',locName:s.locName,visitedAt:s.visitedAt}));});
+  acts.sort((a,b)=>new Date(b.visitedAt)-new Date(a.visitedAt));
+  const ovr=document.getElementById('ov-recent'); ovr.innerHTML='';
+  acts.slice(0,8).forEach(a=>{ovr.innerHTML+=`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--aged);font-size:.78rem"><span style="flex:1"><strong>${esc(a.name)}</strong> → ${esc(a.locName)}</span><span style="font-size:.69rem;color:#aaa">${fmtDate(a.visitedAt)}</span></div>`;});
 }
 
-// ── [복구] 참여자 상태 관리 함수 ──
 function getCompletedCourses(uid){const s=allStamps[uid]||{};return courses.filter(c=>{const ids=c.locationIds||[];return ids.length>0&&ids.every(id=>s[id]);});}
 function getRequiredCompleted(uid){const s=allStamps[uid]||{};const req=courses.filter(c=>c.required);const done=req.filter(c=>{const ids=c.locationIds||[];return ids.length>0&&ids.every(id=>s[id]);});return{req,done,allDone:req.length>0&&done.length>=req.length};}
 
+// 참여자 관리 원본 복구
 window.renderParts = function(){
   const q=document.getElementById('p-search').value.toLowerCase();
   const f=document.getElementById('p-filter').value;
@@ -260,44 +318,64 @@ window.renderParts = function(){
     const s=allStamps[p.uid]||{}; const v=Object.keys(s).length;
     const {req,done,allDone}=getRequiredCompleted(p.uid);
     const cc=getCompletedCourses(p.uid);
-    tbody.innerHTML+=`<tr><td>${i+1}</td><td><div style="font-weight:500">${p.name}</div></td><td>${p.phone}</td>
+    tbody.innerHTML+=`<tr><td>${i+1}</td><td><div style="font-weight:500">${esc(p.name)}</div></td><td>${p.phone}</td>
       <td>${v}/${locations.length}</td>
-      <td>${cc.length?cc.map(c=>`<span class="sb-complete">${c.name}</span>`).join(' '):'-'}</td>
-      <td>${p.updatedAt?new Date(p.updatedAt).toLocaleString():'-'}</td>
+      <td>${cc.length?cc.map(c=>`<span class="sb-complete" style="font-size:0.6rem">${esc(c.name)}</span>`).join(' '):'-'}</td>
+      <td>${fmtDate(p.updatedAt)}</td>
       <td>${p.applied?'<span class="sb sb-applied">완주신청</span>':allDone?'<span class="sb sb-complete">신청가능</span>':'<span class="sb sb-active">진행중</span>'}</td>
-      <td><button class="btn btn-outline btn-sm" onclick="showDetail('${p.uid}')">상세</button> <button class="btn btn-danger btn-sm" onclick="deleteUserAdmin('${p.uid}', '${p.name}')">탈퇴</button></td></tr>`;
+      <td><button class="btn btn-outline btn-sm" onclick="showDetail('${p.uid}')">상세</button> <button class="btn btn-danger btn-sm" onclick="deleteUserAdmin('${p.uid}', '${esc(p.name)}')">탈퇴</button></td></tr>`;
   });
 };
 
-// ── [복구] 완주 신청 처리 및 반려 사유 입력 ──
+window.deleteUserAdmin = async function(uid, name) {
+  if(!confirm(`${name} 님의 모든 기록을 영구 삭제하시겠습니까?`)) return;
+  const batch = writeBatch(db);
+  const stampsSnap = await getDocs(collection(db, 'participants', uid, 'stamps'));
+  stampsSnap.forEach(d => batch.delete(d.ref));
+  batch.delete(doc(db, 'participants', uid));
+  await batch.commit(); showToast('✓ 삭제되었습니다.'); loadAll();
+};
+
+// 완주 신청 반려 사유 로직 복구
 window.renderComps = function(){
   const tbody=document.getElementById('c-tbody'); tbody.innerHTML='';
   participants.filter(p=>p.applied).forEach((p,i)=>{
     const status = p.applyStatus || 'pending';
     const statusMap={pending:['대기중','#fff3e0','#e65100'],approved:['승인 완료','#e8f5e9','var(--green)'],rejected:['반려','#fde8e8','var(--seal)']};
     const [label, bg, color] = statusMap[status];
-    tbody.innerHTML+=`<tr><td>${i+1}</td><td>${p.name}</td><td>${p.applyName||p.name}</td><td>${p.applyPhone||p.phone}</td>
-      <td>${p.appliedAt?new Date(p.appliedAt).toLocaleString():'-'}</td><td>${Object.keys(allStamps[p.uid]||{}).length}</td>
+    tbody.innerHTML+=`<tr><td>${i+1}</td><td>${esc(p.name)}</td><td>${esc(p.applyName||p.name)}</td><td>${p.applyPhone||p.phone}</td>
+      <td>${fmtDate(p.appliedAt)}</td><td>${Object.keys(allStamps[p.uid]||{}).length}</td>
       <td>${getCompletedCourses(p.uid).length}개</td>
-      <td><span style="background:${bg};color:${color};" class="sb">${label}</span>${p.applyMemo?`<div style="font-size:.68rem;color:#aaa;">${p.applyMemo}</div>`:''}</td>
+      <td><span style="background:${bg};color:${color};" class="sb">${label}</span>${p.applyMemo?`<div style="font-size:.65rem;color:#aaa;">${esc(p.applyMemo)}</div>`:''}</td>
       <td><button class="btn btn-green btn-sm" onclick="processApply('${p.uid}','approved')">승인</button> <button class="btn btn-danger btn-sm" onclick="processApply('${p.uid}','rejected')">반려</button></td></tr>`;
   });
 };
 
 window.processApply = async function(uid, status){
   const p=participants.find(p=>p.uid===uid); if(!p)return;
-  const label=status==='approved'?'승인':'반려';
-  let memo='';
-  if(status==='rejected'){
-    memo=prompt('반려 사유를 입력하세요 (선택사항):','')??'';
-  }
-  if(!confirm(`${p.name} 님의 완주 신청을 ${label} 처리할까요?`))return;
+  let memo=''; if(status==='rejected'){ memo=prompt('반려 사유를 입력하세요:','')??''; }
+  if(!confirm(`${p.name} 님을 ${status==='approved'?'승인':'반려'} 처리할까요?`))return;
   await updateDoc(doc(db,'participants',uid),{applyStatus:status, applyMemo:memo, applyProcessedAt:new Date().toISOString()});
-  p.applyStatus=status; p.applyMemo=memo;
-  renderComps(); showToast(`✓ ${p.name} 님 ${label} 완료`);
+  loadAll(); showToast('✓ 처리 완료');
 };
 
-// ... 나머지 모든 함수(deleteUserAdmin, googleLogin, loadNotices 등) 원본 유지 ...
+function updateBadges(){
+  document.getElementById('nb-locs').textContent=locations.length;
+  document.getElementById('nb-courses').textContent=courses.length;
+  document.getElementById('nb-parts').textContent=participants.length;
+  document.getElementById('s-locs').textContent=locations.length;
+  document.getElementById('s-courses').textContent=courses.length;
+  document.getElementById('s-parts').textContent=participants.length;
+  document.getElementById('s-stamps').textContent=Object.values(allStamps).reduce((s,m)=>s+Object.keys(m).length,0);
+  document.getElementById('s-comps').textContent=participants.filter(p=>p.applied).length;
+}
+
+window.sw=function(id,el){
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.page-section').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active'); document.getElementById('section-'+id).classList.add('active');
+};
+
 loadAll();
 </script>
 </div>
