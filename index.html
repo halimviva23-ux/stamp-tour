@@ -131,18 +131,10 @@
 <!-- Nav -->
 <nav>
   <div class="nav-logo">
-    <!-- =============================================
-      🖼️ [로고 이미지] 수정 구역 — index.html 상단 네비게이션
-      이미지를 쓰려면 아래 <img> 태그의 주석을 해제하고
-      src 안에 이미지 경로를 입력하세요.
-      같은 폴더: src="images/logo.png"
-      외부 URL:  src="https://your-server.com/logo.png"
-      이미지를 쓰지 않으면 아래 텍스트가 그대로 표시돼요.
-    ============================================= -->
-    <!-- <img src="여기에_로고_이미지_경로" alt="전주시 자전거 여권 로고" style="height:32px;"/> -->
-    <span>🚲</span> 전주시 자전거 여권
+    <img src="https://raw.githubusercontent.com/halimviva23-ux/stamp-tour/main/Main%20logo.png" alt="전주시 자전거 여권 로고" style="height:32px;object-fit:contain;"/> 전주시 자전거 여권
   </div>
   <div class="nav-actions">
+    <a class="nav-btn nav-btn-outline" href="notices.html" style="display:inline-block;">📢 공지</a>
     <!-- 비로그인 -->
     <a class="nav-btn nav-btn-outline logged-out-only" href="login.html">로그인</a>
     <a class="nav-btn nav-btn-fill logged-out-only" href="login.html#register">회원가입</a>
@@ -270,6 +262,7 @@
 <footer>
   <p>
     <a href="courses.html">코스 안내</a>
+    <a href="notices.html">공지사항</a>
     <a href="login.html">로그인</a>
     <a href="admin.html">관리자</a>
   </p>
@@ -315,26 +308,29 @@ document.querySelectorAll('.about-card,.step').forEach(el=>{
 <!-- 공지사항 로드 -->
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import{getFirestore,getDocs,collection,query,where,orderBy}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import{getFirestore,getDocs,collection}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 const cfg={apiKey:"AIzaSyAW13Cf2qQnsGWYiAdz9rF3TrWkGR_lLNg",authDomain:"stemp-tour.firebaseapp.com",projectId:"stemp-tour",storageBucket:"stemp-tour.firebasestorage.app",messagingSenderId:"823116268455",appId:"1:823116268455:web:4b060bf808eae664f62c82"};
 const db=getFirestore(initializeApp(cfg));
 const COLORS={'info':['#1a2744','#d4af37'],'event':['#2d6a4f','#d4af37'],'warning':['#7a3a00','#ffcc80']};
-try{
-  const snap=await getDocs(collection(db,'notices'));
-  const notices=[];
-  snap.forEach(d=>notices.push({id:d.id,...d.data()}));
-  const active=notices.filter(n=>n.active&&(n.page==='all'||n.page==='main')).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
-  if(active.length){
-    const n=active[0];
-    const [bg,color]=COLORS[n.type]||COLORS.info;
-    const typeIcon={'info':'📢','event':'🎉','warning':'⚠️'};
-    const banner=document.getElementById('notice-banner');
-    document.getElementById('notice-banner-icon').textContent=typeIcon[n.type]||'📢';
-    document.getElementById('notice-banner-text').textContent=n.title;
-    banner.style.background=bg;banner.style.color=color;banner.style.display='block';
-    document.body.style.paddingTop='38px';
-  }
-}catch(e){console.log('notice load error',e);}
+async function loadNotice(){
+  try{
+    const snap=await getDocs(collection(db,'notices'));
+    const notices=[];
+    snap.forEach(d=>notices.push({id:d.id,...d.data()}));
+    const active=notices.filter(n=>n.active&&(n.page==='all'||n.page==='main')).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+    if(active.length){
+      const n=active[0];
+      const [bg,color]=COLORS[n.type]||COLORS.info;
+      const typeIcon={'info':'📢','event':'🎉','warning':'⚠️'};
+      const banner=document.getElementById('notice-banner');
+      document.getElementById('notice-banner-icon').textContent=typeIcon[n.type]||'📢';
+      document.getElementById('notice-banner-text').textContent=n.title;
+      banner.style.background=bg;banner.style.color=color;banner.style.display='block';
+      document.body.style.paddingTop='38px';
+    }
+  }catch(e){console.log('notice load error',e);}
+}
+loadNotice();
 </script>
 </body>
 </html>
