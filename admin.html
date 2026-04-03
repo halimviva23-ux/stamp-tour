@@ -33,7 +33,7 @@
   .stat-box .n{font-family:'Noto Serif KR',serif;font-size:1.75rem;font-weight:700;line-height:1;}
   .stat-box .l{font-size:.67rem;color:#7a6a50;margin-top:3px;}
 
-  /* 📊 추가된 참여자 상세 현황 그리드 스타일 */
+  /* 📊 [추가] 참여자 상세 현황 그리드 스타일 */
   .det-stat-grid{display:grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap:15px; text-align:center;}
   .det-stat-item{padding:10px; border-right:1px solid var(--aged);}
   .det-stat-item:last-child{border-right:none;}
@@ -53,9 +53,8 @@
   .btn-dark{background:var(--ink);color:white;}.btn-dark:hover{background:var(--seal);}
   .btn-gold{background:var(--gold);color:white;}.btn-gold:hover{background:#9a7209;}
   .btn-outline{background:transparent;color:var(--ink);border:1px solid var(--aged);}.btn-outline:hover{background:var(--aged);}
-  .btn-green{background:var(--green);color:white;}.btn-green:hover{background:#1e4d38;}
-  .btn-sm{padding:4px 10px;font-size:.72rem;}
   .btn-danger{background:transparent;color:#e74c3c;border:1px solid #e74c3c;}.btn-danger:hover{background:#e74c3c;color:white;}
+  .btn-sm{padding:4px 10px;font-size:.72rem;}
 
   .table-wrap{overflow-x:auto;}
   table{width:100%;border-collapse:collapse;font-size:.81rem;}
@@ -82,6 +81,7 @@
   .ci-cnt{font-size:.71rem;color:#7a6a50;}
   .loc-pool{border:1px solid var(--aged);border-radius:6px;height:230px;overflow-y:auto;background:var(--paper);}
   .lp-item{padding:8px 11px;border-bottom:1px solid rgba(232,220,200,.5);cursor:pointer;font-size:.79rem;display:flex;align-items:center;gap:6px;}
+  .lp-item:hover{background:rgba(184,134,11,.07);}
   .lp-item.assigned{background:#e8f5e9;color:var(--green);}
 
   .modal-overlay{display:none;position:fixed;inset:0;background:rgba(26,18,8,.72);z-index:100;align-items:center;justify-content:center;}
@@ -179,21 +179,25 @@
       </div>
       <div class="panel">
         <div class="panel-header">지점 배정</div>
-        <div class="panel-body" id="course-detail-panel">
+        <div class="panel-body">
           <div id="det-empty" class="detail-empty">← 코스를 선택하세요</div>
           <div id="det-content" style="display:none">
-            <div class="name-edit-row">
+            <div class="name-edit-row" style="display:flex; gap:5px; margin-bottom:10px;">
               <input type="text" id="edit-course-name" />
               <button class="btn btn-gold btn-sm" onclick="saveCourseEdit()">저장</button>
               <button class="btn btn-danger btn-sm" onclick="deleteCourse()">삭제</button>
             </div>
-            <div style="padding:10px; background:var(--paper); border-radius:6px; margin-bottom:10px; display:flex; align-items:center; gap:10px;">
-              <span style="font-size:.8rem; font-weight:600;">⭐ 필수 코스</span>
-              <input type="checkbox" id="required-toggle" onchange="toggleRequired()">
+            <div style="padding:10px; background:var(--paper); border-radius:6px; margin-bottom:13px; display:flex; align-items:center; gap:10px;">
+              <span style="font-size:.82rem; font-weight:600;">⭐ 필수 코스</span>
+              <div style="position:relative; width:40px; height:20px;">
+                <input type="checkbox" id="required-toggle" style="width:100%; height:100%; opacity:0; position:absolute; z-index:2; cursor:pointer;" onchange="toggleRequired()">
+                <div id="required-track" style="position:absolute; inset:0; background:#ccc; border-radius:10px; transition:.2s;"></div>
+                <div id="required-thumb" style="position:absolute; top:2px; left:2px; width:16px; height:16px; background:white; border-radius:50%; transition:.2s;"></div>
+              </div>
             </div>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-              <div><h4 style="font-size:.7rem; margin-bottom:5px;">전체 지점</h4><div class="loc-pool" id="pool-avail"></div></div>
-              <div><h4 style="font-size:.7rem; margin-bottom:5px;">배정된 지점</h4><div class="loc-pool" id="pool-assigned"></div></div>
+              <div><h4 style="font-size:.73rem; margin-bottom:6px; color:#7a6a50;">전체 지점 (추가+)</h4><div class="loc-pool" id="pool-avail"></div></div>
+              <div><h4 style="font-size:.73rem; margin-bottom:6px; color:#7a6a50;">배정된 지점 (삭제✕)</h4><div class="loc-pool" id="pool-assigned"></div></div>
             </div>
           </div>
         </div>
@@ -207,7 +211,7 @@
     <div class="card-title">📂 CSV / 엑셀 업로드</div>
     <div class="upload-zone" id="upload-zone">
       <input type="file" id="file-input" accept=".csv,.xlsx,.xls" onchange="handleFile(event)">
-      <div class="ui">📄</div><p>파일 업로드 (CSV, Excel)</p>
+      <div class="ui">📄</div><p>파일을 드래그하거나 클릭하여 업로드</p>
     </div>
     <div class="csv-hint">📋 형식: <code>지점명</code>, <code>설명</code>, <code>주소</code> <button class="btn btn-outline btn-sm" onclick="dlTemplate()" style="margin-left:auto">샘플 다운로드</button></div>
   </div>
@@ -225,7 +229,7 @@
       <div class="card-title">📋 지점 목록 <span id="loc-cnt-label">0개</span></div>
       <div class="toolbar-right"><button class="btn btn-danger btn-sm" onclick="clearAllLocs()">전체 삭제</button></div>
     </div>
-    <div class="table-wrap"><table><thead><tr><th>#</th><th>지점명</th><th>설명</th><th>주소</th><th>QR</th><th>삭제</th></tr></thead><tbody id="loc-tbody"></tbody></table></div>
+    <div class="table-wrap"><table><thead><tr><th>#</th><th>지점명</th><th>설명</th><th>주소</th><th>QR</th><th>작업</th></tr></thead><tbody id="loc-tbody"></tbody></table></div>
   </div>
 </div>
 
@@ -236,58 +240,16 @@
       <input class="search-input" id="p-search" placeholder="이름/전화 검색…" oninput="renderParts()"/>
       <select class="filter-sel" id="p-filter" onchange="renderParts()"><option value="all">전체</option><option value="applied">완주신청</option><option value="active">진행중</option></select>
     </div>
-    <div class="table-wrap"><table><thead><tr><th>#</th><th>이름</th><th>전화번호</th><th>방문 현황</th><th>완주 코스</th><th>마지막 방문</th><th>상태</th><th>상세/관리</th></tr></thead><tbody id="p-tbody"></tbody></table></div>
+    <div class="table-wrap"><table><thead><tr><th>#</th><th>이름</th><th>전화번호</th><th>방문</th><th>완주 코스</th><th>마지막 방문</th><th>상태</th><th>상세/관리</th></tr></thead><tbody id="p-tbody"></tbody></table></div>
   </div>
 </div>
 
 <div class="page-section" id="section-completions">
   <div class="card">
     <div class="toolbar"><div class="card-title">🏆 완주 신청 목록</div></div>
-    <div class="table-wrap"><table><thead><tr><th>#</th><th>계정 이름</th><th>신청 이름</th><th>신청 전화번호</th><th>신청 시각</th><th>방문수</th><th>완주 코스</th><th>상태</th><th>처리</th></tr></thead><tbody id="c-tbody"></tbody></table></div>
+    <div class="table-wrap"><table><thead><tr><th>#</th><th>계정</th><th>신청자</th><th>전화번호</th><th>신청시각</th><th>방문수</th><th>상태</th><th>처리</th></tr></thead><tbody id="c-tbody"></tbody></table></div>
   </div>
 </div>
-
-<div class="page-section" id="section-notices">
-  <div class="card">
-    <div class="card-title">📢 공지사항 작성</div>
-    <div style="display:grid; gap:10px;">
-      <input type="text" id="notice-title" placeholder="제목"/>
-      <textarea id="notice-content" placeholder="내용" style="height:100px; padding:10px; border-radius:8px; border:1px solid var(--aged);"></textarea>
-      <button class="btn btn-dark" onclick="addNotice()">공지 등록</button>
-    </div>
-  </div>
-  <div class="card"><div id="notice-list"></div></div>
-</div>
-
-<div class="page-section" id="section-inquiries">
-  <div class="card">
-    <div class="card-title">🎧 고객 문의 관리</div>
-    <div class="table-wrap"><table><thead><tr><th>상태</th><th>작성자</th><th>내용</th><th>답변</th><th>작업</th></tr></thead><tbody id="inquiry-tbody"></tbody></table></div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="qr-modal">
-  <div class="modal"><button class="modal-close" onclick="closeQR()">✕</button><h3 id="qr-title"></h3><div id="qr-container" style="display:flex; justify-content:center; margin:20px 0;"></div><div style="text-align:center;"><button class="btn btn-dark" onclick="dlQR()">PNG 다운로드</button></div></div>
-</div>
-
-<div class="modal-overlay" id="detail-modal">
-  <div class="modal">
-    <button class="modal-close" onclick="document.getElementById('detail-modal').classList.remove('open')">✕</button>
-    <h3 id="d-name"></h3>
-    <div id="d-info" style="font-size:.8rem; color:#7a6a50; margin-bottom:15px;"></div>
-    <div style="display:flex; border-bottom:1px solid var(--aged); margin-bottom:15px;">
-      <button class="btn-outline btn-sm" onclick="switchDTab('courses')">코스 현황</button>
-      <button class="btn-outline btn-sm" onclick="switchDTab('stamps')">스탬프 관리</button>
-    </div>
-    <div id="dtab-courses"></div>
-    <div id="dtab-stamps" style="display:none;">
-      <div style="margin-bottom:10px;"><select id="stamp-add-select"></select><button class="btn btn-dark btn-sm" onclick="addStampAdmin()">추가</button></div>
-      <div id="stamp-manage-list" style="display:flex; flex-wrap:wrap; gap:5px;"></div>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
 
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -299,17 +261,18 @@ const app=initializeApp(cfg);
 const db=getFirestore(app);
 const auth=getAuth(app);
 
+// 관리자 계정 설정
 const ADMIN_EMAILS = ['halimviva23@gmail.com', 'newadmin@gmail.com'];
 let locations=[],courses=[],participants=[],allStamps={},selCourse=null;
 const COLORS=['#c0392b','#b8860b','#2d6a4f','#1565c0','#6a1b9a','#e65100','#00838f','#37474f'];
 
-// [복구] 유틸리티
+// [복구] 기초 유틸
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
 function fmtDate(iso){if(!iso)return'-';return new Date(iso).toLocaleString('ko-KR',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
 function genId(){return Math.random().toString(36).substr(2,8).toUpperCase();}
 
-// 인증 처리
+// 인증 로직
 window.googleLogin=async function(){
   try{
     const provider=new GoogleAuthProvider(); const result=await signInWithPopup(auth,provider);
@@ -324,7 +287,6 @@ onAuthStateChanged(auth,user=>{
   }else{ document.getElementById('lock-screen').style.display='flex'; }
 });
 
-// 전체 데이터 로드 (원본 1:1)
 async function loadAll(){
   document.getElementById('page-loading').style.display='flex';
   try{
@@ -337,13 +299,13 @@ async function loadAll(){
       const sSnap=await getDocs(collection(db,'participants',p.uid,'stamps'));
       allStamps[p.uid]={}; sSnap.forEach(d=>allStamps[p.uid][d.id]=d.data());
     }));
-    renderOverview(); renderCourseList(); renderLocations(); renderParts(); renderComps(); loadAdminInquiries(); loadNotices(); updateBadges();
+    renderOverview(); renderCourseList(); renderLocations(); renderParts(); renderComps(); updateBadges();
   }catch(e){console.error(e);}
   document.getElementById('page-loading').style.display='none';
 }
 
 function renderOverview(){
-  // 참여자 상세 현황 계산 (신규 기능)
+  // 참여자 상세 현황 (계산)
   const now = new Date();
   const sevenDaysAgo = new Date(now.getTime() - (7 * 24 * 60 * 60 * 1000));
   const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -364,30 +326,27 @@ function renderOverview(){
   document.getElementById('det-comp-rate').textContent = completionRate + '%';
   document.getElementById('det-today-parts').textContent = '+' + todayPartsCount + '명';
 
-  // [복구] 지점별 순위
+  // [복구] 지점 랭킹 및 차트
   const lvc={}; Object.values(allStamps).forEach(s=>Object.keys(s).forEach(id=>{lvc[id]=(lvc[id]||0)+1;}));
   locations.forEach(l=>l.visitCount=lvc[l.id]||0);
   const lcm={}; courses.forEach(c=>(c.locationIds||[]).forEach(id=>{if(!lcm[id])lcm[id]=[];lcm[id].push(c.name);}));
   const tbody=document.getElementById('ov-locs'); tbody.innerHTML='';
   [...locations].sort((a,b)=>(b.visitCount||0)-(a.visitCount||0)).slice(0,15).forEach((l,i)=>{
-    tbody.innerHTML+=`<tr><td>${i+1}</td><td style="font-weight:500">${esc(l.name)}</td><td>${l.visitCount||0}</td><td style="font-size:.7rem">${(lcm[l.id]||[]).join(', ')||'-'}</td></tr>`;
+    tbody.innerHTML+=`<tr><td>${i+1}</td><td style="font-weight:600">${esc(l.name)}</td><td>${l.visitCount||0}</td><td style="font-size:.7rem; color:#888;">${(lcm[l.id]||[]).join(', ')}</td></tr>`;
   });
 
-  // [복구] 코스별 참여 카드
   const ocp=document.getElementById('ov-course-parts'); ocp.innerHTML='';
-  let courseGrid='<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;">';
+  let grid='<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:10px;">';
   courses.forEach((c,ci)=>{
-    const ids=c.locationIds||[]; const color=COLORS[ci%COLORS.length];
+    const ids=c.locationIds||[]; const clr=COLORS[ci%COLORS.length];
     const pc=participants.filter(p=>ids.some(id=>allStamps[p.uid]?.[id])).length;
     const cc=participants.filter(p=>ids.length>0&&ids.every(id=>allStamps[p.uid]?.[id])).length;
-    courseGrid+=`<div style="padding:14px;background:white;border:1px solid var(--aged);border-left:4px solid ${color};border-radius:8px;">
-      <div style="font-size:.82rem;font-weight:600;margin-bottom:8px;">${c.name}</div>
-      <div style="display:flex;gap:12px;"><div style="text-align:center"><div style="font-size:1.2rem;font-weight:700;color:${color}">${pc}</div><div style="font-size:.65rem;color:#aaa">참여</div></div>
-      <div style="text-align:center"><div style="font-size:1.2rem;font-weight:700;color:var(--gold)">${cc}</div><div style="font-size:.65rem;color:#aaa">완주</div></div></div></div>`;
+    grid+=`<div style="padding:15px; background:white; border:1px solid var(--aged); border-left:4px solid ${clr}; border-radius:8px;">
+      <div style="font-size:.85rem; font-weight:700; margin-bottom:8px;">${esc(c.name)}</div>
+      <div style="display:flex; gap:15px;"><div style="text-align:center"><div style="font-size:1.3rem; font-weight:700; color:${clr}">${pc}</div><div style="font-size:.6rem; color:#aaa">참여중</div></div>
+      <div style="text-align:center"><div style="font-size:1.3rem; font-weight:700; color:var(--gold)">${cc}</div><div style="font-size:.6rem; color:#aaa">완주</div></div></div></div>`;
   });
-  ocp.innerHTML=courseGrid+'</div>';
-
-  // [복구] 차트 및 최근인증
+  ocp.innerHTML=grid+'</div>';
   renderCharts();
 }
 
@@ -397,15 +356,22 @@ function renderCharts(){
   allActs.forEach(iso=>{ const d=new Date(iso); const k=`${d.getMonth()+1}/${d.getDate()}`; if(k in dateMap)dateMap[k]++; });
   const maxV=Math.max(...Object.values(dateMap),1);
   let cHTML='<div style="display:flex;align-items:flex-end;gap:3px;height:80px;padding-bottom:18px;">';
-  Object.entries(dateMap).forEach(([l,cnt])=>{ const h=Math.max(cnt/maxV*100,2); cHTML+=`<div style="flex:1;display:flex;flex-direction:column;align-items:center;"><div style="width:100%;height:${h}%;background:var(--gold);border-radius:2px 2px 0 0;"></div><span style="font-size:.55rem;color:#bbb">${l}</span></div>`;});
+  Object.entries(dateMap).forEach(([l,cnt])=>{ const h=Math.max(cnt/maxV*100,2); cHTML+=`<div style="flex:1;display:flex;flex-direction:column;align-items:center;"><div style="width:100%;height:${h}%;background:var(--gold);border-radius:2px 2px 0 0;"></div><span style="font-size:.55rem;color:#bbb;writing-mode:vertical-rl;transform:rotate(180deg);margin-top:2px">${l}</span></div>`;});
   document.getElementById('ov-chart').innerHTML=cHTML+'</div>';
 
   const hourMap={}; for(let i=0;i<24;i++)hourMap[i]=0;
   allActs.forEach(iso=>{ const h=new Date(iso).getHours(); hourMap[h]++; });
   const maxH=Math.max(...Object.values(hourMap),1);
   let hHTML='<div style="display:flex;align-items:flex-end;gap:2px;height:80px;padding-bottom:18px;">';
-  Object.entries(hourMap).forEach(([h,cnt])=>{ const ph=Math.max(cnt/maxH*100,2); hHTML+=`<div style="flex:1;display:flex;flex-direction:column;align-items:center;"><div style="width:100%;height:${ph}%;background:var(--seal);border-radius:1px;"></div><span style="font-size:.45rem;color:#bbb">${h%6===0?h:''}</span></div>`;});
+  Object.entries(hourMap).forEach(([h,cnt])=>{ const ph=Math.max(cnt/maxH*100,2); hHTML+=`<div style="flex:1;display:flex;flex-direction:column;align-items:center;"><div style="width:100%;height:${ph}%;background:var(--seal);border-radius:1px;"></div><span style="font-size:.45rem;color:#bbb">${h%6===0?h+'시':''}</span></div>`;});
   document.getElementById('ov-hour-chart').innerHTML=hHTML+'</div>';
+
+  const ovc=document.getElementById('ov-courses'); ovc.innerHTML='';
+  courses.forEach((c,ci)=>{
+    const ids=c.locationIds||[]; const cnt=participants.filter(p=>{const s=allStamps[p.uid]||{};return ids.length>0&&ids.every(id=>s[id]);}).length;
+    const pct=participants.length?Math.round(cnt/participants.length*100):0;
+    ovc.innerHTML+=`<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:.76rem;margin-bottom:3px"><span>${c.name}</span><span>${cnt}명</span></div><div style="height:5px;background:var(--aged);border-radius:3px;overflow:hidden"><div style="height:100%;width:${pct}%;background:${COLORS[ci%COLORS.length]}"></div></div></div>`;
+  });
 
   const acts=[]; Object.entries(allStamps).forEach(([uid,sm])=>{const p=participants.find(p=>p.uid===uid);Object.values(sm).forEach(s=>acts.push({name:p?.name||'익명',locName:s.locName,visitedAt:s.visitedAt}));});
   acts.sort((a,b)=>new Date(b.visitedAt)-new Date(a.visitedAt));
@@ -413,13 +379,13 @@ function renderCharts(){
   acts.slice(0,8).forEach(a=>{ovr.innerHTML+=`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--aged);font-size:.78rem"><span style="flex:1"><strong>${esc(a.name)}</strong> → ${esc(a.locName)}</span><span style="font-size:.69rem;color:#aaa">${fmtDate(a.visitedAt)}</span></div>`;});
 }
 
-// [복구] 코스 관리 로직
+// [복구] 코스 관리 (아코디언 및 배정)
 window.renderCourseList=function(){
   const el=document.getElementById('course-list-items'); el.innerHTML='';
   courses.forEach((c,ci)=>{
     const div=document.createElement('div'); div.className='course-item'+(selCourse===c.id?' active':'');
     div.onclick=()=>{selCourse=c.id; renderCourseList(); renderCourseDetail();};
-    div.innerHTML=`<div style="width:10px; height:10px; border-radius:50%; background:${COLORS[ci%COLORS.length]}"></div><span class="ci-name">${esc(c.name)}</span><span class="ci-cnt">${(c.locationIds||[]).length}개</span>`;
+    div.innerHTML=`<div style="width:10px;height:10px;border-radius:50%;background:${COLORS[ci%COLORS.length]}"></div><span class="ci-name">${esc(c.name)}</span>${c.required?'<span class="sb-complete" style="font-size:.6rem; padding:1px 5px;">필수</span>':''}<span class="ci-cnt">${(c.locationIds||[]).length}개</span>`;
     el.appendChild(div);
   });
   document.getElementById('course-cnt-label').textContent=courses.length+'개';
@@ -430,30 +396,83 @@ window.renderCourseDetail=function(){
   document.getElementById('det-content').style.display=c?'block':'none';
   if(!c)return;
   document.getElementById('edit-course-name').value=c.name;
-  document.getElementById('required-toggle').checked=!!c.required;
+  const isReq=!!c.required;
+  document.getElementById('required-toggle').checked=isReq;
+  document.getElementById('required-track').style.background=isReq?'var(--gold)':'#ccc';
+  document.getElementById('required-thumb').style.transform=isReq?'translateX(20px)':'translateX(0)';
+  const poolA=document.getElementById('pool-avail'); poolA.innerHTML='';
   const assigned=new Set(c.locationIds||[]);
-  const poolAvail=document.getElementById('pool-avail'); poolAvail.innerHTML='';
   locations.filter(l=>!assigned.has(l.id)).forEach(l=>{
-    const div=document.createElement('div'); div.className='lp-item'; div.innerHTML=`${esc(l.name)} +`;
-    div.onclick=()=>assignLoc(selCourse,l.id); poolAvail.appendChild(div);
+    const d=document.createElement('div'); d.className='lp-item'; d.innerHTML=`<span>${esc(l.name)}</span><span style="margin-left:auto;color:var(--gold);">+</span>`;
+    d.onclick=()=>assignLoc(selCourse,l.id); poolA.appendChild(d);
   });
   const poolAssigned=document.getElementById('pool-assigned'); poolAssigned.innerHTML='';
   (c.locationIds||[]).forEach(id=>{
     const l=locations.find(l=>l.id===id); if(!l)return;
-    const div=document.createElement('div'); div.className='lp-item assigned'; div.innerHTML=`${esc(l.name)} ✕`;
-    div.onclick=()=>removeLoc(selCourse,l.id); poolAssigned.appendChild(div);
+    const d=document.createElement('div'); d.className='lp-item assigned'; d.innerHTML=`<span>${esc(l.name)}</span><span style="margin-left:auto;color:var(--seal);">✕</span>`;
+    d.onclick=()=>removeLoc(selCourse,l.id); poolAssigned.appendChild(d);
   });
 };
 window.addCourse=async function(){
-  const name=document.getElementById('new-course-name').value.trim();
-  if(!name)return; const id=genId();
-  await setDoc(doc(db,'courses',id),{name, desc:document.getElementById('new-course-desc').value, locationIds:[], order:courses.length});
+  const name=document.getElementById('new-course-name').value.trim(); if(!name)return;
+  const id=genId(); await setDoc(doc(db,'courses',id),{name, desc:document.getElementById('new-course-desc').value, locationIds:[], order:courses.length});
   loadAll(); document.getElementById('new-course-name').value='';
+};
+window.toggleRequired=async function(){
+  const c=courses.find(c=>c.id===selCourse); if(!c)return;
+  c.required=!c.required; await updateDoc(doc(db,'courses',selCourse),{required:c.required}); renderCourseDetail(); renderCourseList();
 };
 async function assignLoc(cid,lid){const c=courses.find(c=>c.id===cid); if(!c)return; c.locationIds.push(lid); await updateDoc(doc(db,'courses',cid),{locationIds:c.locationIds}); renderCourseDetail();}
 async function removeLoc(cid,lid){const c=courses.find(c=>c.id===cid); if(!c)return; c.locationIds=c.locationIds.filter(i=>i!==lid); await updateDoc(doc(db,'courses',cid),{locationIds:c.locationIds}); renderCourseDetail();}
 
-// [복구] 지점 및 참여자 관리 로직
+// [복구] 참여자 관리 및 탈퇴 로직
+window.renderParts=function(){
+  const q=document.getElementById('p-search').value.toLowerCase();
+  const f=document.getElementById('p-filter').value;
+  let list=participants.filter(p=>(p.name||'').toLowerCase().includes(q)||(p.phone||'').includes(q.replace(/-/g,'')));
+  if(f==='applied')list=list.filter(p=>p.applied);
+  const tbody=document.getElementById('p-tbody'); tbody.innerHTML='';
+  list.forEach((p,i)=>{
+    const s=allStamps[p.uid]||{}; const v=Object.keys(s).length;
+    const reqDone=courses.filter(c=>c.required).every(c=>(c.locationIds||[]).every(id=>s[id]));
+    tbody.innerHTML+=`<tr><td>${i+1}</td><td><div style="font-weight:600">${esc(p.name)}</div></td><td>${p.phone}</td>
+      <td>${v}/${locations.length}</td><td>${courses.filter(c=>(c.locationIds||[]).every(id=>s[id])).length}개</td><td>${fmtDate(p.updatedAt)}</td>
+      <td>${p.applied?'<span class="sb sb-applied">완주신청</span>':reqDone?'<span class="sb sb-complete">신청가능</span>':'<span class="sb sb-active">진행중</span>'}</td>
+      <td><button class="btn btn-outline btn-sm" onclick="showDetail('${p.uid}')">상세</button> <button class="btn btn-danger btn-sm" onclick="deleteUserAdmin('${p.uid}', '${esc(p.name)}')">탈퇴</button></td></tr>`;
+  });
+};
+
+window.deleteUserAdmin = async function(uid, name) {
+  if(!confirm(`${name} 님의 계정과 모든 스탬프 기록을 영구 삭제하시겠습니까?`)) return;
+  try {
+    const batch = writeBatch(db);
+    const stampsSnap = await getDocs(collection(db, 'participants', uid, 'stamps'));
+    stampsSnap.forEach(d => batch.delete(d.ref));
+    batch.delete(doc(db, 'participants', uid));
+    await batch.commit(); showToast('✓ 영구 삭제 완료'); loadAll();
+  } catch(e) { alert(e.message); }
+};
+
+// [복구] 반려 사유 묻기 로직
+window.renderComps=function(){
+  const tbody=document.getElementById('c-tbody'); tbody.innerHTML='';
+  participants.filter(p=>p.applied).forEach((p,i)=>{
+    const status = p.applyStatus || 'pending';
+    tbody.innerHTML+=`<tr><td>${i+1}</td><td>${esc(p.name)}</td><td>${esc(p.applyName||p.name)}</td><td>${p.applyPhone||p.phone}</td><td>${fmtDate(p.appliedAt)}</td><td>${Object.keys(allStamps[p.uid]||{}).length}</td>
+      <td><span class="sb ${status==='approved'?'sb-complete':status==='rejected'?'sb-active':'sb-applied'}">${status}</span>${p.applyMemo?`<div style="font-size:.65rem;color:#888;">${esc(p.applyMemo)}</div>`:''}</td>
+      <td><button class="btn btn-green btn-sm" onclick="processApply('${p.uid}','approved')">승인</button> <button class="btn btn-danger btn-sm" onclick="processApply('${p.uid}','rejected')">반려</button></td></tr>`;
+  });
+};
+
+window.processApply=async function(uid, status){
+  const p=participants.find(p=>p.uid===uid); if(!p)return;
+  let memo=''; if(status==='rejected'){ memo=prompt('반려 사유를 입력하세요 (선택사항):','')??''; }
+  if(!confirm(`${p.name} 님을 ${status==='approved'?'승인':'반려'} 처리할까요?`))return;
+  await updateDoc(doc(db,'participants',uid),{applyStatus:status, applyMemo:memo, applyProcessedAt:new Date().toISOString()});
+  loadAll(); showToast('✓ 처리 완료');
+};
+
+// [복구] 지점 관리
 window.renderLocations=function(){
   const tbody=document.getElementById('loc-tbody'); tbody.innerHTML='';
   locations.forEach((l,i)=>{
@@ -461,69 +480,13 @@ window.renderLocations=function(){
   });
   document.getElementById('loc-cnt-label').textContent=locations.length+'개';
 };
-window.addLocation=async function(){
-  const name=document.getElementById('new-name').value.trim(); if(!name)return;
-  const id=genId(); await setDoc(doc(db,'locations',id),{name, desc:document.getElementById('new-desc').value, address:document.getElementById('new-addr').value, order:locations.length});
-  loadAll();
-};
 
-window.renderParts=function(){
-  const q=document.getElementById('p-search').value.toLowerCase();
-  const f=document.getElementById('p-filter').value;
-  let list=participants.filter(p=> (p.name||'').toLowerCase().includes(q) || (p.phone||'').includes(q) );
-  if(f==='applied') list=list.filter(p=>p.applied);
-  const tbody=document.getElementById('p-tbody'); tbody.innerHTML='';
-  list.forEach((p,i)=>{
-    const s=allStamps[p.uid]||{}; const v=Object.keys(s).length;
-    const cc=courses.filter(c=>(c.locationIds||[]).every(id=>s[id]));
-    const allDone = courses.filter(c=>c.required).every(c=>(c.locationIds||[]).every(id=>s[id]));
-    tbody.innerHTML+=`<tr><td>${i+1}</td><td>${esc(p.name)}</td><td>${p.phone}</td><td>${v}/${locations.length}</td><td>${cc.length}개</td><td>${fmtDate(p.updatedAt)}</td><td>${p.applied?'<span class="sb sb-applied">완주신청</span>':allDone?'<span class="sb sb-complete">신청가능</span>':'<span class="sb sb-active">진행중</span>'}</td><td><button class="btn btn-outline btn-sm" onclick="showDetail('${p.uid}')">상세</button> <button class="btn btn-danger btn-sm" onclick="deleteUserAdmin('${p.uid}', '${p.name}')">탈퇴</button></td></tr>`;
-  });
-};
-
-window.deleteUserAdmin = async function(uid, name) {
-  if(!confirm(`${name} 님의 데이터를 영구 삭제할까요?`)) return;
-  const batch = writeBatch(db);
-  const stampsSnap = await getDocs(collection(db, 'participants', uid, 'stamps'));
-  stampsSnap.forEach(d => batch.delete(d.ref));
-  batch.delete(doc(db, 'participants', uid));
-  await batch.commit(); showToast('삭제 완료'); loadAll();
-};
-
-window.renderComps=function(){
-  const tbody=document.getElementById('c-tbody'); tbody.innerHTML='';
-  participants.filter(p=>p.applied).forEach((p,i)=>{
-    const status = p.applyStatus || 'pending';
-    tbody.innerHTML+=`<tr><td>${i+1}</td><td>${esc(p.name)}</td><td>${esc(p.applyName)}</td><td>${p.applyPhone}</td><td>${fmtDate(p.appliedAt)}</td><td>${Object.keys(allStamps[p.uid]||{}).length}</td><td>-</td><td>${status}</td><td><button class="btn btn-green btn-sm" onclick="processApply('${p.uid}','approved')">승인</button> <button class="btn btn-danger btn-sm" onclick="processApply('${p.uid}','rejected')">반려</button></td></tr>`;
-  });
-};
-
-window.processApply=async function(uid, status){
-  const p=participants.find(p=>p.uid===uid); if(!p)return;
-  let memo=''; if(status==='rejected'){ memo=prompt('반려 사유 입력:')??''; }
-  if(!confirm('처리하시겠습니까?'))return;
-  await updateDoc(doc(db,'participants',uid),{applyStatus:status, applyMemo:memo, applyProcessedAt:new Date().toISOString()});
-  loadAll();
-};
-
-// [복구] 공지 및 문의 로직
-async function loadNotices(){
-  const snap=await getDocs(collection(db,'notices'));
-  const el=document.getElementById('notice-list'); el.innerHTML='';
-  snap.forEach(d=>{ const n=d.data(); el.innerHTML+=`<div style="padding:10px; border-bottom:1px solid var(--aged);"><strong>${esc(n.title)}</strong><p>${esc(n.content)}</p><button class="btn btn-danger btn-sm" onclick="deleteNotice('${d.id}')">삭제</button></div>`; });
-}
-async function loadAdminInquiries(){
-  const snap=await getDocs(collection(db,'inquiries'));
-  const tbody=document.getElementById('inquiry-tbody'); tbody.innerHTML='';
-  snap.forEach(d=>{ const iq=d.data(); tbody.innerHTML+=`<tr><td>${iq.status}</td><td>${esc(iq.name)}</td><td>${esc(iq.content)}</td><td>${esc(iq.answer)}</td><td><button onclick="answerInquiry('${d.id}')">답변</button></td></tr>`; });
-}
-
+// 나머지 뱃지 및 아웃라인 유지
 function updateBadges(){
-  document.getElementById('nb-courses').textContent=courses.length;
   document.getElementById('nb-locs').textContent=locations.length;
+  document.getElementById('nb-courses').textContent=courses.length;
   document.getElementById('nb-parts').textContent=participants.length;
 }
-
 window.sw=function(id,el){
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.page-section').forEach(s=>s.classList.remove('active'));
