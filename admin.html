@@ -166,6 +166,7 @@
   <div class="nav-tab" onclick="sw('participants',this)">👥 참여자 <span class="nb" id="nb-parts">0</span></div>
   <div class="nav-tab" onclick="sw('completions',this)">🏆 완주 신청 <span class="nb green" id="nb-comps">0</span></div>
   <div class="nav-tab" onclick="sw('notices',this)">📢 공지사항 <span class="nb" style="background:#6a1b9a" id="nb-notices">0</span></div>
+  <div class="nav-tab" onclick="sw('inquiries',this)">🎧 고객 문의 <span class="nb" style="background:#e65100" id="nb-inquiries">0</span></div>
 </div>
 
 <!-- 현황 -->
@@ -356,7 +357,23 @@
     <div id="notice-list"></div>
   </div>
 </div>
-
+<div class="page-section" id="section-inquiries">
+  <div class="card">
+    <div class="toolbar">
+      <div class="card-title" style="margin-bottom:0">🎧 고객 문의 관리</div>
+      <div class="toolbar-right">
+        <button class="btn btn-outline btn-sm" onclick="loadAdminInquiries()">🔄 새로고침</button>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="width:70px">상태</th><th style="width:90px">작성자</th><th>내용 및 답변</th><th style="width:100px">작성일</th><th style="width:80px">작업</th></tr></thead>
+        <tbody id="inquiry-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+  
 <!-- QR Modal -->
 <div class="modal-overlay" id="qr-modal">
   <div class="modal">
@@ -517,6 +534,7 @@ async function loadAll(){
     const lvc={};Object.values(allStamps).forEach(s=>Object.keys(s).forEach(id=>{lvc[id]=(lvc[id]||0)+1;}));
     locations.forEach(l=>l.visitCount=lvc[l.id]||0);
     updateBadges();renderOverview();renderCourseList();renderLocations();renderParts();renderComps();
+    await loadAdminInquiries();
     await loadNotices();
   }catch(e){console.error(e);showToast('로드 실패: '+e.message);}
   document.getElementById('page-loading').style.display='none';
@@ -1010,6 +1028,63 @@ window.deleteNotice=async function(id){
   renderNotices();
   document.getElementById('nb-notices').textContent=notices.filter(n=>n.active).length;
   showToast('삭제됨');
+};
+
+  window.loadAdminInquiries = async function() {
+  const snap = await getDocs(collection(db, 'inquiries'));
+  const list = [];
+  let pendingCount = 0;
+  snap.forEach(d => {
+      const data = {id: d.id, ...d.data()};
+      list.push(data);
+      if(data.status === 'pending') pendingCount++;
+  });
+  list.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+  
+  const badge = document.getElementById('nb-inquiries');
+  if(badge) {
+      badge.textContent = pendingCount;
+      badge.style.background = pendingCount > 0 ? '#e65100' : 'var(--aged)';
+  }
+
+  const tbody = document.getElementById('inquiry-tbody');
+  if(!list.length) {
+      tbody.innerHTML = '<tr class="empty-row"><td colspan="5">접수된 문의가 없습니다.</td></tr>';
+      return;
+  }
+  
+  tbody.innerHTML = list.map(iq => `
+    <tr>
+      <td><span class="sb ${iq.status==='answered'?'sb-complete':'sb-active'}">${iq.status==='answered'?'답변완료':'대기중'}</span></td>
+      <td style="font-weight:500;">${esc(iq.name)}</td>
+      <td style="max-width:300px; white-space:normal; font-size:0.75rem; line-height:1.5;">
+        <div style="color:var(--ink);">${esc(iq.content).replace(/\n/g, '<br>')}</div>
+        ${iq.answer ? `<div style="color:var(--seal); margin-top:6px; padding-top:6px; border-top:1px dashed var(--aged);"><strong>A:</strong> ${esc(iq.answer).replace(/\n/g, '<br>')}</div>` : ''}
+      </td>
+      <td style="font-size:0.7rem; color:#aaa;">${fmtDate(iq.createdAt)}</td>
+      <td>
+        <button class="btn btn-outline btn-sm" onclick="answerInquiry('${iq.id}', '${esc(iq.answer||'')}')" style="margin-bottom:4px;">답변/수정</button><br>
+        <button class="btn btn-danger btn-sm" onclick="deleteInquiry('${iq.id}')">삭제</button>
+      </td>
+    </tr>
+  `).join('');
+};
+
+window.answerInquiry = async function(id, oldAnswer) {
+  const ans = prompt('고객에게 전달할 답변을 입력하세요:', oldAnswer);
+  if(ans !== null) {
+    const status = ans.trim() ? 'answered' : 'pending';
+    await updateDoc(doc(db, 'inquiries', id), { answer: ans.trim(), status: status });
+    showToast('✓ 답변이 저장되었습니다.');
+    loadAdminInquiries();
+  }
+};
+
+window.deleteInquiry = async function(id) {
+  if(!confirm('이 문의를 삭제하시겠습니까?')) return;
+  await deleteDoc(doc(db, 'inquiries', id));
+  showToast('삭제되었습니다.');
+  loadAdminInquiries();
 };
 
 // loadAll은 비밀번호 인증 후 자동 호출됩니다
