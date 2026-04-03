@@ -615,6 +615,9 @@ window.reapplyModal=function(){
   document.getElementById('apply-error').style.display='none';
   document.getElementById('apply-modal-overlay').classList.add('open');
 };
+// --- 1:1 문의 기능 최종 통합본 ---
+
+// 1. 문의 등록 함수
 window.submitInquiry = async function() {
   try {
     const text = document.getElementById('new-inquiry-text').value.trim();
@@ -623,6 +626,7 @@ window.submitInquiry = async function() {
     const id = Math.random().toString(36).substr(2,9);
     const now = new Date().toISOString();
     
+    // 데이터 저장
     await setDoc(doc(db, 'inquiries', id), {
       id: id, 
       uid: window._myData.uid, 
@@ -635,44 +639,50 @@ window.submitInquiry = async function() {
     
     document.getElementById('new-inquiry-text').value = ''; 
     showToast('✓ 문의가 등록되었습니다.');
-    loadInquiries();
+    loadInquiries(); // 목록 새로고침
   } catch(e) {
     alert('문의 등록 실패: ' + e.message);
     console.error(e);
   }
 };
 
+// 2. 문의 내역 불러오기 함수
 window.loadInquiries = async function() {
   try {
     const snap = await getDocs(collection(db, 'inquiries'));
     const list = [];
-    snap.forEach(d => { if(d.data().uid === window._myData.uid) list.push(d.data()); });
+    // 본인 글만 필터링
+    snap.forEach(d => { 
+      const data = d.data();
+      if(data.uid === window._myData.uid) list.push(data); 
+    });
+    
     list.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
     
     const esc = (s) => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     
-  const html = list.map(iq => `
-      <div style="background:white; border:1px solid var(--aged); padding:14px; border-radius:8px; margin-bottom:10px; position:relative;">
-        <button onclick="deleteMyInquiry('${iq.id}')" style="position:absolute; top:12px; right:12px; background:none; border:none; color:rgba(192,57,43,0.3); cursor:pointer; font-size:0.7rem; text-decoration:underline; font-family:'Noto Sans KR',sans-serif;">삭제</button>
-        
+    const html = list.map(iq => `
+      <div style="background:white; border:1px solid var(--aged); padding:14px; border-radius:8px; margin-bottom:10px; position:relative; text-align:left;">
+        <button onclick="deleteMyInquiry('${iq.id}')" style="position:absolute; top:12px; right:12px; background:none; border:none; color:rgba(192,57,43,0.4); cursor:pointer; font-size:0.7rem; text-decoration:underline; font-family:'Noto Sans KR',sans-serif;">삭제</button>
         <div style="font-size:0.75rem; color:#aaa; margin-bottom:6px;">${fmtDate(iq.createdAt)} <span style="color:${iq.status==='answered'?'var(--green)':'#e65100'}; font-weight:bold;">${iq.status==='answered'?'[답변완료]':'[대기중]'}</span></div>
         <div style="font-size:0.85rem; color:var(--ink); line-height:1.5;">${esc(iq.content).replace(/\n/g, '<br>')}</div>
         ${iq.answer ? `<div style="margin-top:10px; padding-top:10px; border-top:1px dashed var(--aged); font-size:0.8rem; color:var(--seal); line-height:1.5;"><strong>관리자 답변:</strong><br>${esc(iq.answer).replace(/\n/g, '<br>')}</div>` : ''}
       </div>
     `).join('');
+    
     document.getElementById('my-inquiry-list').innerHTML = html || '<div class="empty-state" style="padding:20px;"><p>등록된 문의가 없습니다.</p></div>';
   } catch(e) {
-    alert('내역 불러오기 실패: ' + e.message);
-    console.error(e);
+    console.error('내역 로드 에러:', e);
   }
 };
 
-  window.deleteMyInquiry = async function(id) {
-  if(!confirm('작성한 문의글을 삭제하시겠습니까?')) return;
+// 3. 내 문의 삭제 함수
+window.deleteMyInquiry = async function(id) {
+  if(!confirm('작성하신 문의글을 삭제하시겠습니까?')) return;
   try {
     await deleteDoc(doc(db, 'inquiries', id));
-    showToast('삭제되었습니다.');
-    loadInquiries(); // 목록 새로고침
+    showToast('✓ 삭제되었습니다.');
+    loadInquiries();
   } catch(e) {
     alert('삭제 실패: ' + e.message);
   }
