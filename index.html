@@ -6,14 +6,14 @@
 <title>전주시 자전거 여권</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@300;400;500&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
 <style>
-  /* 🎨 남색 테마로 통일된 색상 변수 */
+  /* 🎨 남색 테마 색상 변수 */
   :root{
     --ink:#0f1e38;
     --paper:#f5efe3;
     --aged:#e8dcc8;
     --seal:#c0392b;
     --gold:#b8860b;
-    --navy:#1a2b4d; /* 메인 남색 */
+    --navy:#1a2b4d; 
     --light-gold:rgba(184,134,11,.12);
   }
   
@@ -24,86 +24,100 @@
   /* 한지 텍스처 */
   body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");pointer-events:none;z-index:0;}
 
-  /* ── 상단 내비게이션 (로고 겹침/사라짐 방지) ── */
+  /* ── [수정] 상단 내비게이션 (타이틀 크기 확대 버전) ── */
   nav {
     position: fixed;
     top: 0; left: 0; right: 0;
     z-index: 100;
-    padding: 10px 16px;
+    padding: 10px 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: rgba(15, 30, 56, 0.95); /* 남색 배경 */
+    background: rgba(15, 30, 56, 0.95);
     backdrop-filter: blur(10px);
-    height: 64px;
+    height: 70px; /* 타이틀 확대를 위해 높이 살짝 높임 */
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   }
 
   .nav-logo {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 12px; /* 간격 확대 */
     white-space: nowrap; 
     flex-shrink: 0;
     font-family: 'Noto Serif KR', serif;
-    font-size: 0.95rem;
+    font-size: 1.15rem; /* 타이틀 크기 확대 */
     font-weight: 700;
     color: #f0e8d4;
   }
 
-  .nav-logo img { height: 28px; width: auto; }
+  .nav-logo img { 
+    height: 38px; /* 로고 이미지 확대 */
+    width: auto; 
+  }
 
-  .nav-actions { display: flex; gap: 8px; align-items: center; }
+  .nav-actions { display: flex; gap: 10px; align-items: center; }
 
   .nav-btn {
-    padding: 6px 12px;
+    padding: 7px 16px;
     border-radius: 20px;
-    font-size: 0.75rem;
+    font-size: 0.82rem;
     font-family: 'Noto Sans KR', sans-serif;
-    cursor: pointer;
     text-decoration: none;
     transition: all 0.2s;
   }
 
-  .nav-btn-outline { border: 1px solid rgba(232, 220, 200, 0.3); color: rgba(232, 220, 200, 0.7); }
-  .nav-btn-mypage { background: var(--gold); color: white; display: none; }
+  .nav-btn-outline { border: 1.2px solid rgba(232, 220, 200, 0.35); color: rgba(232, 220, 200, 0.75); }
+  .nav-btn-mypage { background: var(--gold); color: white; display: none; font-weight: 600; }
 
+  /* 📱 모바일 최적화 (글자 안 사라지게 유지) */
   @media (max-width: 480px) {
-    nav { padding: 10px 8px; }
-    .nav-logo span { display: inline-block; font-size: 0.75rem; letter-spacing: -0.03em; } /* 글자 크기 줄여서 유지 */
-    .nav-logo img { height: 22px; }
-    .nav-btn { padding: 4px 8px; font-size: 0.65rem; }
+    nav { padding: 10px 12px; height: 64px; }
+    .nav-logo { gap: 8px; }
+    .nav-logo span { display: inline-block; font-size: 0.95rem; letter-spacing: -0.03em; } 
+    .nav-logo img { height: 30px; }
+    .nav-btn { padding: 5px 12px; font-size: 0.72rem; }
   }
 
-  /* ── Hero (남색 테마) ── */
+  /* ── Hero ── */
   .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:100px 24px 80px;position:relative;text-align:center;background:linear-gradient(160deg, #1a2b4d 0%, #0f1e38 100%);}
   .hero-eyebrow{font-size:.68rem;letter-spacing:.4em;color:rgba(232,220,200,.45);margin-bottom:18px;}
   .hero-title{font-family:'Noto Serif KR',serif;font-size:clamp(2.2rem,6vw,4rem);font-weight:900;color:#f0e8d4;line-height:1.15;margin-bottom:14px;}
   .hero-title em{font-style:normal;color:var(--gold);}
   .hero-sub{font-size:clamp(.9rem,2.5vw,1.1rem);color:rgba(232,220,200,.65);line-height:1.8;max-width:520px;margin:0 auto 36px;}
   .hero-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
-  .btn-hero-main{padding:15px 36px;background:var(--seal);color:white;border:none;border-radius:4px;font-family:'Noto Serif KR',serif;font-size:1rem;font-weight:600;text-decoration:none;}
-  .btn-hero-sub{padding:15px 36px;background:transparent;color:rgba(232,220,200,.85);border:1.5px solid rgba(232,220,200,.35);border-radius:4px;font-family:'Noto Serif KR',serif;font-size:1rem;text-decoration:none;}
+  .btn-hero-main{padding:15px 36px;background:var(--seal);color:white;border-radius:4px;font-family:'Noto Serif KR',serif;font-weight:600;text-decoration:none;transition: .2s;}
+  .btn-hero-main:hover{transform:translateY(-2px); box-shadow:0 8px 24px rgba(192,57,43,.35);}
+  .btn-hero-sub{padding:15px 36px;border:1.5px solid rgba(232,220,200,.35);color:rgba(232,220,200,.85);text-decoration:none;}
 
-  /* ── About & How to (복구 완료) ── */
+  /* ── About 섹션 ── */
   .section{padding:80px 24px; text-align:center;}
-  .section-title{font-family:'Noto Serif KR',serif; font-size:1.8rem; margin-bottom:15px;}
-  .about-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));gap:20px;max-width:860px;margin:0 auto;}
-  .about-card{background:white;border:1px solid var(--aged);border-radius:10px;padding:30px 20px;}
-  .about-card::before{content:''; display:block; height:3px; background:var(--gold); margin-bottom:15px;}
+  .section-title{font-family:'Noto Serif KR',serif; font-size:clamp(1.5rem,4vw,2.2rem); margin-bottom:14px; color:var(--ink);}
+  .about-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:860px;margin:0 auto;}
+  .about-card{background:white;border:1px solid var(--aged);border-radius:10px;padding:28px 22px; position:relative; overflow:hidden; transition: .2s;}
+  .about-card:hover{transform:translateY(-4px); box-shadow:0 12px 36px rgba(26,18,8,.1);}
+  .about-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gold);}
   
+  /* ── How to 섹션 (남색 테마) ── */
   .howto-section{background:linear-gradient(160deg, #1a2b4d 0%, #0f1e38 100%); padding:80px 24px; color:white;}
-  .steps{display:flex;gap:20px;max-width:820px;margin:0 auto;}
-  @media(max-width:640px){ .steps{flex-direction:column;} .about-grid{grid-template-columns:1fr;} }
-  .step{flex:1;text-align:center;}
-  .step-num{width:60px; height:60px; border-radius:50%; border:2px solid var(--gold); display:flex; align-items:center; justify-content:center; margin:0 auto 15px; font-size:1.5rem; color:var(--gold);}
+  .steps{display:flex;gap:0;max-width:820px;margin:0 auto;}
+  .step{flex:1;text-align:center;padding:0 16px;}
+  .step-num{width:72px; height:72px; border-radius:50%; border:2px solid var(--gold); display:flex; align-items:center; justify-content:center; margin:0 auto 18px; font-size:1.6rem; color:var(--gold);}
 
-  /* ── CTA & Footer ── */
+  /* ── CTA 섹션 ── */
   .cta-section{padding:80px 24px; text-align:center;}
-  .cta-box{max-width:560px;margin:0 auto;background:white;border:1px solid var(--aged);padding:40px;border-radius:12px; position:relative; overflow:hidden;}
-  .cta-box::before{content:''; position:absolute; top:0; left:0; right:0; height:4px; background:var(--gold);}
-  footer{background:#0a1426;padding:40px 24px;text-align:center;color:rgba(255,255,255,0.4);}
-  footer a{color:rgba(255,255,255,0.6);text-decoration:none;margin:0 10px;font-size:0.85rem;}
+  .cta-box{max-width:560px;margin:0 auto;background:white;border:1px solid var(--aged);padding:48px 36px;border-radius:12px; position:relative; overflow:hidden;}
+  .cta-box::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--gold);}
+
+  /* ── Footer (남색 테마) ── */
+  footer{background:#0a1426;padding:32px 24px;text-align:center;color:rgba(232,220,200,.35);}
+  footer a{color:rgba(184,134,11,.6);text-decoration:none;margin:0 10px;}
+  footer a:hover{color:var(--gold);}
+  
+  @media(max-width:640px){
+    .about-grid{grid-template-columns:1fr;}
+    .steps{flex-direction:column;gap:32px;}
+  }
 </style>
 </head>
 <body>
@@ -127,31 +141,56 @@
 </section>
 
 <section class="section">
-  <div style="font-size:0.7rem; color:var(--gold); letter-spacing:0.3em; margin-bottom:10px;">ABOUT</div>
+  <div style="font-size:.65rem; color:var(--gold); letter-spacing:.38em; margin-bottom:10px;">ABOUT</div>
   <h2 class="section-title">전주시 자전거 여권이란?</h2>
-  <p style="color:#666; line-height:1.8; margin-bottom:40px;">자전거를 타고 전주 곳곳의 명소를 방문하며<br>QR코드로 방문을 인증하는 자전거 여행 프로그램입니다.</p>
+  <p style="color:#7a6a50; line-height:1.9; margin-bottom:56px;">자전거를 타고 전주 곳곳의 명소를 방문하며<br>QR코드로 방문을 인증하는 자전거 여행 프로그램입니다.</p>
   <div class="about-grid">
-    <div class="about-card"><span style="font-size:2rem;">🚲</span><div style="font-weight:700; margin:15px 0 10px;">자전거로 떠나요</div><p style="font-size:0.85rem; color:#888;">전주의 아름다운 명소들을 자전거를 타고 직접 찾아다녀요.</p></div>
-    <div class="about-card"><span style="font-size:2rem;">📖</span><div style="font-weight:700; margin:15px 0 10px;">여권 수집</div><p style="font-size:0.85rem; color:#888;">방문할 때마다 디지털 여권에 도장이 찍혀 나만의 기록이 쌓여요.</p></div>
-    <div class="about-card"><span style="font-size:2rem;">🏆</span><div style="font-weight:700; margin:15px 0 10px;">코스 완주</div><p style="font-size:0.85rem; color:#888;">모든 지점을 완주하면 신청을 통해 기념품을 받을 수 있어요.</p></div>
+    <div class="about-card">
+      <span style="font-size:2.2rem;">🚲</span>
+      <div style="font-weight:700; margin:14px 0 8px;">자전거로 떠나요</div>
+      <p style="font-size:.8rem; color:#7a6a50;">전주의 아름다운 명소들을 자전거를 타고 직접 찾아다녀요.</p>
+    </div>
+    <div class="about-card">
+      <span style="font-size:2.2rem;">📖</span>
+      <div style="font-weight:700; margin:14px 0 8px;">여권 수집</div>
+      <p style="font-size:.8rem; color:#7a6a50;">방문할 때마다 디지털 여권에 도장이 찍혀 나만의 기록이 쌓여요.</p>
+    </div>
+    <div class="about-card">
+      <span style="font-size:2.2rem;">🏆</span>
+      <div style="font-weight:700; margin:14px 0 8px;">코스 완주</div>
+      <p style="font-size:.8rem; color:#7a6a50;">코스의 모든 지점을 완주하면 신청을 통해 기념품을 받을 수 있어요.</p>
+    </div>
   </div>
 </section>
 
 <section class="howto-section">
-  <div style="font-size:0.7rem; color:rgba(255,255,255,0.5); letter-spacing:0.3em; margin-bottom:10px; text-align:center;">HOW TO</div>
-  <h2 class="section-title" style="text-align:center; color:var(--gold);">참여 방법</h2>
-  <div class="steps" style="margin-top:40px;">
-    <div class="step"><div class="step-num">1</div><div style="font-weight:600; margin-bottom:10px;">회원가입</div><p style="font-size:0.8rem; opacity:0.7;">이름과 휴대폰 번호로<br>간단하게 가입해요.</p></div>
-    <div class="step"><div class="step-num">2</div><div style="font-weight:600; margin-bottom:10px;">QR 스캔</div><p style="font-size:0.8rem; opacity:0.7;">각 지점의 QR코드를<br>스캔해 방문을 인증해요.</p></div>
-    <div class="step"><div class="step-num">3</div><div style="font-weight:600; margin-bottom:10px;">완주 신청</div><p style="font-size:0.8rem; opacity:0.7;">코스를 완주하면<br>기념품을 받을 수 있어요.</p></div>
+  <div style="font-size:.65rem; color:rgba(184,134,11,.7); letter-spacing:.38em; margin-bottom:10px; text-align:center;">HOW TO</div>
+  <h2 class="section-title" style="color:var(--gold); text-align:center;">참여 방법</h2>
+  <p style="color:rgba(232,220,200,.55); text-align:center; margin-bottom:52px;">세 단계만 따라오면 누구나 쉽게 참여할 수 있어요.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div style="font-weight:600; color:var(--gold); margin-bottom:8px;">회원가입</div>
+      <p style="font-size:.78rem; color:rgba(232,220,200,.55);">이름과 휴대폰 번호로<br>간단하게 가입해요.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div style="font-weight:600; color:var(--gold); margin-bottom:8px;">QR 스캔</div>
+      <p style="font-size:.78rem; color:rgba(232,220,200,.55);">각 지점의 QR코드를<br>스캔해 방문을 인증해요.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div style="font-weight:600; color:var(--gold); margin-bottom:8px;">완주 신청</div>
+      <p style="font-size:.78rem; color:rgba(232,220,200,.55);">코스를 완주하면<br>기념품을 받을 수 있어요.</p>
+    </div>
   </div>
 </section>
 
 <section class="cta-section">
   <div class="cta-box">
-    <span style="font-size:2.5rem; display:block; margin-bottom:15px;">🚲</span>
-    <h2 style="margin-bottom:10px;">지금 라이딩을 시작하세요</h2>
-    <p id="cta-desc-text" style="font-size:0.9rem; color:#666; margin-bottom:30px;"></p>
+    <span style="font-size:2.6rem; display:block; margin-bottom:14px;">🚲</span>
+    <h2 style="margin-bottom:8px;">지금 라이딩을 시작하세요</h2>
+    <p id="cta-desc" style="font-size:.85rem; color:#7a6a50; margin-bottom:28px;"></p>
     <div id="cta-btns" class="hero-cta"></div>
   </div>
 </section>
@@ -163,25 +202,26 @@
     <a href="login.html" id="footer-login-btn">로그인</a>
     <a href="admin.html">관리자</a>
   </p>
-  <p style="margin-top:20px; font-size:0.75rem;">© 2026 전주시 자전거 여권. All rights reserved.</p>
+  <p style="margin-top:12px; font-size:.74rem;">© 2026 전주시 자전거 여권. All rights reserved.</p>
 </footer>
 
 <script>
-function updateUI() {
+// 로그인 상태 반영 로직
+function init() {
   const uid = localStorage.getItem('stampUID');
   const navMypage = document.getElementById('nav-mypage-btn');
-  const footerBtn = document.getElementById('footer-login-btn');
+  const footerLogin = document.getElementById('footer-login-btn');
   const heroBtns = document.getElementById('hero-btns');
   const ctaBtns = document.getElementById('cta-btns');
-  const ctaDesc = document.getElementById('cta-desc-text');
+  const ctaDesc = document.getElementById('cta-desc');
 
   if(uid) {
     if(navMypage) navMypage.style.display = 'inline-block';
-    if(footerBtn) {
-      footerBtn.textContent = '로그아웃';
-      footerBtn.href = '#';
-      footerBtn.style.color = '#d4af37';
-      footerBtn.onclick = (e) => {
+    if(footerLogin) {
+      footerLogin.textContent = '로그아웃';
+      footerLogin.href = '#';
+      footerLogin.style.color = 'var(--gold)';
+      footerLogin.onclick = (e) => {
         e.preventDefault();
         if(confirm('로그아웃 하시겠습니까?')) {
           localStorage.removeItem('stampUID');
@@ -192,18 +232,17 @@ function updateUI() {
       };
     }
     const html = `<a class="btn-hero-main" href="mypage.html">📖 내 여권 보기</a><a class="btn-hero-sub" href="courses.html">코스 둘러보기</a>`;
-    heroBtns.innerHTML = html;
-    ctaBtns.innerHTML = html;
-    ctaDesc.textContent = "마이페이지에서 코스 진행 현황을 확인하고 완주에 도전해보세요!";
+    if(heroBtns) heroBtns.innerHTML = html;
+    if(ctaBtns) ctaBtns.innerHTML = html;
+    if(ctaDesc) ctaDesc.textContent = "마이페이지에서 코스 진행 현황을 확인하고 완주에 도전해보세요!";
   } else {
-    if(navMypage) navMypage.style.display = 'none';
     const html = `<a class="btn-hero-main" href="login.html#register">지금 시작하기</a><a class="btn-hero-sub" href="courses.html">코스 둘러보기</a>`;
-    heroBtns.innerHTML = html;
-    ctaBtns.innerHTML = html;
-    ctaDesc.textContent = "회원가입은 이름과 휴대폰 번호만 있으면 돼요. 어느 기기에서든 같은 계정으로 접속할 수 있어요.";
+    if(heroBtns) heroBtns.innerHTML = html;
+    if(ctaBtns) ctaBtns.innerHTML = html;
+    if(ctaDesc) ctaDesc.textContent = "회원가입은 이름과 휴대폰 번호만 있으면 돼요. 어느 기기에서든 같은 계정으로 접속할 수 있어요.";
   }
 }
-document.addEventListener('DOMContentLoaded', updateUI);
+document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
