@@ -310,9 +310,15 @@ async function load(){
       cta.style.display='block';
       document.getElementById('cta-title').textContent=`필수 코스 완주 달성! 🎉`;
       document.getElementById('cta-desc').textContent='기념품 신청이 가능합니다.';
-      if(pData.applied){
-        document.getElementById('cta-btn-wrap').innerHTML='<div class="applied-notice">⏳ 신청 검토 중</div>';
-      }
+  if(pData.applied){
+      const status = pData.applyStatus || 'pending';
+      const statusHTML = {
+        pending: `<div class="applied-notice" style="background:rgba(230,144,0,.2);border-color:rgba(230,144,0,.4);color:#f0a500;">⏳ 완주 신청 검토 중</div>`,
+        approved: `<div class="applied-notice" style="background:rgba(45,106,79,.3);border-color:rgba(165,214,167,.4);color:#a5d6a7;">🎉 완주 신청 승인 완료!</div>`,
+        rejected: `<div style="text-align:center"><div class="applied-notice" style="background:rgba(192,57,43,.2);border-color:rgba(192,57,43,.3);color:#e88;margin-bottom:8px;">❌ 완주 신청 반려${pData.applyMemo?` — ${pData.applyMemo}`:''}</div><button class="btn-apply" onclick="reapplyModal()" style="font-size:.82rem;padding:8px 20px;">재신청하기</button></div>`,
+      };
+      document.getElementById('cta-btn-wrap').innerHTML = statusHTML[status] || statusHTML.pending;
+    }
     } else if(requiredCourses.length>0) {
       cta.style.display='block';
       document.getElementById('cta-title').textContent=`완주까지 ${requiredCourses.length - completedRequired.length}개 코스 남음`;
