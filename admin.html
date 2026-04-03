@@ -17,39 +17,31 @@
   header p{font-size:.77rem;color:#7a6a50;margin-top:3px;}
   .live-dot{display:inline-block;width:6px;height:6px;background:#2ecc71;border-radius:50%;margin-right:4px;animation:pulse 2s infinite;}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-
   .nav-tabs{max-width:980px;margin:0 auto 22px;display:flex;border-bottom:2px solid var(--aged);overflow-x:auto;}
   .nav-tab{padding:9px 16px;font-size:.82rem;color:#7a6a50;cursor:pointer;letter-spacing:.04em;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:5px;flex-shrink:0;}
   .nav-tab.active{color:var(--seal);border-bottom-color:var(--seal);font-weight:500;}
   .nb{background:var(--seal);color:white;border-radius:9px;padding:1px 6px;font-size:.65rem;font-weight:600;}
-  .nb.green{background:var(--green);}.nb.blue{background:var(--blue);}
-  .page-section{display:none;max-width:980px;margin:0 auto;}.page-section.active{display:block;}
-
+  .nb.green{background:var(--green)}.nb.blue{background:var(--blue)}
+  .page-section{display:none;max-width:980px;margin:0 auto}.page-section.active{display:block}
   .card{background:white;border:1px solid var(--aged);border-radius:8px;padding:20px 24px;box-shadow:0 2px 12px var(--sh);margin-bottom:16px;}
   .card-title{font-family:'Noto Serif KR',serif;font-size:.9rem;font-weight:600;color:var(--gold);letter-spacing:.06em;margin-bottom:13px;display:flex;align-items:center;gap:7px;}
-
   .stat-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px;}
   .stat-box{background:white;border:1px solid var(--aged);border-radius:8px;padding:16px 12px;text-align:center;box-shadow:0 2px 8px var(--sh);}
   .stat-box .n{font-family:'Noto Serif KR',serif;font-size:1.75rem;font-weight:700;line-height:1;}
   .stat-box .l{font-size:.67rem;color:#7a6a50;margin-top:3px;}
   .n.gold{color:var(--gold)}.n.seal{color:var(--seal)}.n.green{color:var(--green)}.n.blue{color:var(--blue)}
-
-  /* 📊 [추가된 디자인] 신규 지표 그리드 스타일 */
-  .det-stat-grid{display:grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap:15px; text-align:center;}
-  .det-stat-item{padding:10px; border-right:1px solid var(--aged);}
+  .det-stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:0;text-align:center;}
+  .det-stat-item{padding:14px 10px;border-right:1px solid var(--aged);}
   .det-stat-item:last-child{border-right:none;}
-  .det-stat-label{font-size:0.7rem; color:#7a6a50; margin-bottom:5px;}
-  .det-stat-value{font-family:'Noto Serif KR'; font-size:1.4rem; font-weight:700;}
-
+  .det-stat-label{font-size:.68rem;color:#7a6a50;margin-bottom:5px;}
+  .det-stat-value{font-family:'Noto Serif KR',serif;font-size:1.4rem;font-weight:700;}
   .upload-zone{border:2px dashed var(--aged);border-radius:8px;padding:22px 18px;text-align:center;cursor:pointer;transition:all .2s;background:var(--paper);position:relative;}
   .upload-zone:hover,.upload-zone.drag-over{border-color:var(--gold);background:#fdf8ee;}
   .upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
   .upload-zone .ui{font-size:1.8rem;margin-bottom:5px;}
   .upload-zone p{font-size:.82rem;color:#7a6a50;}
-  .upload-zone small{font-size:.71rem;color:#bbb;}
   .csv-hint{display:flex;align-items:center;gap:7px;margin-top:10px;padding:9px 13px;background:var(--paper);border-radius:4px;border:1px solid var(--aged);font-size:.76rem;color:#7a6a50;flex-wrap:wrap;}
   .csv-hint code{background:#eee;padding:1px 6px;border-radius:3px;font-size:.73rem;color:var(--seal);font-family:monospace;}
-
   label{font-size:.72rem;color:#7a6a50;display:block;margin-bottom:4px;}
   input[type=text],input[type=tel]{width:100%;padding:8px 11px;border:1px solid var(--aged);border-radius:4px;background:var(--paper);font-family:'Noto Sans KR',sans-serif;font-size:.84rem;color:var(--ink);}
   input[type=text]:focus,input[type=tel]:focus{outline:none;border-color:var(--gold);}
@@ -60,7 +52,6 @@
   .btn-green{background:var(--green);color:white;}.btn-green:hover{background:#1e4d38;}
   .btn-sm{padding:4px 10px;font-size:.72rem;}
   .btn-danger{background:transparent;color:#e74c3c;border:1px solid #e74c3c;}.btn-danger:hover{background:#e74c3c;color:white;}
-
   .table-wrap{overflow-x:auto;}
   table{width:100%;border-collapse:collapse;font-size:.81rem;}
   th{background:var(--ink);color:white;padding:10px 12px;text-align:left;font-weight:500;font-size:.74rem;white-space:nowrap;}
@@ -71,14 +62,11 @@
   td input[type=text]:focus{background:white;border-color:var(--aged);}
   .row-actions{display:flex;gap:4px;}
   .empty-row td{text-align:center;padding:32px;color:#bbb;font-size:.81rem;}
-
   .toolbar{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-bottom:13px;}
   .toolbar-right{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap;}
   .search-input{padding:6px 10px;border:1px solid var(--aged);border-radius:4px;font-family:'Noto Sans KR',sans-serif;font-size:.78rem;background:var(--paper);color:var(--ink);width:155px;}
   .search-input:focus{outline:none;border-color:var(--gold);}
   .filter-sel{padding:6px 9px;border:1px solid var(--aged);border-radius:4px;font-family:'Noto Sans KR',sans-serif;font-size:.78rem;background:var(--paper);cursor:pointer;}
-
-  /* Course editor */
   .course-editor{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
   .panel{background:white;border:1px solid var(--aged);border-radius:8px;overflow:hidden;}
   .panel-header{padding:12px 15px;border-bottom:1px solid var(--aged);font-family:'Noto Serif KR',serif;font-size:.87rem;font-weight:600;display:flex;align-items:center;justify-content:space-between;}
@@ -102,16 +90,12 @@
   .lp-dot{width:7px;height:7px;border-radius:50%;background:var(--aged);flex-shrink:0;}
   .lp-item.assigned .lp-dot{background:var(--green);}
   .lp-arr{font-size:.85rem;color:#aaa;margin-left:auto;}
-
-  /* Status chips */
   .sb{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.68rem;font-weight:500;}
   .sb-applied{background:#e3f2fd;color:var(--blue);border:1px solid #90caf9;}
   .sb-complete{background:#e8f5e9;color:var(--green);border:1px solid #a5d6a7;}
   .sb-active{background:#fff3e0;color:#e65100;border:1px solid #ffcc80;}
   .pm-bar{height:4px;background:var(--aged);border-radius:2px;margin-top:3px;overflow:hidden;}
   .pm-fill{height:100%;background:var(--green);border-radius:2px;}
-
-  /* Modals */
   .modal-overlay{display:none;position:fixed;inset:0;background:rgba(26,18,8,.72);z-index:100;align-items:center;justify-content:center;}
   .modal-overlay.open{display:flex;}
   .modal{background:white;border-radius:8px;padding:28px;max-width:360px;width:90%;text-align:center;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.35);}
@@ -120,7 +104,7 @@
   #qr-container{display:flex;justify-content:center;margin-bottom:13px;}
   .modal-actions{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;}
   .modal-close{position:absolute;top:10px;right:12px;background:none;border:none;color:#bbb;font-size:1.1rem;cursor:pointer;padding:0;}
-  .detail-modal{max-width:540px;text-align:left;max-height:88vh;overflow-y:auto;}
+  .detail-modal{max-width:560px;text-align:left;max-height:88vh;overflow-y:auto;}
   .detail-modal h3{font-family:'Noto Serif KR',serif;margin-bottom:7px;}
   .d-info{font-size:.77rem;color:#7a6a50;margin-bottom:14px;line-height:1.7;}
   .d-courses{display:flex;flex-direction:column;gap:10px;margin-bottom:14px;}
@@ -129,7 +113,6 @@
   .d-spots{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;}
   .d-spot{padding:5px 4px;background:white;border:1px solid var(--aged);border-radius:4px;font-size:.65rem;text-align:center;color:#7a6a50;}
   .d-spot.v{background:#e8f5e9;border-color:#a5d6a7;color:var(--green);font-weight:500;}
-
   .loading-overlay{position:fixed;inset:0;background:rgba(240,232,216,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200;}
   .sp{width:38px;height:38px;border:3px solid var(--aged);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:11px;}
   @keyframes spin{to{transform:rotate(360deg)}}
@@ -140,6 +123,7 @@
 </head>
 <body>
 
+<!-- 잠금 화면 -->
 <div id="lock-screen" style="display:none;position:fixed;inset:0;background:linear-gradient(160deg,#1a2744 0%,#0f1e38 100%);z-index:9999;align-items:center;justify-content:center;">
   <div style="background:white;border-radius:12px;padding:40px 32px;max-width:360px;width:90%;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,.5);">
     <div style="font-size:2.8rem;margin-bottom:12px;">🔒</div>
@@ -155,6 +139,7 @@
   </div>
 </div>
 
+<!-- 관리자 본문 -->
 <div id="admin-wrap" style="display:none;">
 <div class="loading-overlay" id="page-loading"><div class="sp"></div><p>데이터 불러오는 중...</p></div>
 
@@ -170,9 +155,9 @@
   <div class="nav-tab" onclick="sw('participants',this)">👥 참여자 <span class="nb" id="nb-parts">0</span></div>
   <div class="nav-tab" onclick="sw('completions',this)">🏆 완주 신청 <span class="nb green" id="nb-comps">0</span></div>
   <div class="nav-tab" onclick="sw('notices',this)">📢 공지사항 <span class="nb" style="background:#6a1b9a" id="nb-notices">0</span></div>
-  <div class="nav-tab" onclick="sw('inquiries',this)">🎧 고객 문의 <span class="nb" style="background:#e65100" id="nb-inquiries">0</span></div>
 </div>
 
+<!-- 현황 -->
 <div class="page-section active" id="section-overview">
   <div class="stat-grid">
     <div class="stat-box"><div class="n" id="s-locs">-</div><div class="l">전체 지점</div></div>
@@ -181,51 +166,62 @@
     <div class="stat-box"><div class="n seal" id="s-stamps">-</div><div class="l">총 스탬프</div></div>
     <div class="stat-box"><div class="n green" id="s-comps">-</div><div class="l">완주 신청</div></div>
   </div>
-
-  <div class="card" style="margin-bottom:16px; background: #fdfaf5;">
+  <div class="card" style="margin-bottom:16px">
     <div class="card-title">👥 참여자 상세 현황</div>
     <div class="det-stat-grid">
-      <div class="det-stat-item"><div class="det-stat-label">총 가입자</div><div id="det-total-parts" class="det-stat-value">-</div></div>
-      <div class="det-stat-item"><div class="det-stat-label">활동 중(7일)</div><div id="det-active-parts" class="det-stat-value" style="color:var(--seal);">-</div></div>
-      <div class="det-stat-item"><div class="det-stat-label">누적 완주</div><div id="det-comp-parts" class="det-stat-value" style="color:var(--green);">-</div></div>
-      <div class="det-stat-item"><div class="det-stat-label">코스 완주율</div><div id="det-comp-rate" class="det-stat-value" style="color:var(--gold);">-</div></div>
-      <div class="det-stat-item"><div class="det-stat-label">오늘 신규</div><div id="det-today-parts" class="det-stat-value" style="color:var(--blue);">-</div></div>
+      <div class="det-stat-item"><div class="det-stat-label">총 가입자</div><div id="det-total" class="det-stat-value">-</div></div>
+      <div class="det-stat-item"><div class="det-stat-label">활동 중 (7일)</div><div id="det-active" class="det-stat-value" style="color:var(--seal)">-</div></div>
+      <div class="det-stat-item"><div class="det-stat-label">누적 완주</div><div id="det-comp" class="det-stat-value" style="color:var(--green)">-</div></div>
+      <div class="det-stat-item"><div class="det-stat-label">완주율</div><div id="det-rate" class="det-stat-value" style="color:var(--gold)">-</div></div>
+      <div class="det-stat-item"><div class="det-stat-label">오늘 신규</div><div id="det-today" class="det-stat-value" style="color:var(--blue)">-</div></div>
     </div>
   </div>
-
   <div class="card" style="margin-bottom:16px"><div class="card-title">👥 코스별 참여자 현황</div><div id="ov-course-parts"></div></div>
-
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
-    <div class="card"><div class="card-title">📅 날짜별 방문 현황 <span style="font-size:.72rem;color:#aaa;font-weight:400">(최근 14일)</span></div><div id="ov-chart" style="padding:4px 0"></div></div>
-    <div class="card"><div class="card-title">🕐 시간대별 방문 현황</div><div id="ov-hour-chart" style="padding:4px 0"></div></div>
+    <div class="card"><div class="card-title">📅 날짜별 방문 현황 <span style="font-size:.72rem;color:#aaa;font-weight:400">(최근 14일)</span></div><div id="ov-chart"></div></div>
+    <div class="card"><div class="card-title">🕐 시간대별 방문 현황</div><div id="ov-hour-chart"></div></div>
   </div>
-
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
     <div class="card"><div class="card-title">🔥 지점별 방문 순위</div><div class="table-wrap"><table><thead><tr><th>#</th><th>지점명</th><th>방문수</th><th>코스</th></tr></thead><tbody id="ov-locs"></tbody></table></div></div>
     <div class="card"><div class="card-title">🗺️ 코스별 완주 현황</div><div id="ov-courses"></div><div class="card-title" style="margin-top:16px">🕐 최근 인증</div><div id="ov-recent"></div></div>
   </div>
 </div>
 
+<!-- 코스 관리 -->
 <div class="page-section" id="section-courses">
   <div class="card">
     <div class="card-title">🗺️ 코스 생성 및 지점 배정</div>
     <div style="display:flex;gap:8px;margin-bottom:16px;align-items:flex-end">
-      <div style="flex:1"><label>코스 이름</label><input type="text" id="new-course-name" placeholder="예: 궁궐 코스" onkeydown="if(event.key==='Enter')addCourse()"/></div>
-      <div style="flex:1"><label>설명 (선택)</label><input type="text" id="new-course-desc" placeholder="예: 서울 5대 궁궐"/></div>
+      <div style="flex:1"><label>코스 이름</label><input type="text" id="new-course-name" placeholder="예: 한옥마을 코스" onkeydown="if(event.key==='Enter')addCourse()"/></div>
+      <div style="flex:1"><label>설명 (선택)</label><input type="text" id="new-course-desc" placeholder="예: 전주 대표 명소"/></div>
       <button class="btn btn-dark" onclick="addCourse()">코스 추가</button>
     </div>
     <div class="course-editor">
-      <div class="panel"><div class="panel-header">코스 목록 <span id="course-cnt-label">0개</span></div><div id="course-list-items"></div></div>
+      <div class="panel">
+        <div class="panel-header">코스 목록 <span style="font-size:.74rem;color:#aaa;font-weight:400" id="course-cnt-label">0개</span></div>
+        <div id="course-list-items"><div style="padding:26px;text-align:center;color:#bbb;font-size:.8rem">코스를 추가하세요</div></div>
+      </div>
       <div class="panel">
         <div class="panel-header">지점 배정</div>
         <div class="panel-body">
-          <div class="detail-empty" id="det-empty">← 코스를 선택하세요</div>
+          <div class="detail-empty" id="det-empty">← 코스를 선택하면<br>지점을 배정할 수 있어요</div>
           <div id="det-content" style="display:none">
-            <div class="name-edit-row"><input type="text" id="edit-course-name"/><button class="btn btn-gold btn-sm" onclick="saveCourseEdit()">저장</button><button class="btn btn-danger btn-sm" onclick="deleteCourse()">삭제</button></div>
-            <div style="display:flex;align-items:center;gap:10px;padding:10px 13px;background:var(--paper);border-radius:6px;border:1px solid var(--aged);margin-bottom:13px;"><span style="font-size:.82rem;font-weight:500;color:var(--ink);flex:1">⭐ 필수 코스</span><div style="position:relative;width:40px;height:20px;"><input type="checkbox" id="required-toggle" style="opacity:0;position:absolute;inset:0;z-index:2;cursor:pointer;" onchange="toggleRequired()"/><div id="required-track" style="position:absolute;inset:0;background:#ccc;border-radius:10px;transition:.2s;"></div><div id="required-thumb" style="position:absolute;top:2px;left:2px;width:16px;height:16px;background:white;border-radius:50%;transition:.2s;"></div></div></div>
+            <div class="name-edit-row">
+              <input type="text" id="edit-course-name" placeholder="코스 이름"/>
+              <button class="btn btn-gold btn-sm" onclick="saveCourseEdit()">저장</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteCourse()">삭제</button>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 13px;background:var(--paper);border-radius:6px;border:1px solid var(--aged);margin-bottom:13px;">
+              <span style="font-size:.82rem;font-weight:500;color:var(--ink);flex:1">⭐ 필수 코스 (완주 신청 조건)</span>
+              <span style="font-size:.76rem;color:#aaa" id="required-label">선택</span>
+              <div style="position:relative;width:44px;height:24px;cursor:pointer;" onclick="toggleRequired()">
+                <div id="required-track" style="position:absolute;inset:0;border-radius:12px;background:#ccc;transition:background .2s;"></div>
+                <div id="required-thumb" style="position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:white;transition:transform .2s;box-shadow:0 1px 4px rgba(0,0,0,.2);"></div>
+              </div>
+            </div>
             <div class="loc-assign">
-              <div class="loc-pool-wrap"><h4>전체 지점 (+)</h4><div class="loc-pool" id="pool-avail"></div></div>
-              <div class="loc-pool-wrap"><h4>배정 지점 (✕)</h4><div class="loc-pool" id="pool-assigned"></div></div>
+              <div class="loc-pool-wrap"><h4>전체 지점 (클릭하여 추가)</h4><div class="loc-pool" id="pool-avail"></div></div>
+              <div class="loc-pool-wrap"><h4>배정된 지점 (클릭하여 제거)</h4><div class="loc-pool" id="pool-assigned"></div></div>
             </div>
           </div>
         </div>
@@ -234,292 +230,651 @@
   </div>
 </div>
 
+<!-- 지점 관리 -->
 <div class="page-section" id="section-locations">
   <div class="card">
     <div class="card-title">📂 CSV / 엑셀 업로드</div>
-    <div class="upload-zone" id="upload-zone"><input type="file" id="file-input" accept=".csv,.xlsx,.xls" onchange="handleFile(event)"/><div class="ui">📄</div><p>파일을 업로드하세요</p></div>
+    <div class="upload-zone" id="upload-zone">
+      <input type="file" id="file-input" accept=".csv,.xlsx,.xls" onchange="handleFile(event)">
+      <div class="ui">📄</div><p>파일을 드래그하거나 클릭하여 업로드</p><small>CSV, Excel · 기존 목록에 추가됩니다</small>
+    </div>
+    <div class="csv-hint"><span>📋 형식:</span><code>지점명</code><code>설명</code><code>주소</code> 세 열 (첫 행 헤더) <button class="btn btn-outline btn-sm" onclick="dlTemplate()" style="margin-left:auto">샘플 다운로드</button></div>
   </div>
   <div class="card">
     <div class="card-title">✏️ 지점 직접 추가</div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1.5fr 1.5fr auto;gap:8px;align-items:flex-end">
-      <div><label>지점명 *</label><input type="text" id="new-name"/></div>
-      <div><label>설명</label><input type="text" id="new-desc"/></div>
-      <div><label>주소</label><input type="text" id="new-addr"/></div>
-      <div><label>이미지 URL</label><input type="text" id="new-img"/></div>
-      <button class="btn btn-dark" onclick="addLocation()">추가</button>
+      <div><label>지점명 *</label><input type="text" id="new-name" placeholder="예: 한옥마을" onkeydown="if(event.key==='Enter')addLocation()"/></div>
+      <div><label>설명 (선택)</label><input type="text" id="new-desc" placeholder="예: 전주 대표 명소"/></div>
+      <div><label>주소 (선택)</label><input type="text" id="new-addr" placeholder="전북 전주시 완산구..."/></div>
+      <div><label>🖼️ 이미지 URL (선택)</label><input type="text" id="new-img" placeholder="https://..."/></div>
+      <button class="btn btn-dark" onclick="addLocation()" style="align-self:flex-end">추가</button>
     </div>
   </div>
-  <div class="card"><div class="toolbar"><div class="card-title">📋 지점 목록 <span id="loc-cnt-label">0개</span></div><button class="btn btn-danger btn-sm" onclick="clearAllLocs()">전체 삭제</button></div><div class="table-wrap"><table><thead><tr><th>#</th><th>지점명</th><th>설명</th><th>주소</th><th>ID</th><th>작업</th></tr></thead><tbody id="loc-tbody"></tbody></table></div></div>
+  <div class="card">
+    <div class="toolbar">
+      <div class="card-title" style="margin-bottom:0">📋 지점 목록 <span style="font-size:.74rem;color:#aaa;font-weight:400" id="loc-cnt-label">0개</span></div>
+      <div class="toolbar-right">
+        <button class="btn btn-outline btn-sm" onclick="exportLocCSV()">💾 CSV</button>
+        <button class="btn btn-danger btn-sm" onclick="clearAllLocs()">전체 삭제</button>
+      </div>
+    </div>
+    <div class="table-wrap"><table><thead><tr><th style="width:30px">#</th><th>지점명</th><th>설명</th><th>주소</th><th>🖼️ 이미지 URL</th><th>배정 코스</th><th style="width:80px">ID</th><th style="width:120px">작업</th></tr></thead><tbody id="loc-tbody"></tbody></table></div>
+  </div>
 </div>
 
+<!-- 참여자 -->
 <div class="page-section" id="section-participants">
   <div class="card">
     <div class="toolbar">
-      <div class="card-title">👥 전체 참여자</div>
-      <input class="search-input" id="p-search" placeholder="검색…" oninput="renderParts()"/>
-      <select class="filter-sel" id="p-filter" onchange="renderParts()"><option value="all">전체</option><option value="applied">완주신청</option><option value="active">진행중</option></select>
+      <div class="card-title" style="margin-bottom:0">👥 전체 참여자</div>
+      <input class="search-input" id="p-search" placeholder="이름/전화 검색…" oninput="renderParts()"/>
+      <select class="filter-sel" id="p-filter" onchange="renderParts()">
+        <option value="all">전체</option><option value="applied">완주신청</option><option value="active">진행중</option>
+      </select>
+      <div class="toolbar-right">
+        <button class="btn btn-outline btn-sm" onclick="loadAll()">🔄 새로고침</button>
+        <button class="btn btn-outline btn-sm" onclick="exportPartsCSV()">💾 CSV</button>
+      </div>
     </div>
-    <div class="table-wrap"><table><thead><tr><th>#</th><th>이름</th><th>전화번호</th><th>방문</th><th>완주</th><th>마지막</th><th>상태</th><th>관리</th></tr></thead><tbody id="p-tbody"></tbody></table></div>
+    <div class="table-wrap"><table><thead><tr><th>#</th><th>이름</th><th>전화번호</th><th>방문 현황</th><th>완주 코스</th><th>마지막 방문</th><th>상태</th><th>관리</th></tr></thead><tbody id="p-tbody"></tbody></table></div>
   </div>
 </div>
 
+<!-- 완주 신청 -->
 <div class="page-section" id="section-completions">
   <div class="card">
-    <div class="toolbar"><div class="card-title">🏆 완주 신청 목록</div></div>
-    <div class="table-wrap"><table><thead><tr><th>#</th><th>계정</th><th>신청자</th><th>전화</th><th>시각</th><th>방문수</th><th>상태</th><th>처리</th></tr></thead><tbody id="c-tbody"></tbody></table></div>
+    <div class="toolbar">
+      <div class="card-title" style="margin-bottom:0">🏆 완주 신청 목록</div>
+      <input class="search-input" id="c-search" placeholder="이름/전화 검색…" oninput="renderComps()"/>
+      <select class="filter-sel" id="c-filter" onchange="renderComps()">
+        <option value="all">전체</option><option value="pending">대기 중</option><option value="approved">승인 완료</option><option value="rejected">반려</option>
+      </select>
+      <div class="toolbar-right"><button class="btn btn-outline btn-sm" onclick="exportCompsCSV()">💾 CSV</button></div>
+    </div>
+    <div class="table-wrap"><table><thead><tr><th>#</th><th>계정 이름</th><th>신청 이름</th><th>신청 전화번호</th><th>신청 시각</th><th>방문수</th><th>완주 코스</th><th>처리 상태</th><th>처리</th></tr></thead><tbody id="c-tbody"></tbody></table></div>
   </div>
 </div>
 
+<!-- 공지사항 -->
 <div class="page-section" id="section-notices">
   <div class="card">
     <div class="card-title">📢 공지사항 작성</div>
     <div style="display:grid;gap:10px;margin-bottom:14px;">
-      <div><label>제목 *</label><input type="text" id="notice-title"/></div>
-      <div><label>내용 *</label><textarea id="notice-content" style="width:100%;height:100px;padding:10px;border:1px solid var(--aged);border-radius:4px;"></textarea></div>
-      <div style="display:flex;gap:10px;">
-        <select id="notice-type" style="padding:8px;border-radius:4px;"><option value="info">📢 일반</option><option value="event">🎉 이벤트</option><option value="warning">⚠️ 주의</option></select>
-        <select id="notice-page" style="padding:8px;border-radius:4px;"><option value="all">전체</option><option value="main">메인</option><option value="mypage">마이페이지</option></select>
-        <button class="btn btn-dark" onclick="addNotice()">등록</button>
+      <div><label>제목 *</label><input type="text" id="notice-title" placeholder="예: 자전거 여권 이벤트 안내"/></div>
+      <div><label>내용 *</label><textarea id="notice-content" placeholder="공지 내용을 입력하세요..." style="width:100%;padding:9px 12px;border:1px solid var(--aged);border-radius:4px;font-family:'Noto Sans KR',sans-serif;font-size:.84rem;color:var(--ink);background:var(--paper);resize:vertical;min-height:90px;"></textarea></div>
+      <div style="display:flex;gap:10px;align-items:flex-end;">
+        <div style="flex:1"><label>유형</label>
+          <select id="notice-type" style="width:100%;padding:8px 11px;border:1px solid var(--aged);border-radius:4px;font-family:'Noto Sans KR',sans-serif;font-size:.84rem;background:var(--paper);">
+            <option value="info">📢 일반 공지</option><option value="event">🎉 이벤트</option><option value="warning">⚠️ 주의사항</option>
+          </select>
+        </div>
+        <div style="flex:1"><label>노출 위치</label>
+          <select id="notice-page" style="width:100%;padding:8px 11px;border:1px solid var(--aged);border-radius:4px;font-family:'Noto Sans KR',sans-serif;font-size:.84rem;background:var(--paper);">
+            <option value="all">전체 페이지</option><option value="main">메인 페이지만</option><option value="mypage">마이페이지만</option>
+          </select>
+        </div>
+        <button class="btn btn-dark" onclick="addNotice()" style="align-self:flex-end">공지 등록</button>
       </div>
     </div>
   </div>
-  <div class="card"><div id="notice-list"></div></div>
+  <div class="card">
+    <div class="toolbar"><div class="card-title" style="margin-bottom:0">📋 등록된 공지사항 <span style="font-size:.74rem;color:#aaa;font-weight:400" id="notice-cnt-label">0개</span></div></div>
+    <div id="notice-list"></div>
+  </div>
 </div>
 
-<div class="page-section" id="section-inquiries">
-  <div class="card"><div class="card-title">🎧 고객 문의</div><div class="table-wrap"><table><thead><tr><th>상태</th><th>작성자</th><th>내용</th><th>답변</th><th>작업</th></tr></thead><tbody id="inquiry-tbody"></tbody></table></div></div>
+<!-- QR Modal -->
+<div class="modal-overlay" id="qr-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeQR()">✕</button>
+    <h3 id="qr-title"></h3><div class="modal-url" id="qr-url"></div>
+    <div id="qr-container"></div>
+    <div class="modal-actions">
+      <button class="btn btn-dark" onclick="dlQR()">⬇ PNG</button>
+      <button class="btn btn-outline" onclick="copyURL()">🔗 URL 복사</button>
+      <button class="btn btn-outline" onclick="closeQR()">닫기</button>
+    </div>
+  </div>
 </div>
 
-<div class="modal-overlay" id="qr-modal"><div class="modal"><button class="modal-close" onclick="closeQR()">✕</button><h3 id="qr-title"></h3><div id="qr-container"></div><div class="modal-actions"><button class="btn btn-dark" onclick="dlQR()">⬇ PNG</button><button class="btn btn-outline" onclick="copyURL()">🔗 복사</button></div></div></div>
-<div class="modal-overlay" id="detail-modal"><div class="modal detail-modal"><button class="modal-close" onclick="document.getElementById('detail-modal').classList.remove('open')">✕</button><h3 id="d-name"></h3><div id="d-info"></div><div style="display:flex;border-bottom:2px solid var(--aged);margin-bottom:14px;"><div class="detail-tab-btn active" onclick="switchDTab('coures',this)" style="padding:7px 14px;cursor:pointer;">코스 현황</div><div class="detail-tab-btn" onclick="switchDTab('stamps',this)" style="padding:7px 14px;cursor:pointer;">스탬프 관리</div></div><div id="dtab-coures"><div class="d-courses" id="d-courses"></div></div><div id="dtab-stamps" style="display:none"><div style="margin-bottom:12px;padding:10px;background:var(--paper);border-radius:6px;"><p style="font-size:.75rem;margin-bottom:5px;">📍 수동 추가</p><div style="display:flex;gap:5px;"><select id="stamp-add-select" style="flex:1;padding:5px;"></select><button class="btn btn-dark btn-sm" onclick="addStampAdmin()">추가</button></div></div><div id="stamp-manage-list" style="display:flex;flex-wrap:wrap;gap:6px;"></div></div></div></div>
+<!-- Detail Modal -->
+<div class="modal-overlay" id="detail-modal">
+  <div class="modal detail-modal">
+    <button class="modal-close" onclick="document.getElementById('detail-modal').classList.remove('open')">✕</button>
+    <h3 id="d-name"></h3>
+    <div class="d-info" id="d-info"></div>
+    <div style="display:flex;border-bottom:2px solid var(--aged);margin-bottom:14px;">
+      <div id="dtab-btn-courses" onclick="switchDTab('courses',this)" style="padding:7px 14px;font-size:.79rem;color:var(--seal);cursor:pointer;border-bottom:2px solid var(--seal);margin-bottom:-2px;">코스 현황</div>
+      <div id="dtab-btn-stamps" onclick="switchDTab('stamps',this)" style="padding:7px 14px;font-size:.79rem;color:#7a6a50;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;">스탬프 관리</div>
+    </div>
+    <div id="dtab-courses"><div class="d-courses" id="d-courses"></div></div>
+    <div id="dtab-stamps" style="display:none">
+      <div style="margin-bottom:12px;padding:10px 13px;background:var(--paper);border-radius:6px;border:1px solid var(--aged);">
+        <div style="font-size:.76rem;color:#7a6a50;margin-bottom:8px;font-weight:500">📍 스탬프 추가</div>
+        <div style="display:flex;gap:7px;">
+          <select id="stamp-add-select" style="flex:1;padding:7px 10px;border:1px solid var(--aged);border-radius:4px;font-family:'Noto Sans KR',sans-serif;font-size:.8rem;background:white;"><option value="">지점 선택...</option></select>
+          <button class="btn btn-dark btn-sm" onclick="addStampAdmin()">추가</button>
+        </div>
+      </div>
+      <div style="font-size:.76rem;color:#7a6a50;margin-bottom:7px;font-weight:500">📋 보유 스탬프 (클릭하면 삭제)</div>
+      <div id="stamp-manage-list" style="display:flex;flex-wrap:wrap;gap:6px;max-height:260px;overflow-y:auto;"></div>
+      <div id="stamp-manage-empty" style="display:none;padding:20px;text-align:center;color:#bbb;font-size:.8rem">스탬프가 없어요</div>
+    </div>
+    <div style="text-align:right;margin-top:14px"><button class="btn btn-outline btn-sm" onclick="document.getElementById('detail-modal').classList.remove('open')">닫기</button></div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import{getFirestore,doc,getDoc,getDocs,setDoc,updateDoc,deleteDoc,collection,writeBatch}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import{getFirestore,doc,getDocs,setDoc,updateDoc,deleteDoc,collection,writeBatch}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import{getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
 const cfg={apiKey:"AIzaSyAW13Cf2qQnsGWYiAdz9rF3TrWkGR_lLNg",authDomain:"stemp-tour.firebaseapp.com",projectId:"stemp-tour",storageBucket:"stemp-tour.firebasestorage.app",messagingSenderId:"823116268455",appId:"1:823116268455:web:4b060bf808eae664f62c82"};
-const app=initializeApp(cfg);
-const db=getFirestore(app);
-const auth=getAuth(app);
+const app=initializeApp(cfg);const db=getFirestore(app);const auth=getAuth(app);
 const ADMIN_EMAIL='halimviva23@gmail.com';
+const BASE_URL=location.origin+'/stamp.html';
+const COLORS=['#c0392b','#b8860b','#2d6a4f','#1565c0','#6a1b9a','#e65100','#00838f','#37474f'];
+let locations=[],courses=[],participants=[],allStamps={},notices=[],selCourse=null,curQRUrl='',currentDetailUid=null;
 
-// ── [복구] 참여자 탈퇴 기능 ──
-window.deleteUserAdmin = async function(uid, name) {
-  if(!confirm(`${name} 님의 정보를 영구 삭제할까요?`)) return;
-  const batch = writeBatch(db);
-  const stampsSnap = await getDocs(collection(db, 'participants', uid, 'stamps'));
-  stampsSnap.forEach(d => batch.delete(d.ref));
-  batch.delete(doc(db, 'participants', uid));
-  await batch.commit(); showToast('✓ 삭제 완료'); loadAll();
-};
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
+function fmtDate(iso){if(!iso)return'-';const d=new Date(iso);return`${d.getFullYear()}.${d.getMonth()+1}.${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;}
+function fmtPhone(p){if(!p)return'-';const s=String(p).replace(/[^0-9]/g,'');return s.length===11?s.replace(/(\d{3})(\d{4})(\d{4})/,'$1-$2-$3'):s.length===10?s.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3'):p;}
+function genId(){return Math.random().toString(36).substr(2,8).toUpperCase();}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3200);}
+function getCompletedCourses(uid){const s=allStamps[uid]||{};return courses.filter(c=>{const ids=c.locationIds||[];return ids.length>0&&ids.every(id=>s[id]);});}
+function getRequiredStatus(uid){const s=allStamps[uid]||{};const req=courses.filter(c=>c.required);const done=req.filter(c=>{const ids=c.locationIds||[];return ids.length>0&&ids.every(id=>s[id]);});return{req,done,allDone:req.length>0&&done.length>=req.length};}
 
+// ── Google 로그인 ──
 window.googleLogin=async function(){
-  try{const provider=new GoogleAuthProvider(); const result=await signInWithPopup(auth,provider);
-    if(result.user.email!==ADMIN_EMAIL){await signOut(auth); alert('권한이 없습니다.');}
-  }catch(e){console.error(e);}
+  document.getElementById('google-login-btn').style.display='none';
+  document.getElementById('auth-loading').style.display='block';
+  document.getElementById('auth-error').style.display='none';
+  try{
+    const result=await signInWithPopup(auth,new GoogleAuthProvider());
+    if(result.user.email!==ADMIN_EMAIL){await signOut(auth);document.getElementById('auth-error').style.display='block';document.getElementById('google-login-btn').style.display='flex';document.getElementById('auth-loading').style.display='none';}
+  }catch(e){document.getElementById('google-login-btn').style.display='flex';document.getElementById('auth-loading').style.display='none';}
 };
+function addLogoutBtn(email){
+  if(document.getElementById('admin-logout-btn'))return;
+  const btn=document.createElement('button');btn.id='admin-logout-btn';btn.textContent=`${email} · 로그아웃`;
+  btn.style.cssText='background:rgba(192,57,43,.12);border:1px solid rgba(192,57,43,.3);color:var(--seal);padding:5px 14px;border-radius:20px;font-size:.74rem;cursor:pointer;margin-top:6px;font-family:\'Noto Sans KR\',sans-serif;';
+  btn.onclick=async()=>{if(confirm('로그아웃 할까요?'))await signOut(auth);};
+  document.querySelector('header').appendChild(btn);
+}
 onAuthStateChanged(auth,user=>{
   if(user&&user.email===ADMIN_EMAIL){
     document.getElementById('lock-screen').style.display='none';
     document.getElementById('admin-wrap').style.display='block';
-    loadAll();
-  }else{ document.getElementById('lock-screen').style.display='flex'; }
+    addLogoutBtn(user.email);loadAll();
+  }else{
+    document.getElementById('lock-screen').style.display='flex';
+    document.getElementById('admin-wrap').style.display='none';
+    document.getElementById('google-login-btn').style.display='flex';
+    document.getElementById('auth-loading').style.display='none';
+  }
 });
 
-const BASE_URL=location.origin+'/stamp.html';
-const COLORS=['#c0392b','#b8860b','#2d6a4f','#1565c0','#6a1b9a','#e65100','#00838f','#37474f'];
-let locations=[],courses=[],participants=[],allStamps={},selCourse=null,currentDetailUid=null;
-
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
-function fmtDate(iso){if(!iso)return'-';return new Date(iso).toLocaleString('ko-KR',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});}
-function fmtPhone(p){if(!p)return'-';const s=p.replace(/[^0-9]/g,'');return s.length===11?s.replace(/(\d{3})(\d{4})(\d{4})/,'$1-$2-$3'):s;}
-function genId(){return Math.random().toString(36).substr(2,8).toUpperCase();}
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
-
-async function loadAll(){
+// ── 데이터 로드 ──
+window.loadAll=async function(){
   document.getElementById('page-loading').style.display='flex';
   try{
     const[lS,cS,pS]=await Promise.all([getDocs(collection(db,'locations')),getDocs(collection(db,'courses')),getDocs(collection(db,'participants'))]);
-    locations=lS.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>a.order-b.order);
-    courses=cS.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>a.order-b.order);
-    participants=pS.docs.map(d=>({uid:d.id,...d.data()}));
+    locations=[];lS.forEach(d=>locations.push({id:d.id,...d.data()}));locations.sort((a,b)=>(a.order||0)-(b.order||0));
+    courses=[];cS.forEach(d=>courses.push({id:d.id,...d.data()}));courses.sort((a,b)=>(a.order||0)-(b.order||0));
+    participants=[];pS.forEach(d=>participants.push({uid:d.id,...d.data()}));
     allStamps={};
-    await Promise.all(participants.map(async p=>{
-      const sSnap=await getDocs(collection(db,'participants',p.uid,'stamps'));
-      allStamps[p.uid]={}; sSnap.forEach(d=>allStamps[p.uid][d.id]=d.data());
-    }));
+    await Promise.all(participants.map(async p=>{const sSnap=await getDocs(collection(db,'participants',p.uid,'stamps'));allStamps[p.uid]={};sSnap.forEach(d=>allStamps[p.uid][d.id]=d.data());}));
     const lvc={};Object.values(allStamps).forEach(s=>Object.keys(s).forEach(id=>{lvc[id]=(lvc[id]||0)+1;}));
     locations.forEach(l=>l.visitCount=lvc[l.id]||0);
-    renderOverview(); renderCourseList(); renderLocations(); renderParts(); renderComps(); loadAdminInquiries(); loadNotices(); updateBadges();
-  }catch(e){console.error(e);}
+    await loadNoticesData();
+    updateBadges();renderOverview();renderCourseList();renderLocations();renderParts();renderComps();
+  }catch(e){console.error(e);showToast('로드 실패: '+e.message);}
   document.getElementById('page-loading').style.display='none';
-}
-
-function renderOverview(){
-  // --- [신규 추가] 상세 현황 계산 로직 ---
-  const now = new Date();
-  const sevenDaysAgo = new Date(now.getTime() - (7 * 24 * 60 * 60 * 1000));
-  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const activeUserIds = new Set();
-  Object.entries(allStamps).forEach(([uid, sm]) => {
-    Object.values(sm).forEach(s => { if (s.visitedAt && new Date(s.visitedAt) > sevenDaysAgo) activeUserIds.add(uid); });
-  });
-  const completedUserCount = participants.filter(p => {
-    const s = allStamps[p.uid] || {};
-    return courses.some(c => { const ids = c.locationIds || []; return ids.length > 0 && ids.every(id => s[id]); });
-  }).length;
-  const todayPartsCount = participants.filter(p => p.createdAt && new Date(p.createdAt) >= todayStart).length;
-  const completionRate = participants.length > 0 ? ((completedUserCount / participants.length) * 100).toFixed(1) : 0;
-
-  document.getElementById('det-total-parts').textContent = participants.length + '명';
-  document.getElementById('det-active-parts').textContent = activeUserIds.size + '명';
-  document.getElementById('det-comp-parts').textContent = completedUserCount + '명';
-  document.getElementById('det-comp-rate').textContent = completionRate + '%';
-  document.getElementById('det-today-parts').textContent = '+' + todayPartsCount + '명';
-
-  // [복구] 기존 통계 렌더링
-  const lcm={};courses.forEach(c=>(c.locationIds||[]).forEach(id=>{if(!lcm[id])lcm[id]=[];lcm[id].push(c.name);}));
-  const tbody=document.getElementById('ov-locs'); tbody.innerHTML='';
-  [...locations].sort((a,b)=>b.visitCount-a.visitCount).slice(0,15).forEach((l,i)=>{
-    tbody.innerHTML+=`<tr><td>${i+1}</td><td style="font-weight:600">${esc(l.name)}</td><td>${l.visitCount}</td><td style="font-size:.7rem">${(lcm[l.id]||[]).join(', ')}</td></tr>`;
-  });
-  renderCharts();
-}
-
-function renderCharts(){
-  const allActs=[]; Object.entries(allStamps).forEach(([uid,sm])=>Object.values(sm).forEach(s=>allActs.push(s.visitedAt)));
-  const dateMap={}; for(let i=13;i>=0;i--){ const d=new Date(); d.setDate(d.getDate()-i); dateMap[`${d.getMonth()+1}/${d.getDate()}`]=0; }
-  allActs.forEach(iso=>{ const d=new Date(iso); const k=`${d.getMonth()+1}/${d.getDate()}`; if(k in dateMap)dateMap[k]++; });
-  const maxV=Math.max(...Object.values(dateMap),1);
-  let cHTML='<div style="display:flex;align-items:flex-end;gap:3px;height:80px;padding-bottom:18px;">';
-  Object.entries(dateMap).forEach(([l,cnt])=>{ const h=Math.max(cnt/maxV*100,2); cHTML+=`<div style="flex:1;display:flex;flex-direction:column;align-items:center;"><div style="width:100%;height:${h}%;background:var(--gold);border-radius:2px;"></div><span style="font-size:.5rem;color:#bbb">${l}</span></div>`;});
-  document.getElementById('ov-chart').innerHTML=cHTML+'</div>';
-
-  const hourMap={}; for(let i=0;i<24;i++)hourMap[i]=0;
-  allActs.forEach(iso=>{ const h=new Date(iso).getHours(); hourMap[h]++; });
-  const maxH=Math.max(...Object.values(hourMap),1);
-  let hHTML='<div style="display:flex;align-items:flex-end;gap:2px;height:80px;padding-bottom:18px;">';
-  Object.entries(hourMap).forEach(([h,cnt])=>{ const ph=Math.max(cnt/maxH*100,2); hHTML+=`<div style="flex:1;display:flex;flex-direction:column;align-items:center;"><div style="width:100%;height:${ph}%;background:var(--seal);border-radius:1px;"></div><span style="font-size:.5rem;color:#bbb">${h%6===0?h:''}</span></div>`;});
-  document.getElementById('ov-hour-chart').innerHTML=hHTML+'</div>';
-
-  const ovc=document.getElementById('ov-courses'); ovc.innerHTML='';
-  courses.forEach((c,ci)=>{
-    const ids=c.locationIds||[]; const cnt=participants.filter(p=>{const s=allStamps[p.uid]||{};return ids.length>0&&ids.every(id=>s[id]);}).length;
-    const pct=participants.length?Math.round(cnt/participants.length*100):0;
-    ovc.innerHTML+=`<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:.76rem;margin-bottom:3px"><span>${c.name}</span><span>${cnt}명</span></div><div style="height:5px;background:var(--aged);border-radius:3px;overflow:hidden"><div style="height:100%;width:${pct}%;background:${COLORS[ci%COLORS.length]}"></div></div></div>`;
-  });
-
-  const acts=[]; Object.entries(allStamps).forEach(([uid,sm])=>{const p=participants.find(p=>p.uid===uid);Object.values(sm).forEach(s=>acts.push({name:p?.name||'익명',locName:s.locName,visitedAt:s.visitedAt}));});
-  acts.sort((a,b)=>new Date(b.visitedAt)-new Date(a.visitedAt));
-  const ovr=document.getElementById('ov-recent'); ovr.innerHTML='';
-  acts.slice(0,8).forEach(a=>{ovr.innerHTML+=`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--aged);font-size:.78rem"><span style="flex:1"><strong>${esc(a.name)}</strong> → ${esc(a.locName)}</span><span style="font-size:.69rem;color:#aaa">${fmtDate(a.visitedAt)}</span></div>`;});
-}
-
-// ── [복구] 공지사항 기능 전체 ──
-window.addNotice = async function() {
-  const t=document.getElementById('notice-title').value.trim();
-  const c=document.getElementById('notice-content').value.trim();
-  const ty=document.getElementById('notice-type').value;
-  const p=document.getElementById('notice-page').value;
-  if(!t||!c){alert('내용을 입력하세요');return;}
-  await setDoc(doc(db,'notices',genId()),{title:t,content:c,type:ty,page:p,createdAt:new Date().toISOString()});
-  document.getElementById('notice-title').value=''; document.getElementById('notice-content').value='';
-  showToast('✓ 등록 완료'); loadNotices();
 };
-async function loadNotices(){
-  const snap=await getDocs(collection(db,'notices')); const el=document.getElementById('notice-list'); el.innerHTML='';
-  snap.forEach(d=>{
-    const n=d.data();
-    el.innerHTML+=`<div style="padding:15px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;"><div><strong>${esc(n.title)}</strong><p style="font-size:.8rem;color:#7a6a50">${esc(n.content)}</p></div><button class="btn btn-danger btn-sm" onclick="deleteNotice('${d.id}')">삭제</button></div>`;
-  });
-}
-window.deleteNotice=async function(id){if(!confirm('삭제할까요?'))return;await deleteDoc(doc(db,'notices',id));loadNotices();};
 
-// ── [복구] 코스 & 지점 관리 전체 ──
-window.renderCourseList=function(){
-  const el=document.getElementById('course-list-items'); el.innerHTML='';
+function updateBadges(){
+  document.getElementById('nb-locs').textContent=locations.length;
+  document.getElementById('nb-courses').textContent=courses.length;
+  document.getElementById('nb-parts').textContent=participants.length;
+  document.getElementById('nb-comps').textContent=participants.filter(p=>p.applied).length;
+  document.getElementById('nb-notices').textContent=notices.filter(n=>n.active).length;
+  document.getElementById('s-locs').textContent=locations.length;
+  document.getElementById('s-courses').textContent=courses.length;
+  document.getElementById('s-parts').textContent=participants.length;
+  document.getElementById('s-stamps').textContent=Object.values(allStamps).reduce((s,m)=>s+Object.keys(m).length,0);
+  document.getElementById('s-comps').textContent=participants.filter(p=>p.applied).length;
+}
+
+// ── 현황 ──
+function renderOverview(){
+  const now=new Date();const sevenAgo=new Date(now-7*86400000);const todayStart=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  const activeSet=new Set();
+  Object.entries(allStamps).forEach(([uid,sm])=>Object.values(sm).forEach(s=>{if(s.visitedAt&&new Date(s.visitedAt)>sevenAgo)activeSet.add(uid);}));
+  const compCount=participants.filter(p=>getCompletedCourses(p.uid).length>0).length;
+  const todayNew=participants.filter(p=>p.createdAt&&new Date(p.createdAt)>=todayStart).length;
+  const rate=participants.length?((compCount/participants.length)*100).toFixed(1):0;
+  document.getElementById('det-total').textContent=participants.length+'명';
+  document.getElementById('det-active').textContent=activeSet.size+'명';
+  document.getElementById('det-comp').textContent=compCount+'명';
+  document.getElementById('det-rate').textContent=rate+'%';
+  document.getElementById('det-today').textContent='+'+todayNew+'명';
+
+  // 코스별 참여자 현황
+  const ocp=document.getElementById('ov-course-parts');ocp.innerHTML='';
+  if(!courses.length){ocp.innerHTML='<p style="font-size:.78rem;color:#bbb;padding:10px 0">코스 없음</p>';}
+  else{
+    const grid=document.createElement('div');grid.style.cssText='display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;';
+    courses.forEach((c,ci)=>{
+      const ids=c.locationIds||[];
+      const partCnt=participants.filter(p=>ids.some(id=>allStamps[p.uid]?.[id])).length;
+      const compCnt=participants.filter(p=>ids.length>0&&ids.every(id=>allStamps[p.uid]?.[id])).length;
+      const color=COLORS[ci%COLORS.length];
+      const box=document.createElement('div');
+      box.style.cssText=`padding:14px 16px;background:white;border:1px solid var(--aged);border-radius:8px;border-left:4px solid ${color};`;
+      box.innerHTML=`<div style="font-size:.82rem;font-weight:600;color:var(--ink);margin-bottom:8px;display:flex;align-items:center;gap:5px"><span style="width:8px;height:8px;border-radius:50%;background:${color};display:inline-block"></span>${esc(c.name)}${c.required?'<span style="background:#b8860b;color:white;border-radius:6px;padding:1px 5px;font-size:.6rem;margin-left:4px">필수</span>':''}</div><div style="display:flex;gap:16px"><div style="text-align:center"><div style="font-family:\'Noto Serif KR\',serif;font-size:1.4rem;font-weight:700;color:${color}">${partCnt}</div><div style="font-size:.66rem;color:#aaa">참여 중</div></div><div style="text-align:center"><div style="font-family:\'Noto Serif KR\',serif;font-size:1.4rem;font-weight:700;color:var(--gold)">${compCnt}</div><div style="font-size:.66rem;color:#aaa">완주</div></div><div style="text-align:center"><div style="font-family:\'Noto Serif KR\',serif;font-size:1.4rem;font-weight:700;color:#aaa">${ids.length}</div><div style="font-size:.66rem;color:#aaa">지점 수</div></div></div>`;
+      grid.appendChild(box);
+    });
+    ocp.appendChild(grid);
+  }
+
+  // 지점 순위
+  const lcm={};courses.forEach(c=>(c.locationIds||[]).forEach(id=>{if(!lcm[id])lcm[id]=[];lcm[id].push(c.name);}));
+  const tbody=document.getElementById('ov-locs');tbody.innerHTML='';
+  [...locations].sort((a,b)=>(b.visitCount||0)-(a.visitCount||0)).slice(0,15).forEach((l,i)=>{
+    tbody.innerHTML+=`<tr><td style="color:#bbb;font-size:.72rem">${i+1}</td><td style="font-weight:500">${esc(l.name)}</td><td style="font-family:'Noto Serif KR',serif;font-size:.95rem;font-weight:700">${l.visitCount||0}</td><td style="font-size:.7rem;color:#7a6a50">${(lcm[l.id]||[]).join(', ')||'-'}</td></tr>`;
+  });
+  if(!locations.length)tbody.innerHTML='<tr class="empty-row"><td colspan="4">지점 없음</td></tr>';
+
+  // 날짜/시간대 차트
+  const allActs=[];Object.entries(allStamps).forEach(([,sm])=>Object.values(sm).forEach(s=>{if(s.visitedAt)allActs.push(s.visitedAt);}));
+  const dateMap={};for(let i=13;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);dateMap[`${d.getMonth()+1}/${d.getDate()}`]=0;}
+  allActs.forEach(iso=>{const d=new Date(iso);const k=`${d.getMonth()+1}/${d.getDate()}`;if(k in dateMap)dateMap[k]++;});
+  const maxV=Math.max(...Object.values(dateMap),1);
+  const chartEl=document.getElementById('ov-chart');
+  let cHTML='<div style="display:flex;align-items:flex-end;gap:3px;height:80px;padding-bottom:18px;">';
+  Object.entries(dateMap).forEach(([l,cnt])=>{const h=Math.max(cnt/maxV*100,2);cHTML+=`<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;"><span style="font-size:.55rem;color:#aaa">${cnt||''}</span><div style="width:100%;height:${h}%;background:var(--gold);border-radius:2px 2px 0 0;"></div><span style="font-size:.52rem;color:#bbb;white-space:nowrap;writing-mode:vertical-rl;transform:rotate(180deg)">${l}</span></div>`;});
+  chartEl.innerHTML=allActs.length?cHTML+'</div>':'<p style="font-size:.78rem;color:#bbb;padding:16px 0;text-align:center">방문 기록 없음</p>';
+  const hourMap={};for(let i=0;i<24;i++)hourMap[i]=0;
+  allActs.forEach(iso=>hourMap[new Date(iso).getHours()]++);
+  const maxH=Math.max(...Object.values(hourMap),1);
+  const hourEl=document.getElementById('ov-hour-chart');
+  let hHTML='<div style="display:flex;align-items:flex-end;gap:2px;height:80px;padding-bottom:18px;">';
+  Object.entries(hourMap).forEach(([h,cnt])=>{const ph=Math.max(cnt/maxH*100,2);hHTML+=`<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;"><div style="width:100%;height:${ph}%;background:${cnt>0?'var(--seal)':'var(--aged)'};border-radius:2px 2px 0 0;min-height:2px;" title="${h}시 ${cnt}건"></div><span style="font-size:.52rem;color:#bbb">${Number(h)%6===0?h+'시':''}</span></div>`;});
+  hourEl.innerHTML=allActs.length?hHTML+'</div>':'<p style="font-size:.78rem;color:#bbb;padding:16px 0;text-align:center">방문 기록 없음</p>';
+
+  // 코스별 완주
+  const ovc=document.getElementById('ov-courses');ovc.innerHTML='';
+  const total=participants.length||1;
   courses.forEach((c,ci)=>{
-    const div=document.createElement('div'); div.className='course-item'+(selCourse===c.id?' active':'');
-    div.onclick=()=>{selCourse=c.id; renderCourseList(); renderCourseDetail();};
-    div.innerHTML=`<div class="cdot" style="background:${COLORS[ci%COLORS.length]}"></div><span class="ci-name">${esc(c.name)}</span><span class="ci-cnt">${(c.locationIds||[]).length}개</span>`;
+    const ids=c.locationIds||[];const cnt=participants.filter(p=>{const s=allStamps[p.uid]||{};return ids.length>0&&ids.every(id=>s[id]);}).length;
+    const pct=Math.round(cnt/total*100);const color=COLORS[ci%COLORS.length];
+    ovc.innerHTML+=`<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:.76rem;margin-bottom:3px"><span style="display:flex;align-items:center;gap:5px"><span style="width:8px;height:8px;border-radius:50%;background:${color};display:inline-block"></span>${esc(c.name)}</span><span style="color:#7a6a50">${cnt}명</span></div><div style="height:5px;background:var(--aged);border-radius:3px;overflow:hidden"><div style="height:100%;width:${pct}%;background:${color};border-radius:3px"></div></div></div>`;
+  });
+  if(!courses.length)ovc.innerHTML='<p style="font-size:.78rem;color:#bbb">코스 없음</p>';
+
+  // 최근 인증
+  const acts=[];Object.entries(allStamps).forEach(([uid,sm])=>{const p=participants.find(p=>p.uid===uid);Object.values(sm).forEach(s=>acts.push({name:p?.name||'익명',locName:s.locName,visitedAt:s.visitedAt}));});
+  acts.sort((a,b)=>new Date(b.visitedAt)-new Date(a.visitedAt));
+  const ovr=document.getElementById('ov-recent');ovr.innerHTML='';
+  acts.slice(0,8).forEach(a=>{ovr.innerHTML+=`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--aged);font-size:.78rem"><span>📍</span><span style="flex:1"><strong>${esc(a.name)}</strong> → ${esc(a.locName)}</span><span style="font-size:.69rem;color:#aaa;white-space:nowrap">${fmtDate(a.visitedAt)}</span></div>`;});
+  if(!acts.length)ovr.innerHTML='<p style="font-size:.78rem;color:#bbb">방문 기록 없음</p>';
+}
+
+// ── 코스 관리 ──
+function renderCourseList(){
+  document.getElementById('course-cnt-label').textContent=`${courses.length}개`;
+  const el=document.getElementById('course-list-items');
+  if(!courses.length){el.innerHTML='<div style="padding:26px;text-align:center;color:#bbb;font-size:.8rem">코스를 추가하세요</div>';return;}
+  el.innerHTML='';
+  courses.forEach((c,ci)=>{
+    const div=document.createElement('div');div.className='course-item'+(selCourse===c.id?' active':'');
+    div.onclick=()=>{selCourse=c.id;renderCourseList();renderCourseDetail();};
+    div.innerHTML=`<div class="cdot" style="background:${COLORS[ci%COLORS.length]}"></div><span class="ci-name">${esc(c.name)}</span>${c.required?'<span style="background:#b8860b;color:white;border-radius:8px;padding:1px 7px;font-size:.62rem;font-weight:600">필수</span>':''}<span class="ci-cnt">${(c.locationIds||[]).length}개</span>`;
     el.appendChild(div);
   });
-};
-window.renderCourseDetail=function(){
-  const c=courses.find(u=>u.id===selCourse); if(!c)return;
-  document.getElementById('det-empty').style.display='none'; document.getElementById('det-content').style.display='block';
+}
+function renderCourseDetail(){
+  const c=courses.find(c=>c.id===selCourse);
+  document.getElementById('det-empty').style.display=c?'none':'block';
+  document.getElementById('det-content').style.display=c?'block':'none';
+  if(!c)return;
   document.getElementById('edit-course-name').value=c.name;
-  document.getElementById('required-toggle').checked=!!c.required;
-  document.getElementById('required-track').style.background=c.required?'var(--gold)':'#ccc';
-  document.getElementById('required-thumb').style.transform=c.required?'translateX(20px)':'translateX(0)';
-  const poolA=document.getElementById('pool-avail'); poolA.innerHTML=''; const assigned=new Set(c.locationIds||[]);
-  locations.filter(l=>!assigned.has(l.id)).forEach(l=>{ const d=document.createElement('div'); d.className='lp-item'; d.innerHTML=`${esc(l.name)} +`; d.onclick=()=>assignLoc(selCourse,l.id); poolA.appendChild(d); });
-  const poolP=document.getElementById('pool-assigned'); poolP.innerHTML=''; (c.locationIds||[]).forEach(id=>{
-    const l=locations.find(u=>u.id===id); if(l){const d=document.createElement('div'); d.className='lp-item assigned'; d.innerHTML=`${esc(l.name)} ✕`; d.onclick=()=>removeLoc(selCourse,l.id); poolP.appendChild(d);}
+  const isReq=!!c.required;
+  document.getElementById('required-track').style.background=isReq?'#b8860b':'#ccc';
+  document.getElementById('required-thumb').style.transform=isReq?'translateX(20px)':'translateX(0)';
+  document.getElementById('required-label').textContent=isReq?'필수':'선택';
+  document.getElementById('required-label').style.color=isReq?'#b8860b':'#aaa';
+  const assigned=new Set(c.locationIds||[]);
+  const avail=document.getElementById('pool-avail');avail.innerHTML='';
+  locations.filter(l=>!assigned.has(l.id)).forEach(l=>{
+    const div=document.createElement('div');div.className='lp-item';
+    div.innerHTML=`<div class="lp-dot"></div><span style="flex:1">${esc(l.name)}</span><span class="lp-arr">+</span>`;
+    div.onclick=()=>assignLoc(selCourse,l.id);avail.appendChild(div);
   });
+  if(!locations.length)avail.innerHTML='<div style="padding:14px;font-size:.77rem;color:#bbb;text-align:center">지점 없음</div>';
+  const assignedEl=document.getElementById('pool-assigned');assignedEl.innerHTML='';
+  (c.locationIds||[]).map(id=>locations.find(l=>l.id===id)).filter(Boolean).forEach(l=>{
+    const div=document.createElement('div');div.className='lp-item assigned';
+    div.innerHTML=`<div class="lp-dot"></div><span style="flex:1">${esc(l.name)}</span><span class="lp-arr" style="color:#e74c3c">✕</span>`;
+    div.onclick=()=>removeLoc(selCourse,l.id);assignedEl.appendChild(div);
+  });
+  if(!(c.locationIds||[]).length)assignedEl.innerHTML='<div style="padding:14px;font-size:.77rem;color:#bbb;text-align:center">지점을 추가하세요</div>';
+}
+window.addCourse=async function(){
+  const name=document.getElementById('new-course-name').value.trim();if(!name){showToast('코스 이름을 입력하세요');return;}
+  const id=genId(),desc=document.getElementById('new-course-desc').value.trim();
+  await setDoc(doc(db,'courses',id),{name,desc,locationIds:[],order:courses.length,required:false});
+  courses.push({id,name,desc,locationIds:[],order:courses.length,required:false});
+  document.getElementById('new-course-name').value='';document.getElementById('new-course-desc').value='';
+  updateBadges();renderCourseList();renderOverview();showToast('✓ 코스 추가됨');
 };
-async function assignLoc(cid,lid){ const c=courses.find(u=>u.id===cid); c.locationIds.push(lid); await updateDoc(doc(db,'courses',cid),{locationIds:c.locationIds}); renderCourseDetail(); }
-async function removeLoc(cid,lid){ const c=courses.find(u=>u.id===cid); c.locationIds=c.locationIds.filter(i=>i!==lid); await updateDoc(doc(db,'courses',cid),{locationIds:c.locationIds}); renderCourseDetail(); }
+window.saveCourseEdit=async function(){
+  const c=courses.find(c=>c.id===selCourse);if(!c)return;
+  const n=document.getElementById('edit-course-name').value.trim();if(!n)return;
+  c.name=n;await updateDoc(doc(db,'courses',selCourse),{name:n});renderCourseList();showToast('✓ 저장됨');
+};
+window.deleteCourse=async function(){
+  const c=courses.find(c=>c.id===selCourse);if(!c||!confirm(`"${c.name}" 삭제?`))return;
+  await deleteDoc(doc(db,'courses',selCourse));courses=courses.filter(c=>c.id!==selCourse);selCourse=null;
+  updateBadges();renderCourseList();renderCourseDetail();renderOverview();showToast('삭제됨');
+};
+window.toggleRequired=async function(){
+  const c=courses.find(c=>c.id===selCourse);if(!c)return;
+  c.required=!c.required;await updateDoc(doc(db,'courses',selCourse),{required:c.required});
+  renderCourseDetail();renderCourseList();showToast(c.required?'⭐ 필수 코스로 설정됨':'선택 코스로 변경됨');
+};
+async function assignLoc(cid,lid){const c=courses.find(c=>c.id===cid);if(!c||c.locationIds?.includes(lid))return;c.locationIds=[...(c.locationIds||[]),lid];await updateDoc(doc(db,'courses',cid),{locationIds:c.locationIds});renderCourseDetail();renderLocations();}
+async function removeLoc(cid,lid){const c=courses.find(c=>c.id===cid);if(!c)return;c.locationIds=(c.locationIds||[]).filter(i=>i!==lid);await updateDoc(doc(db,'courses',cid),{locationIds:c.locationIds});renderCourseDetail();renderLocations();}
 
-window.renderLocations=function(){
-  const tbody=document.getElementById('loc-tbody'); tbody.innerHTML='';
+// ── 지점 관리 ──
+function renderLocations(){
+  const tbody=document.getElementById('loc-tbody');
+  const lcm={};courses.forEach(c=>(c.locationIds||[]).forEach(id=>{if(!lcm[id])lcm[id]=[];lcm[id].push(c.name);}));
+  if(!locations.length){tbody.innerHTML='<tr class="empty-row"><td colspan="8">지점 없음</td></tr>';document.getElementById('loc-cnt-label').textContent='0개';return;}
+  tbody.innerHTML='';
   locations.forEach((l,i)=>{
-    tbody.innerHTML+=`<tr><td>${i+1}</td><td><input type="text" value="${esc(l.name)}" onchange="updLoc('${l.id}','name',this.value)"/></td><td>${esc(l.desc)}</td><td>${esc(l.address)}</td><td><span class="loc-id">${l.id}</span></td><td><button class="btn btn-outline btn-sm" onclick="showQR('${l.id}',${i})">QR</button> <button class="btn btn-danger btn-sm" onclick="delLoc('${l.id}')">삭제</button></td></tr>`;
+    const cn=(lcm[l.id]||[]).map(n=>`<span style="background:#e8f5e9;color:var(--green);border:1px solid #a5d6a7;border-radius:3px;padding:1px 5px;font-size:.66rem">${esc(n)}</span>`).join(' ')||'<span style="color:#bbb;font-size:.72rem">미배정</span>';
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td style="color:#bbb;font-size:.72rem">${i+1}</td>
+      <td><input type="text" value="${esc(l.name)}" onchange="updLoc('${l.id}','name',this.value)"/></td>
+      <td><input type="text" value="${esc(l.desc||'')}" onchange="updLoc('${l.id}','desc',this.value)" placeholder="설명 없음"/></td>
+      <td><input type="text" value="${esc(l.address||'')}" onchange="updLoc('${l.id}','address',this.value)" placeholder="주소 입력"/></td>
+      <td><input type="text" value="${esc(l.imageUrl||'')}" onchange="updLoc('${l.id}','imageUrl',this.value)" placeholder="https://..." style="min-width:160px"/></td>
+      <td>${cn}</td><td><span class="loc-id">${l.id}</span></td>
+      <td><div class="row-actions"><button class="btn btn-outline btn-sm" onclick="showQR('${l.id}',${i})">QR</button><button class="btn btn-danger btn-sm" onclick="delLoc('${l.id}','${esc(l.name)}')">삭제</button></div></td>`;
+    tbody.appendChild(tr);
   });
+  document.getElementById('loc-cnt-label').textContent=`${locations.length}개`;
+}
+window.updLoc=async function(id,key,val){const l=locations.find(l=>l.id===id);if(!l)return;l[key]=val;await updateDoc(doc(db,'locations',id),{[key]:val});};
+window.addLocation=async function(){
+  const name=document.getElementById('new-name').value.trim();if(!name){showToast('지점명을 입력하세요');return;}
+  const id=genId(),desc=document.getElementById('new-desc').value.trim(),address=document.getElementById('new-addr').value.trim(),imageUrl=document.getElementById('new-img').value.trim();
+  await setDoc(doc(db,'locations',id),{name,desc,address,imageUrl,order:locations.length});
+  locations.push({id,name,desc,address,imageUrl,order:locations.length,visitCount:0});
+  ['new-name','new-desc','new-addr','new-img'].forEach(id=>document.getElementById(id).value='');
+  updateBadges();renderLocations();renderCourseDetail();showToast('✓ 지점 추가됨');
 };
+window.delLoc=async function(id,name){
+  if(!confirm(`"${name}" 삭제?`))return;
+  await deleteDoc(doc(db,'locations',id));
+  for(const c of courses){if((c.locationIds||[]).includes(id)){c.locationIds=c.locationIds.filter(i=>i!==id);await updateDoc(doc(db,'courses',c.id),{locationIds:c.locationIds});}}
+  locations=locations.filter(l=>l.id!==id);
+  updateBadges();renderLocations();renderCourseDetail();showToast('삭제됨');
+};
+window.clearAllLocs=async function(){
+  if(!confirm('모든 지점을 삭제할까요?'))return;
+  const b=writeBatch(db);locations.forEach(l=>b.delete(doc(db,'locations',l.id)));await b.commit();
+  locations=[];updateBadges();renderLocations();showToast('전체 삭제됨');
+};
+window.handleFile=function(e){
+  const f=e.target.files[0];if(!f)return;
+  const ext=f.name.split('.').pop().toLowerCase();
+  if(ext==='csv'){const r=new FileReader();r.onload=ev=>parseCSV(ev.target.result);r.readAsText(f,'UTF-8');}
+  else if(['xlsx','xls'].includes(ext)){const r=new FileReader();r.onload=ev=>parseXLSX(ev.target.result);r.readAsArrayBuffer(f);}
+  else showToast('CSV 또는 Excel만 지원합니다');e.target.value='';
+};
+async function bulkAdd(rows){
+  const b=writeBatch(db);let n=0;const base=locations.length;
+  rows.forEach(([name,desc,address],i)=>{
+    if(!name?.trim())return;const id=genId();
+    b.set(doc(db,'locations',id),{name:name.trim(),desc:(desc||'').trim(),address:(address||'').trim(),imageUrl:'',order:base+i});
+    locations.push({id,name:name.trim(),desc:(desc||'').trim(),address:(address||'').trim(),imageUrl:'',order:base+i,visitCount:0});n++;
+  });
+  await b.commit();updateBadges();renderLocations();renderCourseDetail();showToast(`✓ ${n}개 지점 업로드 완료`);
+}
+function parseCSV(t){const lines=t.trim().split('\n');bulkAdd(lines.slice(1).map(l=>l.split(',').map(c=>c.replace(/^"|"$/g,'').trim())));}
+function parseXLSX(buf){const wb=XLSX.read(buf,{type:'arraybuffer'});const ws=wb.Sheets[wb.SheetNames[0]];const rows=XLSX.utils.sheet_to_json(ws,{header:1});bulkAdd(rows.slice(1).map(r=>[String(r[0]||''),String(r[1]||''),String(r[2]||'')]));}
+window.dlTemplate=function(){const c='지점명,설명,주소\n한옥마을,전주 대표 명소,전북 전주시 완산구 기린대로 99\n경기전,조선 태조 어진 봉안,전북 전주시 완산구 태조로 44';const blob=new Blob(['\uFEFF'+c],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='stamp_template.csv';a.click();};
+window.exportLocCSV=function(){
+  const lcm={};courses.forEach(c=>(c.locationIds||[]).forEach(id=>{if(!lcm[id])lcm[id]=[];lcm[id].push(c.name);}));
+  let c='번호,지점명,설명,주소,코스,방문수\n';locations.forEach((l,i)=>{c+=`${i+1},"${l.name}","${l.desc||''}","${l.address||''}","${(lcm[l.id]||[]).join('/')}","${l.visitCount||0}"\n`;});
+  const blob=new Blob(['\uFEFF'+c],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='stamp_locations.csv';a.click();
+};
+const zone=document.getElementById('upload-zone');
+zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag-over');});
+zone.addEventListener('dragleave',()=>zone.classList.remove('drag-over'));
+zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('drag-over');const f=e.dataTransfer.files[0];if(f)window.handleFile({target:{files:[f],value:''}});});
 
-// ── [복구] 참여자 & 완주 신청 반려 사유 전체 ──
+// ── QR ──
+window.showQR=function(id,idx){
+  const loc=locations.find(l=>l.id===id);if(!loc)return;
+  curQRUrl=`${BASE_URL}?id=${loc.id}&name=${encodeURIComponent(loc.name)}&idx=${idx}`;
+  document.getElementById('qr-title').textContent=loc.name;
+  document.getElementById('qr-url').textContent=curQRUrl;
+  document.getElementById('qr-container').innerHTML='';
+  new QRCode(document.getElementById('qr-container'),{text:curQRUrl,width:190,height:190,colorDark:'#1a1208',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.H});
+  document.getElementById('qr-modal').classList.add('open');
+};
+window.closeQR=function(){document.getElementById('qr-modal').classList.remove('open');};
+document.getElementById('qr-modal').addEventListener('click',function(e){if(e.target===this)window.closeQR();});
+window.dlQR=function(){setTimeout(()=>{const c=document.querySelector('#qr-container canvas');if(!c){showToast('잠시 후 다시 시도');return;}const a=document.createElement('a');a.download=`QR_${document.getElementById('qr-title').textContent}.png`;a.href=c.toDataURL();a.click();},100);};
+window.copyURL=function(){navigator.clipboard.writeText(curQRUrl).then(()=>showToast('✓ URL 복사됨'));};
+
+// ── 참여자 ──
 window.renderParts=function(){
   const q=document.getElementById('p-search').value.toLowerCase();
-  const tbody=document.getElementById('p-tbody'); tbody.innerHTML='';
-  participants.filter(p=>(p.name||'').toLowerCase().includes(q)||(p.phone||'').includes(q)).forEach((p,i)=>{
-    const s=allStamps[p.uid]||{}; const v=Object.keys(s).length;
-    tbody.innerHTML+=`<tr><td>${i+1}</td><td><strong>${esc(p.name)}</strong></td><td>${fmtPhone(p.phone)}</td><td>${v}/${locations.length}</td><td>-</td><td>${fmtDate(p.updatedAt)}</td><td>${p.applied?'<span class="sb sb-applied">완주신청</span>':'<span class="sb sb-active">진행중</span>'}</td><td><button class="btn btn-outline btn-sm" onclick="showDetail('${p.uid}')">상세</button> <button class="btn btn-danger btn-sm" onclick="deleteUserAdmin('${p.uid}','${p.name}')">탈퇴</button></td></tr>`;
+  const f=document.getElementById('p-filter').value;
+  let list=participants.filter(p=>{
+    const mq=!q||(p.name||'').toLowerCase().includes(q)||(p.phone||'').includes(q.replace(/-/g,''));
+    if(f==='applied')return mq&&p.applied;
+    if(f==='active')return mq&&Object.keys(allStamps[p.uid]||{}).length>0;
+    return mq;
+  }).sort((a,b)=>new Date(b.updatedAt||0)-new Date(a.updatedAt||0));
+  const tbody=document.getElementById('p-tbody');tbody.innerHTML='';
+  if(!list.length){tbody.innerHTML='<tr class="empty-row"><td colspan="8">참여자 없음</td></tr>';return;}
+  list.forEach((p,i)=>{
+    const s=allStamps[p.uid]||{};const v=Object.keys(s).length;const tot=locations.length;
+    const pct=tot?Math.round(v/tot*100):0;
+    const cc=getCompletedCourses(p.uid);
+    const {req,done}=getRequiredStatus(p.uid);
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td style="color:#bbb;font-size:.72rem">${i+1}</td>
+      <td><div style="font-weight:500">${esc(p.name)}</div></td>
+      <td style="font-size:.78rem;color:#7a6a50">${fmtPhone(p.phone)}</td>
+      <td><div style="font-size:.74rem;color:#7a6a50">${v}/${tot}곳</div><div class="pm-bar"><div class="pm-fill" style="width:${pct}%"></div></div></td>
+      <td style="font-size:.74rem">${cc.length?cc.map(c=>`<span style="background:${c.required?'#fff3e0':'#e8f5e9'};color:${c.required?'#e65100':'var(--green)'};border:1px solid ${c.required?'#ffcc80':'#a5d6a7'};border-radius:3px;padding:1px 5px;font-size:.66rem">${c.required?'⭐ ':''} ${esc(c.name)}</span>`).join(' '):'<span style="color:#bbb">없음</span>'}</td>
+      <td style="font-size:.71rem;color:#aaa">${fmtDate(p.updatedAt)}</td>
+      <td>${p.applied?'<span class="sb sb-applied">완주신청</span>':cc.length?'<span class="sb sb-complete">신청가능</span>':'<span class="sb sb-active">진행중</span>'}${req.length?`<div style="font-size:.65rem;color:#aaa;margin-top:2px">필수 ${done.length}/${req.length}</div>`:''}</td>
+      <td><div class="row-actions"><button class="btn btn-outline btn-sm" onclick="showDetail('${p.uid}')">상세</button><button class="btn btn-danger btn-sm" onclick="deleteUserAdmin('${p.uid}','${esc(p.name)}')">탈퇴</button></div></td>`;
+    tbody.appendChild(tr);
   });
 };
+window.deleteUserAdmin=async function(uid,name){
+  if(!confirm(`"${name}" 님 계정을 영구 삭제할까요?`))return;
+  const b=writeBatch(db);
+  const sSnap=await getDocs(collection(db,'participants',uid,'stamps'));
+  sSnap.forEach(d=>b.delete(d.ref));b.delete(doc(db,'participants',uid));await b.commit();
+  participants=participants.filter(p=>p.uid!==uid);delete allStamps[uid];
+  updateBadges();renderParts();renderOverview();showToast('✓ 계정 삭제 완료');
+};
+window.exportPartsCSV=function(){
+  let c='이름,전화번호,방문수,완주코스,가입일\n';
+  participants.forEach(p=>{const v=Object.keys(allStamps[p.uid]||{}).length;const cc=getCompletedCourses(p.uid).map(c=>c.name).join('/');c+=`"${p.name}","${fmtPhone(p.phone)}","${v}","${cc}","${fmtDate(p.createdAt)}"\n`;});
+  const blob=new Blob(['\uFEFF'+c],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`참여자_${new Date().toLocaleDateString('ko')}.csv`;a.click();
+};
+
+// ── 완주 신청 ──
 window.renderComps=function(){
-  const tbody=document.getElementById('c-tbody'); tbody.innerHTML='';
-  participants.filter(p=>p.applied).forEach((p,i)=>{
-    const status=p.applyStatus||'pending';
-    tbody.innerHTML+=`<tr><td>${i+1}</td><td>${esc(p.name)}</td><td>${esc(p.applyName||p.name)}</td><td>${fmtPhone(p.phone)}</td><td>${fmtDate(p.appliedAt)}</td><td>${Object.keys(allStamps[p.uid]||{}).length}</td><td>${status}</td><td><button class="btn btn-green btn-sm" onclick="processApply('${p.uid}','approved')">승인</button> <button class="btn btn-danger btn-sm" onclick="processApply('${p.uid}','rejected')">반려</button></td></tr>`;
+  const q=document.getElementById('c-search').value.toLowerCase();
+  const f=document.getElementById('c-filter').value;
+  let list=participants.filter(p=>p.applied&&(!q||(p.name||'').toLowerCase().includes(q)||(p.applyPhone||p.phone||'').includes(q.replace(/-/g,''))));
+  if(f==='pending')list=list.filter(p=>!p.applyStatus||p.applyStatus==='pending');
+  else if(f==='approved')list=list.filter(p=>p.applyStatus==='approved');
+  else if(f==='rejected')list=list.filter(p=>p.applyStatus==='rejected');
+  list.sort((a,b)=>new Date(b.appliedAt||0)-new Date(a.appliedAt||0));
+  const tbody=document.getElementById('c-tbody');tbody.innerHTML='';
+  if(!list.length){tbody.innerHTML='<tr class="empty-row"><td colspan="9">완주 신청 없음</td></tr>';return;}
+  const statusMap={pending:['대기중','#fff3e0','#e65100'],approved:['승인 완료','#e8f5e9','var(--green)'],rejected:['반려','#fde8e8','var(--seal)']};
+  list.forEach((p,i)=>{
+    const s=allStamps[p.uid]||{};const v=Object.keys(s).length;
+    const cc=getCompletedCourses(p.uid);const status=p.applyStatus||'pending';
+    const [statusLabel,statusBg,statusColor]=statusMap[status]||statusMap.pending;
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td style="color:#bbb;font-size:.72rem">${i+1}</td>
+      <td style="font-weight:500">${esc(p.name)}</td><td>${esc(p.applyName||p.name)}</td>
+      <td style="color:#7a6a50">${fmtPhone(p.applyPhone||p.phone)}</td>
+      <td style="font-size:.72rem;color:#aaa">${fmtDate(p.appliedAt)}</td>
+      <td style="font-weight:600">${v}/${locations.length}</td>
+      <td style="font-size:.74rem">${cc.length?cc.map(c=>`<span style="background:#e8f5e9;color:var(--green);border:1px solid #a5d6a7;border-radius:3px;padding:1px 5px;font-size:.66rem">${esc(c.name)}</span>`).join(' '):'<span style="color:#bbb">없음</span>'}</td>
+      <td><span style="background:${statusBg};color:${statusColor};border-radius:10px;padding:2px 10px;font-size:.72rem;font-weight:500">${statusLabel}</span>${p.applyMemo?`<div style="font-size:.68rem;color:#aaa;margin-top:2px">${esc(p.applyMemo)}</div>`:''}</td>
+      <td><div style="display:flex;gap:4px;flex-wrap:wrap;">
+        ${status!=='approved'?`<button class="btn btn-green btn-sm" onclick="processApply('${p.uid}','approved')">승인</button>`:''}
+        ${status!=='rejected'?`<button class="btn btn-danger btn-sm" onclick="processApply('${p.uid}','rejected')">반려</button>`:''}
+        <button class="btn btn-outline btn-sm" onclick="showDetail('${p.uid}')">상세</button>
+      </div></td>`;
+    tbody.appendChild(tr);
   });
 };
 window.processApply=async function(uid,status){
-  let memo=''; if(status==='rejected'){memo=prompt('반려 사유를 입력하세요:')||'';}
-  if(!confirm(`${status==='approved'?'승인':'반려'} 처리할까요?`))return;
-  await updateDoc(doc(db,'participants',uid),{applyStatus:status, applyMemo:memo, applyProcessedAt:new Date().toISOString()});
-  loadAll();
+  const p=participants.find(p=>p.uid===uid);if(!p)return;
+  const label=status==='approved'?'승인':'반려';
+  let memo='';if(status==='rejected'){memo=prompt('반려 사유를 입력하세요 (선택사항):','')??'';}
+  if(!confirm(`${p.name} 님의 완주 신청을 ${label} 처리할까요?`))return;
+  await updateDoc(doc(db,'participants',uid),{applyStatus:status,applyMemo:memo,applyProcessedAt:new Date().toISOString()});
+  p.applyStatus=status;p.applyMemo=memo;renderComps();showToast(`✓ ${p.name} 님 ${label} 처리 완료`);
+};
+window.exportCompsCSV=function(){
+  const ap=participants.filter(p=>p.applied);
+  let c='계정이름,신청이름,신청전화번호,신청시각,방문수,완주코스,처리상태\n';
+  ap.forEach(p=>{const v=Object.keys(allStamps[p.uid]||{}).length;const cc=getCompletedCourses(p.uid).map(c=>c.name).join('/');c+=`"${p.name}","${p.applyName||p.name}","${fmtPhone(p.applyPhone||p.phone)}","${fmtDate(p.appliedAt)}","${v}","${cc}","${p.applyStatus||'pending'}"\n`;});
+  const blob=new Blob(['\uFEFF'+c],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`완주신청_${new Date().toLocaleDateString('ko')}.csv`;a.click();
 };
 
-// ── 상세 모달 탭 및 스탬프 관리 ──
-window.showDetail=function(uid){
-  const p=participants.find(u=>u.uid===uid); currentDetailUid=uid;
-  document.getElementById('d-name').textContent=p.name+' 님';
-  document.getElementById('d-info').textContent=`가입: ${fmtDate(p.createdAt)} · 전화: ${fmtPhone(p.phone)}`;
-  renderStampManage(uid); document.getElementById('detail-modal').classList.add('open');
-};
+// ── 상세 모달 & 스탬프 관리 ──
 window.switchDTab=function(tab,el){
-  document.querySelectorAll('.detail-tab-btn').forEach(b=>b.classList.remove('active')); el.classList.add('active');
-  document.getElementById('dtab-coures').style.display=tab==='coures'?'block':'none';
-  document.getElementById('dtab-stamps').style.display=tab==='stamps'?'block':'none';
+  ['courses','stamps'].forEach(t=>{
+    const btn=document.getElementById(`dtab-btn-${t}`);
+    btn.style.color=t===tab?'var(--seal)':'#7a6a50';
+    btn.style.borderBottomColor=t===tab?'var(--seal)':'transparent';
+    document.getElementById(`dtab-${t}`).style.display=t===tab?'block':'none';
+  });
+  if(tab==='stamps')renderStampManage(currentDetailUid);
+};
+window.showDetail=function(uid){
+  const p=participants.find(p=>p.uid===uid);if(!p)return;
+  currentDetailUid=uid;
+  document.getElementById('d-name').textContent=p.name+' 님';
+  document.getElementById('d-info').innerHTML=`전화: ${fmtPhone(p.phone)} · 방문: ${Object.keys(allStamps[uid]||{}).length}/${locations.length}곳 · 가입: ${fmtDate(p.createdAt)}<br>${p.applied?`✓ 완주신청: ${fmtDate(p.appliedAt)} / 신청이름: ${p.applyName||'-'} / 신청전화: ${fmtPhone(p.applyPhone)}`:''}`;
+  const s=allStamps[uid]||{};const dc=document.getElementById('d-courses');dc.innerHTML='';
+  courses.forEach((c,ci)=>{
+    const ids=c.locationIds||[];const cnt=ids.filter(id=>s[id]).length;const color=COLORS[ci%COLORS.length];
+    const spots=ids.map(id=>{const l=locations.find(l=>l.id===id);return`<div class="d-spot${s[id]?' v':''}">${l?.name||id}</div>`;}).join('');
+    dc.innerHTML+=`<div class="d-cb"><div class="d-ch"><div style="width:8px;height:8px;border-radius:50%;background:${color}"></div><strong style="font-size:.82rem">${esc(c.name)}</strong>${c.required?'<span style="background:#b8860b;color:white;border-radius:6px;padding:1px 5px;font-size:.62rem">필수</span>':''}<span style="margin-left:auto;font-size:.72rem;color:#7a6a50">${cnt}/${ids.length}</span>${cnt>=ids.length&&ids.length>0?'<span style="background:var(--gold);color:white;border-radius:8px;padding:1px 7px;font-size:.65rem">완주</span>':''}</div><div class="d-spots">${spots}</div></div>`;
+  });
+  // 탭 초기화
+  window.switchDTab('courses',document.getElementById('dtab-btn-courses'));
+  // 스탬프 select 채우기
+  const sel=document.getElementById('stamp-add-select');sel.innerHTML='<option value="">지점 선택...</option>';
+  locations.forEach(l=>sel.innerHTML+=`<option value="${l.id}">${esc(l.name)}</option>`);
+  document.getElementById('detail-modal').classList.add('open');
 };
 function renderStampManage(uid){
-  const s=allStamps[uid]||{}; const list=document.getElementById('stamp-manage-list'); list.innerHTML='';
-  Object.entries(s).forEach(([id,d])=>{ const chip=document.createElement('div'); chip.style.cssText='padding:5px 12px;background:#e8f5e9;border-radius:20px;font-size:.75rem;cursor:pointer;'; chip.innerHTML=`✓ ${esc(d.locName)} ✕`; chip.onclick=()=>removeStampAdmin(uid,id); list.appendChild(chip); });
+  const s=allStamps[uid]||{};
+  const list=document.getElementById('stamp-manage-list');
+  const empty=document.getElementById('stamp-manage-empty');
+  const stamped=Object.entries(s);
+  if(!stamped.length){list.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';list.innerHTML='';
+  stamped.forEach(([locId,data])=>{
+    const loc=locations.find(l=>l.id===locId);
+    const chip=document.createElement('div');
+    chip.style.cssText='display:inline-flex;align-items:center;gap:5px;padding:5px 10px;background:#e8f5e9;border:1px solid #a5d6a7;border-radius:20px;font-size:.75rem;color:var(--green);cursor:pointer;transition:all .15s;';
+    chip.innerHTML=`✓ ${esc(loc?.name||locId)} <span style="color:#e74c3c">✕</span>`;
+    chip.onmouseenter=()=>{chip.style.background='#fde8e8';chip.style.borderColor='#e74c3c';chip.style.color='#e74c3c';};
+    chip.onmouseleave=()=>{chip.style.background='#e8f5e9';chip.style.borderColor='#a5d6a7';chip.style.color='var(--green)';};
+    chip.onclick=()=>removeStampAdmin(uid,locId,loc?.name||locId);
+    list.appendChild(chip);
+  });
 }
-
-window.loadAdminInquiries=async function(){
-  const snap=await getDocs(collection(db,'inquiries')); const tbody=document.getElementById('inquiry-tbody'); tbody.innerHTML='';
-  snap.forEach(d=>{ const i=d.data(); tbody.innerHTML+=`<tr><td>${i.status}</td><td>${esc(i.name)}</td><td>${esc(i.content)}</td><td>${esc(i.answer)}</td><td><button class="btn btn-outline btn-sm" onclick="answerInquiry('${d.id}')">답변</button></td></tr>`; });
+window.addStampAdmin=async function(){
+  const uid=currentDetailUid;if(!uid)return;
+  const locId=document.getElementById('stamp-add-select').value;if(!locId){showToast('지점을 선택해주세요');return;}
+  const loc=locations.find(l=>l.id===locId);
+  if(allStamps[uid]?.[locId]){showToast('이미 스탬프가 있어요');return;}
+  const now=new Date().toISOString();
+  await setDoc(doc(db,'participants',uid,'stamps',locId),{locId,locName:loc?.name||locId,visitedAt:now});
+  await updateDoc(doc(db,'participants',uid),{visitCount:Object.keys(allStamps[uid]||{}).length+1,updatedAt:now});
+  if(!allStamps[uid])allStamps[uid]={};allStamps[uid][locId]={locId,locName:loc?.name||locId,visitedAt:now};
+  renderStampManage(uid);renderParts();showToast(`✓ ${loc?.name} 스탬프 추가됨`);
 };
-window.answerInquiry=async function(id){const ans=prompt('답변 내용을 입력하세요:'); if(ans) await updateDoc(doc(db,'inquiries',id),{answer:ans,status:'answered'}); loadAdminInquiries();};
+window.removeStampAdmin=async function(uid,locId,locName){
+  if(!confirm(`"${locName}" 스탬프를 삭제할까요?`))return;
+  await deleteDoc(doc(db,'participants',uid,'stamps',locId));
+  const cnt=Math.max(0,Object.keys(allStamps[uid]||{}).length-1);
+  await updateDoc(doc(db,'participants',uid),{visitCount:cnt,updatedAt:new Date().toISOString()});
+  delete allStamps[uid][locId];renderStampManage(uid);renderParts();showToast(`"${locName}" 스탬프 삭제됨`);
+};
+document.getElementById('detail-modal').addEventListener('click',function(e){if(e.target===this)e.target.classList.remove('open');});
 
-window.sw=function(id,el){document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.page-section').forEach(s=>s.classList.remove('active'));el.classList.add('active');document.getElementById('section-'+id).classList.add('active');};
-function updateBadges(){document.getElementById('nb-locs').textContent=locations.length;document.getElementById('nb-courses').textContent=courses.length;document.getElementById('nb-parts').textContent=participants.length;}
+// ── 공지사항 ──
+async function loadNoticesData(){
+  const snap=await getDocs(collection(db,'notices'));
+  notices=[];snap.forEach(d=>notices.push({id:d.id,...d.data()}));
+  notices.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+  renderNotices();
+}
+function renderNotices(){
+  document.getElementById('notice-cnt-label').textContent=`${notices.length}개`;
+  const el=document.getElementById('notice-list');
+  if(!notices.length){el.innerHTML='<div style="padding:28px;text-align:center;color:#bbb;font-size:.81rem">등록된 공지사항이 없어요</div>';return;}
+  const typeIcon={'info':'📢','event':'🎉','warning':'⚠️'};
+  const pageLabel={'all':'전체','main':'메인','mypage':'마이페이지'};
+  el.innerHTML='';
+  notices.forEach(n=>{
+    const div=document.createElement('div');div.style.cssText='padding:14px 16px;border-bottom:1px solid var(--aged);display:flex;align-items:flex-start;gap:12px;';
+    div.innerHTML=`<div style="flex:1;min-width:0;"><div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;flex-wrap:wrap;"><span style="font-size:.82rem;font-weight:600;color:var(--ink)">${typeIcon[n.type]||'📢'} ${esc(n.title)}</span><span style="font-size:.66rem;padding:1px 7px;border-radius:8px;background:${n.active?'#e8f5e9':'#f5f5f5'};color:${n.active?'var(--green)':'#aaa'};border:1px solid ${n.active?'#a5d6a7':'#ddd'}">${n.active?'노출중':'숨김'}</span><span style="font-size:.66rem;padding:1px 7px;border-radius:8px;background:#e3f2fd;color:var(--blue);border:1px solid #90caf9">${pageLabel[n.page]||'전체'}</span></div><div style="font-size:.79rem;color:#7a6a50;line-height:1.6;margin-bottom:4px;">${esc(n.content)}</div><div style="font-size:.69rem;color:#bbb;">${fmtDate(n.createdAt)}</div></div><div style="display:flex;gap:5px;flex-shrink:0;"><button class="btn btn-outline btn-sm" onclick="toggleNotice('${n.id}',${!n.active})">${n.active?'숨기기':'노출'}</button><button class="btn btn-danger btn-sm" onclick="deleteNotice('${n.id}')">삭제</button></div>`;
+    el.appendChild(div);
+  });
+}
+window.addNotice=async function(){
+  const title=document.getElementById('notice-title').value.trim();const content=document.getElementById('notice-content').value.trim();
+  if(!title||!content){showToast('제목과 내용을 입력해주세요');return;}
+  const type=document.getElementById('notice-type').value;const page=document.getElementById('notice-page').value;
+  const id=genId();const now=new Date().toISOString();
+  await setDoc(doc(db,'notices',id),{title,content,type,page,active:true,createdAt:now});
+  notices.unshift({id,title,content,type,page,active:true,createdAt:now});
+  document.getElementById('notice-title').value='';document.getElementById('notice-content').value='';
+  renderNotices();document.getElementById('nb-notices').textContent=notices.filter(n=>n.active).length;showToast('✓ 공지사항 등록됨');
+};
+window.toggleNotice=async function(id,active){
+  await updateDoc(doc(db,'notices',id),{active});const n=notices.find(n=>n.id===id);if(n)n.active=active;
+  renderNotices();document.getElementById('nb-notices').textContent=notices.filter(n=>n.active).length;showToast(active?'✓ 공지 노출됨':'공지 숨김 처리됨');
+};
+window.deleteNotice=async function(id){
+  if(!confirm('공지사항을 삭제할까요?'))return;await deleteDoc(doc(db,'notices',id));notices=notices.filter(n=>n.id!==id);
+  renderNotices();document.getElementById('nb-notices').textContent=notices.filter(n=>n.active).length;showToast('삭제됨');
+};
 
-loadAll();
+// ── 탭 전환 ──
+window.sw=function(id,el){
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.page-section').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active');document.getElementById('section-'+id).classList.add('active');
+};
 </script>
-</div>
+</div><!-- /admin-wrap -->
 </body>
 </html>
