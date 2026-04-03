@@ -408,6 +408,25 @@ async function load(){
         const remainingIds=locIds.filter(id=>!stamps[id]);
         const total=locIds.length,count=visitedIds.length;
         const pct=total?Math.round(count/total*100):0;
+        // --- 코스 진행률 알림 로직 시작 ---
+        const notifiedKey = `notified_${course.id}_${uid}`;
+        const lastNotifiedLevel = parseInt(localStorage.getItem(notifiedKey) || '0');
+
+        let currentLevel = 0;
+        if (pct >= 90) currentLevel = 90;
+        else if (pct >= 80) currentLevel = 80;
+        else if (pct >= 50) currentLevel = 50;
+
+        // 이전 기록보다 높은 단계에 도달했을 때만 알림 발생
+        if (currentLevel > lastNotifiedLevel) {
+          // 화면 로딩 직후 알림이 여러 개 겹치지 않게 약간의 시차를 두고 실행
+          setTimeout(() => {
+            showToast(`🎉 [${course.name}] 코스 ${currentLevel}% 돌파! 완주가 머지 않았어요!`);
+          }, 1000 + (ci * 200)); 
+          
+          localStorage.setItem(notifiedKey, currentLevel);
+        }
+        // --- 코스 진행률 알림 로직 끝 ---
         const isComplete=count>=total&&total>0;
 
         const stampGridHtml=locIds.map((id,li)=>{
