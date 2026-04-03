@@ -85,7 +85,25 @@
   .btn-hero-main{padding:15px 36px;background:var(--seal);color:white;border-radius:4px;font-family:'Noto Serif KR',serif;font-weight:600;text-decoration:none;transition:.2s;}
   .btn-hero-main:hover{transform:translateY(-2px); box-shadow:0 8px 24px rgba(192,57,43,.35);}
   /* ⚠️ [수정] 코스 둘러보기 버튼 글자색 조정 (가독성 확보) */
-  .btn-hero-sub{padding:15px 36px;border:1.5px solid rgba(232,220,200,.35);color: #f0e8d4; text-decoration:none;}
+  .btn-hero-sub {
+    padding: 15px 36px;
+    background: #ffffff; /* 배경을 완전 흰색으로 고정 */
+    border: 2px solid #1a2b4d; /* 테두리를 진한 남색으로 변경 */
+    color: #1a2b4d !important; /* 글자색을 진한 남색으로 강제 고정 */
+    border-radius: 4px;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s;
+  }
+
+  .btn-hero-sub:hover {
+    background: #f0e8d4; /* 호버 시 살짝 베이지색으로 변경 */
+    border-color: var(--gold);
+    color: var(--gold) !important;
+  }
 
   /* ── About Section (기존 원본 문구 유지) ── */
   .section{padding:80px 24px; text-align:center;}
