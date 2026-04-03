@@ -15,45 +15,44 @@
   body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");pointer-events:none;z-index:0;}
 
   /* ── Nav ── */
- /* 내비게이션 바 레이아웃 최적화 */
+/* 상단 내비게이션 바 전체 최적화 */
   nav {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
+    top: 0; left: 0; right: 0;
     z-index: 100;
-    padding: 12px 20px; /* 여백을 좁혀서 공간 확보 */
+    padding: 10px 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: linear-gradient(to bottom, rgba(15, 30, 56, 0.98), rgba(15, 30, 56, 0.8));
-    backdrop-filter: blur(8px);
+    background: rgba(15, 30, 56, 0.95);
+    backdrop-filter: blur(10px);
     height: 64px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   }
 
   .nav-logo {
-    font-family: 'Noto Serif KR', serif;
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: #f0e8d4;
-    letter-spacing: .06em;
     display: flex;
     align-items: center;
     gap: 8px;
-    flex-shrink: 1; /* 공간 부족 시 로고 영역이 줄어들게 허용 */
-    min-width: 0;
+    /* ⚠️ 핵심: 로고 문구 줄바꿈 절대 방지 */
+    white-space: nowrap; 
+    flex-shrink: 0;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #f0e8d4;
   }
 
   .nav-logo img {
-    height: 28px; /* 로고 이미지 크기 최적화 */
+    height: 30px;
     width: auto;
   }
 
   .nav-actions {
     display: flex;
-    gap: 8px; /* 버튼 간격 좁힘 */
+    gap: 8px;
     align-items: center;
-    flex-shrink: 0; /* 버튼 그룹은 깨지지 않게 보호 */
+    /* 로그아웃 버튼이 빠져서 여유가 생깁니다 */
   }
 
   .nav-btn {
@@ -62,29 +61,19 @@
     font-size: 0.78rem;
     font-family: 'Noto Sans KR', sans-serif;
     cursor: pointer;
-    transition: all .2s;
     text-decoration: none;
-    display: inline-block;
-    white-space: nowrap; /* 글자 줄바꿈 방지 */
+    transition: all 0.2s;
   }
 
   .nav-btn-outline {
-    background: transparent;
-    border: 1.2px solid rgba(232, 220, 200, .3);
-    color: rgba(232, 220, 200, .7);
-  }
-
-  .nav-btn-fill {
-    background: rgba(255, 255, 255, .1);
-    border: 1.2px solid rgba(255, 255, 255, .15);
-    color: white;
+    border: 1px solid rgba(232, 220, 200, 0.3);
+    color: rgba(232, 220, 200, 0.7);
   }
 
   .nav-btn-mypage {
-    background: var(--gold);
-    border: 1.2px solid var(--gold);
+    background: #d4af37; /* 골드 */
     color: white;
-    display: none; /* 로그인 상태에 따라 JS에서 block 처리됨 */
+    display: none; /* 로그인 시 JS로 보임 */
   }
 
   /* 📱 모바일 디바이스(화면 폭 480px 이하) 대응 */
@@ -346,7 +335,7 @@
   <p>
     <a href="courses.html">코스 안내</a>
     <a href="notices.html">공지사항</a>
-    <a href="login.html">로그인</a>
+    <a href="login.html" id="footer-login-btn" class="footer-item">로그인</a>
     <a href="admin.html">관리자</a>
   </p>
   <p style="margin-top:12px">© 2025 전주시 자전거 여권. All rights reserved.</p>
