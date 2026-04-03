@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>공지사항 · 전주시 자전거 여권</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#1a1208;--paper:#f5efe3;--aged:#e8dcc8;--seal:#c0392b;--gold:#b8860b;--green:#2d6a4f;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:#2c1f0e;background-image:radial-gradient(ellipse at 50% 0%,rgba(184,134,11,.1) 0%,transparent 55%);min-height:100vh;font-family:'Noto Sans KR',sans-serif;padding-bottom:60px;}
+
+  /* Hero */
+  .hero{background:linear-gradient(160deg,#1a2744 0%,#0f1e38 100%);padding:52px 24px 36px;text-align:center;position:relative;overflow:hidden;}
+  .hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 14px,rgba(255,255,255,.006) 14px,rgba(255,255,255,.006) 15px);}
+  .hero-nav{position:absolute;top:18px;left:20px;}
+  .back-btn{color:rgba(232,220,200,.5);font-size:.78rem;text-decoration:none;display:flex;align-items:center;gap:4px;transition:color .2s;}
+  .back-btn:hover{color:rgba(232,220,200,.9);}
+  .hero-emblem{font-size:2.2rem;display:block;margin-bottom:8px;position:relative;}
+  .hero-label{font-size:.63rem;letter-spacing:.35em;color:rgba(232,220,200,.4);margin-bottom:5px;position:relative;}
+  .hero-title{font-family:'Noto Serif KR',serif;font-size:1.7rem;font-weight:700;color:#d4af37;position:relative;margin-bottom:5px;}
+  .hero-sub{font-size:.81rem;color:rgba(232,220,200,.5);position:relative;}
+
+  /* Content */
+  .main{max-width:700px;margin:0 auto;padding:28px 16px 0;}
+
+  /* Filter tabs */
+  .filter-tabs{display:flex;gap:7px;margin-bottom:20px;overflow-x:auto;padding-bottom:4px;}
+  .filter-tab{padding:6px 16px;border-radius:20px;border:1.5px solid var(--aged);background:white;font-family:'Noto Sans KR',sans-serif;font-size:.78rem;color:#7a6a50;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;}
+  .filter-tab.active{background:var(--ink);color:white;border-color:var(--ink);}
+
+  /* Notice cards */
+  .notice-list{display:flex;flex-direction:column;gap:10px;}
+  .notice-card{background:white;border:1px solid var(--aged);border-radius:10px;overflow:hidden;cursor:pointer;transition:all .2s;animation:fadeUp .4s both;}
+  .notice-card:hover{border-color:var(--gold);box-shadow:0 4px 20px rgba(26,18,8,.1);transform:translateY(-2px);}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .notice-card-header{padding:16px 18px;display:flex;align-items:flex-start;gap:12px;}
+  .notice-type-badge{flex-shrink:0;width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
+  .notice-info{flex:1;min-width:0;}
+  .notice-title{font-family:'Noto Serif KR',serif;font-size:.95rem;font-weight:600;color:var(--ink);margin-bottom:4px;line-height:1.4;}
+  .notice-meta{display:flex;align-items:center;gap:8px;font-size:.71rem;color:#aaa;}
+  .notice-tag{padding:1px 8px;border-radius:8px;font-size:.67rem;font-weight:500;}
+  .notice-preview{padding:0 18px 14px;font-size:.81rem;color:#7a6a50;line-height:1.7;display:none;}
+  .notice-card.open .notice-preview{display:block;}
+  .notice-chevron{font-size:.8rem;color:#ccc;transition:transform .3s;flex-shrink:0;margin-top:2px;}
+  .notice-card.open .notice-chevron{transform:rotate(90deg);}
+
+  /* New badge */
+  .new-badge{background:var(--seal);color:white;font-size:.6rem;padding:1px 5px;border-radius:4px;font-weight:600;vertical-align:middle;margin-left:5px;}
+
+  /* Empty */
+  .empty-state{text-align:center;padding:60px 20px;color:#7a6a50;}
+  .empty-state .icon{font-size:3rem;display:block;margin-bottom:12px;opacity:.4;}
+  .empty-state p{font-size:.84rem;}
+
+  /* Loading */
+  .spinner{width:36px;height:36px;border:3px solid var(--aged);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin:40px auto;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-nav"><a class="back-btn" href="index.html">← 메인</a></div>
+  <span class="hero-emblem">📢</span>
+  <div class="hero-label">NOTICE BOARD</div>
+  <div class="hero-title">공지사항</div>
+  <div class="hero-sub">전주시 자전거 여권 새소식을 확인하세요</div>
+</div>
+
+<div class="main">
+  <div class="filter-tabs">
+    <button class="filter-tab active" onclick="filterNotices('all',this)">전체</button>
+    <button class="filter-tab" onclick="filterNotices('info',this)">📢 일반</button>
+    <button class="filter-tab" onclick="filterNotices('event',this)">🎉 이벤트</button>
+    <button class="filter-tab" onclick="filterNotices('warning',this)">⚠️ 주의사항</button>
+  </div>
+  <div id="notice-list">
+    <div class="spinner"></div>
+  </div>
+</div>
+
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{getFirestore,getDocs,collection}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const cfg={apiKey:"AIzaSyAW13Cf2qQnsGWYiAdz9rF3TrWkGR_lLNg",authDomain:"stemp-tour.firebaseapp.com",projectId:"stemp-tour",storageBucket:"stemp-tour.firebasestorage.app",messagingSenderId:"823116268455",appId:"1:823116268455:web:4b060bf808eae664f62c82"};
+const db=getFirestore(initializeApp(cfg));
+
+const TYPE_CONFIG={
+  info:{icon:'📢',label:'일반 공지',bg:'#e3f2fd',color:'#1565c0'},
+  event:{icon:'🎉',label:'이벤트',bg:'#e8f5e9',color:'#2d6a4f'},
+  warning:{icon:'⚠️',label:'주의사항',bg:'#fff3e0',color:'#e65100'},
+};
+
+let allNotices=[];
+let curFilter='all';
+
+function fmtDate(iso){
+  if(!iso)return'';
+  const d=new Date(iso);
+  return`${d.getFullYear()}.${d.getMonth()+1}.${d.getDate()}`;
+}
+function isNew(iso){
+  if(!iso)return false;
+  return(Date.now()-new Date(iso).getTime())<1000*60*60*24*3; // 3일 이내
+}
+
+function render(){
+  const list=document.getElementById('notice-list');
+  const filtered=curFilter==='all'?allNotices:allNotices.filter(n=>n.type===curFilter);
+  if(!filtered.length){
+    list.innerHTML='<div class="empty-state"><span class="icon">📭</span><p>등록된 공지사항이 없어요</p></div>';
+    return;
+  }
+  list.innerHTML='';
+  filtered.forEach((n,i)=>{
+    const tc=TYPE_CONFIG[n.type]||TYPE_CONFIG.info;
+    const card=document.createElement('div');
+    card.className='notice-card';
+    card.style.animationDelay=(i*.06)+'s';
+    card.innerHTML=`
+      <div class="notice-card-header" onclick="toggleCard(this)">
+        <div class="notice-type-badge" style="background:${tc.bg}">${tc.icon}</div>
+        <div class="notice-info">
+          <div class="notice-title">${esc(n.title)}${isNew(n.createdAt)?'<span class="new-badge">NEW</span>':''}</div>
+          <div class="notice-meta">
+            <span class="notice-tag" style="background:${tc.bg};color:${tc.color}">${tc.label}</span>
+            <span>${fmtDate(n.createdAt)}</span>
+          </div>
+        </div>
+        <span class="notice-chevron">▶</span>
+      </div>
+      <div class="notice-preview">${esc(n.content).replace(/\n/g,'<br>')}</div>`;
+    list.appendChild(card);
+  });
+}
+
+window.toggleCard=function(headerEl){
+  const card=headerEl.closest('.notice-card');
+  const was=card.classList.contains('open');
+  document.querySelectorAll('.notice-card.open').forEach(c=>c.classList.remove('open'));
+  if(!was)card.classList.add('open');
+};
+
+window.filterNotices=function(type,btn){
+  curFilter=type;
+  document.querySelectorAll('.filter-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+};
+
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+async function load(){
+  try{
+    const snap=await getDocs(collection(db,'notices'));
+    allNotices=[];
+    snap.forEach(d=>allNotices.push({id:d.id,...d.data()}));
+    allNotices=allNotices.filter(n=>n.active).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+    render();
+  }catch(e){
+    document.getElementById('notice-list').innerHTML='<div class="empty-state"><span class="icon">⚠️</span><p>불러오기 실패</p></div>';
+  }
+}
+load();
+</script>
+</body>
+</html>

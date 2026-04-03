@@ -170,9 +170,13 @@
 </div>
 
 <!-- 공지사항 배너 -->
-<div id="notice-banner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:999;padding:10px 20px;text-align:center;font-size:.82rem;font-family:'Noto Sans KR',sans-serif;">
-  <span id="notice-banner-text"></span>
-  <button onclick="document.getElementById('notice-banner').style.display='none'" style="background:none;border:none;color:inherit;margin-left:12px;cursor:pointer;font-size:1rem;opacity:.7;">✕</button>
+<div id="notice-banner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:999;padding:9px 20px;text-align:center;font-size:.8rem;font-family:'Noto Sans KR',sans-serif;">
+  <a id="notice-banner-link" href="notices.html" style="color:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
+    <span id="notice-banner-icon"></span>
+    <span id="notice-banner-text" style="font-weight:500;"></span>
+    <span style="opacity:.6;font-size:.72rem;">자세히 보기 →</span>
+  </a>
+  <button onclick="document.getElementById('notice-banner').style.display='none';document.body.style.paddingTop='0'" style="background:none;border:none;color:inherit;margin-left:14px;cursor:pointer;font-size:1rem;opacity:.6;vertical-align:middle;">✕</button>
 </div>
 
 <div class="passport" id="passport-wrap" style="opacity:0">
@@ -351,7 +355,15 @@ async function load(){
       document.getElementById('completion-cta').style.display='block';
       document.getElementById('cta-title').textContent=`필수 코스 ${completedRequired.length}개 완주 달성! 🎉`;
       document.getElementById('cta-desc').textContent='완주 신청을 하고 기념품을 받아보세요.';
-      if(pData.applied)document.getElementById('cta-btn-wrap').innerHTML='<div class="applied-notice">✓ 완주 신청 완료</div>';
+      if(pData.applied){
+        const status=pData.applyStatus||'pending';
+        const statusHTML={
+          pending:`<div class="applied-notice" style="background:rgba(230,144,0,.2);border-color:rgba(230,144,0,.4);color:#f0a500;">⏳ 완주 신청 검토 중</div>`,
+          approved:`<div class="applied-notice" style="background:rgba(45,106,79,.3);border-color:rgba(165,214,167,.4);color:#a5d6a7;">🎉 완주 신청 승인 완료!</div>`,
+          rejected:`<div style="text-align:center"><div class="applied-notice" style="background:rgba(192,57,43,.2);border-color:rgba(192,57,43,.3);color:#e88;margin-bottom:8px;">❌ 완주 신청 반려${pData.applyMemo?` — ${pData.applyMemo}`:''}</div><button class="btn-apply" onclick="reapplyModal()" style="font-size:.82rem;padding:8px 20px;">재신청하기</button></div>`,
+        };
+        document.getElementById('cta-btn-wrap').innerHTML=statusHTML[status]||statusHTML.pending;
+      }
     } else if(requiredCourses.length>0){
       // 필수 코스가 있지만 아직 미완주 → 진행 현황 표시
       document.getElementById('completion-cta').style.display='block';
@@ -452,9 +464,10 @@ async function load(){
       const [bg,color]=COLORS[n.type]||COLORS.info;
       const typeIcon={'info':'📢','event':'🎉','warning':'⚠️'};
       const banner=document.getElementById('notice-banner');
-      document.getElementById('notice-banner-text').textContent=`${typeIcon[n.type]||'📢'} ${n.title} — ${n.content}`;
+      document.getElementById('notice-banner-icon').textContent=typeIcon[n.type]||'📢';
+      document.getElementById('notice-banner-text').textContent=n.title;
       banner.style.background=bg;banner.style.color=color;banner.style.display='block';
-      document.body.style.paddingTop='44px';
+      document.body.style.paddingTop='38px';
     }
   }catch(e){console.log('notice error',e);}
 }
@@ -532,11 +545,17 @@ window.submitApplication=async function(){
   document.getElementById('apply-error').style.display='none';
   const d=window._myData;
   try{
-    await updateDoc(doc(db,'participants',d.uid),{applied:true,applyName:name,applyPhone:phone,appliedAt:new Date().toISOString()});
+    await updateDoc(doc(db,'participants',d.uid),{applied:true,applyName:name,applyPhone:phone,appliedAt:new Date().toISOString(),applyStatus:'pending',applyMemo:''});
     window.closeApplyModal();
-    document.getElementById('cta-btn-wrap').innerHTML='<div class="applied-notice">✓ 완주 신청 완료</div>';
+    document.getElementById('cta-btn-wrap').innerHTML='<div class="applied-notice" style="background:rgba(230,144,0,.2);border-color:rgba(230,144,0,.4);color:#f0a500;">⏳ 완주 신청 검토 중</div>';
     showToast('✓ 완주 신청이 완료되었습니다!');
   }catch(e){showToast('오류가 발생했습니다.');document.getElementById('btn-submit-apply').disabled=false;}
+};
+window.reapplyModal=function(){
+  // 반려 후 재신청 — 모달 다시 열기
+  document.getElementById('btn-submit-apply').disabled=false;
+  document.getElementById('apply-error').style.display='none';
+  document.getElementById('apply-modal-overlay').classList.add('open');
 };
 
 load();
