@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>완주자 명단 · 전주시 자전거 여권</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@300;400;500&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#1a1208;--paper:#f5efe3;--aged:#e8dcc8;--seal:#c0392b;--gold:#b8860b;--green:#2d6a4f;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:#2c1f0e;background-image:radial-gradient(ellipse at 50% 0%,rgba(184,134,11,.1) 0%,transparent 55%);min-height:100vh;font-family:'Noto Sans KR',sans-serif;padding-bottom:80px;}
+
+  .hero{background:linear-gradient(160deg,#1a2744 0%,#0f1e38 100%);padding:52px 24px 40px;text-align:center;position:relative;overflow:hidden;}
+  .hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 14px,rgba(255,255,255,.006) 14px,rgba(255,255,255,.006) 15px);}
+  .hero-nav{position:absolute;top:18px;left:20px;}
+  .back-btn{color:rgba(232,220,200,.5);font-size:.78rem;text-decoration:none;display:flex;align-items:center;gap:4px;transition:color .2s;}
+  .back-btn:hover{color:rgba(232,220,200,.9);}
+  .hero-emblem{font-size:2.5rem;display:block;margin-bottom:8px;position:relative;filter:drop-shadow(0 2px 12px rgba(184,134,11,.5));}
+  .hero-label{font-size:.63rem;letter-spacing:.35em;color:rgba(232,220,200,.4);margin-bottom:5px;position:relative;}
+  .hero-title{font-family:'Noto Serif KR',serif;font-size:1.9rem;font-weight:700;color:#d4af37;position:relative;margin-bottom:5px;}
+  .hero-sub{font-size:.81rem;color:rgba(232,220,200,.5);position:relative;}
+
+  .main{max-width:700px;margin:0 auto;padding:28px 16px 0;}
+
+  /* 주차 탭 */
+  .week-tabs{display:flex;gap:7px;margin-bottom:24px;overflow-x:auto;padding-bottom:4px;}
+  .week-tab{padding:7px 16px;border-radius:20px;border:1.5px solid var(--aged);background:white;font-family:'Noto Sans KR',sans-serif;font-size:.79rem;color:#7a6a50;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;}
+  .week-tab.active{background:var(--ink);color:#d4af37;border-color:var(--ink);}
+
+  /* 주차 헤더 */
+  .week-header{background:linear-gradient(135deg,#1a2744,#0f1e38);border-radius:12px;padding:20px 24px;margin-bottom:16px;border:1px solid rgba(184,134,11,.3);display:flex;align-items:center;justify-content:space-between;}
+  .week-header-left .week-num{font-family:'IM Fell English',serif;font-size:2rem;color:#d4af37;line-height:1;}
+  .week-header-left .week-date{font-size:.74rem;color:rgba(232,220,200,.5);margin-top:3px;}
+  .week-header-right{text-align:right;}
+  .week-header-right .comp-count{font-family:'Noto Serif KR',serif;font-size:1.6rem;font-weight:700;color:#d4af37;}
+  .week-header-right .comp-label{font-size:.68rem;color:rgba(232,220,200,.45);}
+
+  /* 랭킹 카드 */
+  .ranking-list{display:flex;flex-direction:column;gap:8px;}
+  .rank-card{background:white;border:1px solid var(--aged);border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:14px;animation:fadeUp .4s both;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .rank-card:hover{border-color:var(--gold);box-shadow:0 4px 16px rgba(26,18,8,.1);}
+  .rank-card.top1{background:linear-gradient(135deg,#fffbef,white);border-color:rgba(184,134,11,.5);}
+  .rank-card.top2{background:linear-gradient(135deg,#f8f8f8,white);border-color:#ccc;}
+  .rank-card.top3{background:linear-gradient(135deg,#fff5ef,white);border-color:#e0a882;}
+
+  .rank-num{font-family:'IM Fell English',serif;font-size:1.6rem;width:36px;text-align:center;flex-shrink:0;line-height:1;}
+  .rank-num.gold{color:#d4af37;}
+  .rank-num.silver{color:#9e9e9e;}
+  .rank-num.bronze{color:#cd7f32;}
+  .rank-num.normal{color:#bbb;font-size:1.1rem;}
+
+  .rank-medal{font-size:1.4rem;width:28px;text-align:center;flex-shrink:0;}
+  .rank-info{flex:1;min-width:0;}
+  .rank-nickname{font-family:'Noto Serif KR',serif;font-size:1rem;font-weight:700;color:var(--ink);margin-bottom:2px;}
+  .rank-courses{font-size:.72rem;color:#7a6a50;display:flex;flex-wrap:wrap;gap:4px;margin-top:3px;}
+  .rank-course-chip{background:#e8f5e9;color:var(--green);border:1px solid #a5d6a7;border-radius:8px;padding:1px 7px;font-size:.66rem;}
+  .rank-date{font-size:.68rem;color:#bbb;white-space:nowrap;flex-shrink:0;}
+
+  .empty-state{text-align:center;padding:60px 20px;}
+  .empty-state .icon{font-size:3rem;display:block;margin-bottom:12px;opacity:.4;}
+  .empty-state p{font-size:.84rem;color:#7a6a50;}
+
+  .spinner{width:36px;height:36px;border:3px solid rgba(255,255,255,.15);border-top-color:#d4af37;border-radius:50%;animation:spin .8s linear infinite;margin:40px auto;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* 현재 진행 중 배너 */
+  .current-week-banner{background:linear-gradient(135deg,rgba(184,134,11,.15),rgba(184,134,11,.05));border:1px solid rgba(184,134,11,.3);border-radius:10px;padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;gap:12px;}
+  .cwb-dot{width:8px;height:8px;border-radius:50%;background:#2ecc71;animation:pulse 2s infinite;flex-shrink:0;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+  .cwb-text{font-size:.82rem;color:rgba(232,220,200,.7);}
+  .cwb-text strong{color:#d4af37;}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-nav"><a class="back-btn" href="index.html">← 메인</a></div>
+  <span class="hero-emblem">🏆</span>
+  <div class="hero-label">WEEKLY RANKING</div>
+  <div class="hero-title">완주자 명단</div>
+  <div class="hero-sub">매주 필수 코스를 완주한 라이더들을 소개합니다</div>
+</div>
+
+<div class="main">
+  <div id="loading"><div class="spinner"></div></div>
+  <div id="content" style="display:none">
+    <div class="current-week-banner">
+      <div class="cwb-dot"></div>
+      <div class="cwb-text" id="current-week-text"></div>
+    </div>
+    <div class="week-tabs" id="week-tabs"></div>
+    <div id="week-content"></div>
+  </div>
+</div>
+
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{getFirestore,getDocs,collection}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const cfg={apiKey:"AIzaSyAW13Cf2qQnsGWYiAdz9rF3TrWkGR_lLNg",authDomain:"stemp-tour.firebaseapp.com",projectId:"stemp-tour",storageBucket:"stemp-tour.firebasestorage.app",messagingSenderId:"823116268455",appId:"1:823116268455:web:4b060bf808eae664f62c82"};
+const db=getFirestore(initializeApp(cfg));
+
+function getWeekInfo(date){
+  const d=new Date(date);
+  // 주의 시작: 월요일
+  const day=d.getDay();const diff=d.getDate()-day+(day===0?-6:1);
+  const mon=new Date(d.setDate(diff));mon.setHours(0,0,0,0);
+  const sun=new Date(mon);sun.setDate(sun.getDate()+6);sun.setHours(23,59,59,999);
+  // 주차 번호 (연도 기준)
+  const jan1=new Date(mon.getFullYear(),0,1);
+  const weekNum=Math.ceil(((mon-jan1)/86400000+jan1.getDay()+1)/7);
+  return{weekStart:new Date(mon),weekEnd:sun,weekNum,year:mon.getFullYear(),key:`${mon.getFullYear()}-W${String(weekNum).padStart(2,'0')}`};
+}
+function fmtWeekRange(start,end){
+  const s=new Date(start),e=new Date(end);
+  return`${s.getMonth()+1}.${s.getDate()} ~ ${e.getMonth()+1}.${e.getDate()}`;
+}
+function fmtDate(iso){if(!iso)return'';const d=new Date(iso);return`${d.getMonth()+1}/${d.getDate()} 완주`;}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+
+let weekMap={};// key → [{nickname,courses,completedAt}]
+let weekMeta={};// key → {weekNum,year,start,end}
+let sortedWeeks=[];
+let curWeekKey='';
+
+async function load(){
+  try{
+    const[pSnap,cSnap]=await Promise.all([getDocs(collection(db,'participants')),getDocs(collection(db,'courses'))]);
+    const courses=[];cSnap.forEach(d=>courses.push({id:d.id,...d.data()}));
+    const requiredCourses=courses.filter(c=>c.required);
+
+    // 각 참여자의 스탬프 로드
+    const participants=[];pSnap.forEach(d=>participants.push({uid:d.id,...d.data()}));
+    await Promise.all(participants.map(async p=>{
+      if(!p.applied||p.applyStatus!=='approved')return; // 승인된 완주자만
+      const sSnap=await getDocs(collection(db,'participants',p.uid,'stamps'));
+      const stamps={};sSnap.forEach(d=>stamps[d.id]=d.data());
+      // 필수 코스 모두 완주했는지 확인
+      const completedReq=requiredCourses.filter(c=>{const ids=c.locationIds||[];return ids.length>0&&ids.every(id=>stamps[id]);});
+      if(completedReq.length<requiredCourses.length)return;
+      // 완주 시각 = 마지막 필수 스탬프 시각
+      const reqStampTimes=[];
+      requiredCourses.forEach(c=>(c.locationIds||[]).forEach(id=>{if(stamps[id]?.visitedAt)reqStampTimes.push(stamps[id].visitedAt);}));
+      const completedAt=p.applyProcessedAt||p.appliedAt||reqStampTimes.sort().pop()||'';
+      const wi=getWeekInfo(completedAt||new Date().toISOString());
+      if(!weekMap[wi.key]){weekMap[wi.key]=[];weekMeta[wi.key]=wi;}
+      weekMap[wi.key].push({nickname:p.nickname||p.name||'익명 라이더',courses:completedReq.map(c=>c.name),completedAt});
+    }));
+
+    // 주차 정렬 (최신순)
+    sortedWeeks=Object.keys(weekMap).sort((a,b)=>b.localeCompare(a));
+
+    // 현재 주차
+    const nowWi=getWeekInfo(new Date().toISOString());
+    curWeekKey=nowWi.key;
+    document.getElementById('current-week-text').innerHTML=`<strong>${nowWi.year}년 ${nowWi.weekNum}주차</strong> (${fmtWeekRange(nowWi.weekStart,nowWi.weekEnd)}) 진행 중`;
+
+    // 주차 탭
+    const tabEl=document.getElementById('week-tabs');
+    if(!sortedWeeks.length){
+      document.getElementById('content').style.display='block';
+      document.getElementById('week-content').innerHTML='<div class="empty-state"><span class="icon">🏆</span><p>아직 완주자가 없어요.<br>첫 번째 완주자가 되어보세요!</p></div>';
+      document.getElementById('loading').style.display='none';
+      return;
+    }
+    sortedWeeks.forEach((key,i)=>{
+      const meta=weekMeta[key];
+      const btn=document.createElement('button');
+      btn.className='week-tab'+(i===0?' active':'');
+      btn.textContent=`${meta.year}년 ${meta.weekNum}주차`;
+      btn.onclick=()=>{document.querySelectorAll('.week-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderWeek(key);};
+      tabEl.appendChild(btn);
+    });
+    renderWeek(sortedWeeks[0]);
+    document.getElementById('loading').style.display='none';
+    document.getElementById('content').style.display='block';
+  }catch(e){console.error(e);document.getElementById('loading').innerHTML='<p style="text-align:center;color:#aaa;padding:40px">불러오기 실패</p>';}
+}
+
+function renderWeek(key){
+  const meta=weekMeta[key];
+  const list=(weekMap[key]||[]).sort((a,b)=>new Date(a.completedAt)-new Date(b.completedAt));
+  const el=document.getElementById('week-content');
+  const medals=['🥇','🥈','🥉'];
+  const rankClasses=['top1','top2','top3'];
+  const numColors=['gold','silver','bronze'];
+  el.innerHTML=`
+    <div class="week-header">
+      <div class="week-header-left">
+        <div class="week-num">${meta.year}년 ${meta.weekNum}주차</div>
+        <div class="week-date">${fmtWeekRange(meta.weekStart,meta.weekEnd)}</div>
+      </div>
+      <div class="week-header-right">
+        <div class="comp-count">${list.length}명</div>
+        <div class="comp-label">완주자</div>
+      </div>
+    </div>
+    <div class="ranking-list" id="rank-list"></div>`;
+
+  if(!list.length){
+    document.getElementById('rank-list').innerHTML='<div class="empty-state"><span class="icon">🚲</span><p>이번 주 완주자가 없어요</p></div>';
+    return;
+  }
+  const rankList=document.getElementById('rank-list');
+  list.forEach((p,i)=>{
+    const card=document.createElement('div');
+    card.className='rank-card '+(rankClasses[i]||'');
+    card.style.animationDelay=(i*.05)+'s';
+    const chips=p.courses.map(n=>`<span class="rank-course-chip">${esc(n)}</span>`).join('');
+    card.innerHTML=`
+      <div class="rank-num ${numColors[i]||'normal'}">${i<3?i+1:i+1}</div>
+      <div class="rank-medal">${medals[i]||'🚲'}</div>
+      <div class="rank-info">
+        <div class="rank-nickname">${esc(p.nickname)}</div>
+        <div class="rank-courses">${chips}</div>
+      </div>
+      <div class="rank-date">${fmtDate(p.completedAt)}</div>`;
+    rankList.appendChild(card);
+  });
+}
+load();
+</script>
+</body>
+</html>

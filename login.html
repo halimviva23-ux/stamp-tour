@@ -128,8 +128,13 @@
     <div class="form-section" id="section-register">
       <div class="form-group">
         <label>이름 *</label>
-        <input type="text" id="reg-name" placeholder="홍길동" maxlength="20" onkeydown="if(event.key==='Enter')document.getElementById('reg-phone').focus()"/>
+        <input type="text" id="reg-name" placeholder="홍길동" maxlength="20" onkeydown="if(event.key==='Enter')document.getElementById('reg-nickname').focus()"/>
         <div class="field-error" id="reg-name-err"></div>
+      </div>
+      <div class="form-group">
+        <label>닉네임 * <span style="font-size:.68rem;color:#aaa">(랭킹에 공개됩니다)</span></label>
+        <input type="text" id="reg-nickname" placeholder="예: 전주라이더" maxlength="15" onkeydown="if(event.key==='Enter')document.getElementById('reg-phone').focus()"/>
+        <div class="field-error" id="reg-nickname-err"></div>
       </div>
       <div class="form-group">
         <label>휴대폰 번호 *</label>
@@ -234,9 +239,11 @@ window.doLogin=async function(){
 
 window.doRegister=async function(){
   const name=document.getElementById('reg-name').value.trim();
+  const nickname=document.getElementById('reg-nickname').value.trim();
   const phone=document.getElementById('reg-phone').value.trim();
   let ok=true;
   if(!name){fieldErr('reg-name-err','이름을 입력해주세요.');ok=false;}else fieldErr('reg-name-err','');
+  if(!nickname){fieldErr('reg-nickname-err','닉네임을 입력해주세요.');ok=false;}else fieldErr('reg-nickname-err','');
   if(!validPhone(phone)){fieldErr('reg-phone-err','올바른 휴대폰 번호를 입력해주세요.');ok=false;}else fieldErr('reg-phone-err','');
   if(!ok)return;
   hideGlobalErr();
@@ -254,9 +261,10 @@ window.doRegister=async function(){
       document.getElementById('btn-reg').disabled=false; return;
     }
     const now=new Date().toISOString();
-    await setDoc(doc(db,'participants',uid),{uid,name,phone:cleanPhone(phone),createdAt:now,updatedAt:now,visitCount:0,applied:false});
+    await setDoc(doc(db,'participants',uid),{uid,name,nickname,phone:cleanPhone(phone),createdAt:now,updatedAt:now,visitCount:0,applied:false});
     localStorage.setItem('stampUID',uid);
     localStorage.setItem('stampVisitorName',name);
+    localStorage.setItem('stampNickname',nickname);
     localStorage.setItem('stampPhone',cleanPhone(phone));
     document.getElementById('success-name').textContent=name+' 님, 가입 완료!';
     document.getElementById('success-sub').textContent='전주시 자전거 여권에 오신 것을 환영합니다 🎉';
