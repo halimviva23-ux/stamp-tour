@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>로그인 · 전주시 자전거 여권</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root{--ink:#1a1208;--paper:#f5efe3;--aged:#e8dcc8;--seal:#c0392b;--gold:#b8860b;--green:#2d6a4f;}
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -26,9 +26,9 @@
   .tab-switcher{display:flex;background:var(--paper);border:1px solid var(--aged);border-radius:8px;padding:3px;margin-bottom:24px;gap:3px;}
   .tab-btn{flex:1;padding:9px;border:none;background:transparent;border-radius:6px;font-family:'Noto Sans KR',sans-serif;font-size:.84rem;color:#7a6a50;cursor:pointer;transition:all .2s;letter-spacing:.03em;}
   .tab-btn.active{background:var(--ink);color:white;font-weight:500;}
-  
+  /* 회원가입 전용 모드일 때 탭 숨김 */
   body.register-mode .tab-switcher{display:none;}
-  body.register-mode .form-note{display:none;}
+  /* form-note는 register-mode에서도 표시 — 로그인 링크 유지 */
 
   .form-section{display:none;animation:fadeIn .3s both;}
   .form-section.active{display:block;}
@@ -49,6 +49,7 @@
   .form-note a,.form-note span{color:var(--gold);cursor:pointer;text-decoration:none;}
   .form-note span:hover,.form-note a:hover{text-decoration:underline;}
 
+  /* States */
   .state{display:none;}.state.active{display:block;}
   .checking-wrap{text-align:center;padding:24px 0;}
   .spinner{width:36px;height:36px;border:3px solid var(--aged);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px;}
@@ -70,14 +71,17 @@
 
 <a class="back-link" href="index.html">← 메인으로</a>
 
+<!-- 해시 즉시 처리 (모듈 로드 전에 실행) -->
 <script>
   if(location.hash==='#register'){
     document.body.classList.add('register-mode');
+    // DOM 준비 후 탭 전환
     document.addEventListener('DOMContentLoaded', function(){
       document.getElementById('tab-login-btn').classList.remove('active');
       document.getElementById('tab-reg-btn').classList.add('active');
       document.getElementById('section-login').classList.remove('active');
       document.getElementById('section-register').classList.add('active');
+      // 제목도 회원가입으로 변경
       const logoTitle = document.querySelector('.logo-title');
       if(logoTitle) logoTitle.textContent = '회원가입';
     });
@@ -87,6 +91,16 @@
 <div class="card">
   <div class="state active" id="state-form">
     <div class="logo">
+      <!-- =============================================
+        🖼️ [로그인 로고 이미지] 수정 구역 — login.html
+        이미지를 쓰려면 아래 <img> 주석을 해제하고
+        이모지 줄(<span class="logo-emblem">)은 삭제하거나 주석 처리하세요.
+        권장 크기: 200 x 200px (정사각형 또는 원형)
+        같은 폴더: src="images/logo.png"
+        외부 URL:  src="https://your-server.com/logo.png"
+      ============================================= -->
+      <!-- <img src="여기에_로고_이미지_경로" alt="전주시 자전거 여권 로고"
+        style="width:80px;height:80px;object-fit:contain;margin-bottom:8px;display:block;margin-left:auto;margin-right:auto;"/> -->
       <span class="logo-emblem">🚲</span>
       <div class="logo-title">전주시 자전거 여권</div>
       <div class="logo-line"></div>
@@ -99,6 +113,7 @@
 
     <div class="error-box" id="global-error"></div>
 
+    <!-- Login -->
     <div class="form-section active" id="section-login">
       <div class="form-group">
         <label>휴대폰 번호</label>
@@ -109,16 +124,12 @@
       <p class="form-note">처음이세요? <span onclick="switchTab('register')">회원가입하기</span></p>
     </div>
 
+    <!-- Register -->
     <div class="form-section" id="section-register">
       <div class="form-group">
         <label>이름 *</label>
-        <input type="text" id="reg-name" placeholder="홍길동" maxlength="20" onkeydown="if(event.key==='Enter')document.getElementById('reg-nickname').focus()"/>
+        <input type="text" id="reg-name" placeholder="홍길동" maxlength="20" onkeydown="if(event.key==='Enter')document.getElementById('reg-phone').focus()"/>
         <div class="field-error" id="reg-name-err"></div>
-      </div>
-      <div class="form-group">
-        <label>라이더 닉네임 *</label>
-        <input type="text" id="reg-nickname" placeholder="랭킹에 표시될 별명 (8자 이내)" maxlength="8" onkeydown="if(event.key==='Enter')document.getElementById('reg-phone').focus()"/>
-        <div class="field-error" id="reg-nickname-err"></div>
       </div>
       <div class="form-group">
         <label>휴대폰 번호 *</label>
@@ -155,6 +166,7 @@ const firebaseConfig={apiKey:"AIzaSyAW13Cf2qQnsGWYiAdz9rF3TrWkGR_lLNg",authDomai
 const app=initializeApp(firebaseConfig);
 const db=getFirestore(app);
 
+// If already logged in, redirect
 if(localStorage.getItem('stampUID')){
   const redirect=new URLSearchParams(location.search).get('redirect');
   location.href=redirect?decodeURIComponent(redirect):'mypage.html';
@@ -222,11 +234,9 @@ window.doLogin=async function(){
 
 window.doRegister=async function(){
   const name=document.getElementById('reg-name').value.trim();
-  const nickname=document.getElementById('reg-nickname').value.trim(); // [추가]
   const phone=document.getElementById('reg-phone').value.trim();
   let ok=true;
   if(!name){fieldErr('reg-name-err','이름을 입력해주세요.');ok=false;}else fieldErr('reg-name-err','');
-  if(!nickname){fieldErr('reg-nickname-err','닉네임을 입력해주세요.');ok=false;}else fieldErr('reg-nickname-err',''); // [추가]
   if(!validPhone(phone)){fieldErr('reg-phone-err','올바른 휴대폰 번호를 입력해주세요.');ok=false;}else fieldErr('reg-phone-err','');
   if(!ok)return;
   hideGlobalErr();
@@ -244,8 +254,7 @@ window.doRegister=async function(){
       document.getElementById('btn-reg').disabled=false; return;
     }
     const now=new Date().toISOString();
-    // [수정] Firestore 저장 시 nickname 필드 추가
-    await setDoc(doc(db,'participants',uid),{uid,name,nickname,phone:cleanPhone(phone),createdAt:now,updatedAt:now,visitCount:0,applied:false});
+    await setDoc(doc(db,'participants',uid),{uid,name,phone:cleanPhone(phone),createdAt:now,updatedAt:now,visitCount:0,applied:false});
     localStorage.setItem('stampUID',uid);
     localStorage.setItem('stampVisitorName',name);
     localStorage.setItem('stampPhone',cleanPhone(phone));
