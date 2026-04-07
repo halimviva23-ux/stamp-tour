@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://jjcyclingpassport.com/sitemap.xml
