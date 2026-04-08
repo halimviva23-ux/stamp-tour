@@ -115,6 +115,18 @@ async function init(){
   const uid=localStorage.getItem('stampUID');
   if(!uid){location.href=`login.html?redirect=${encodeURIComponent(location.href)}`;return;}
   if(!locId||!locName){se('올바른 QR코드를 스캔해주세요.');return;}
+  // 운영 기간 체크
+  try{
+    const opSnap=await getDoc(doc(db,'meta','operationSettings'));
+    if(opSnap.exists()){
+      const op=opSnap.data();
+      const now=new Date();
+      const msg=op.message||'현재 운영 기간이 아닙니다.';
+      if(op.forceStop){se(msg);return;}
+      if(op.startDate&&now<new Date(op.startDate)){se(`투어가 ${op.startDate} 부터 시작됩니다.`);return;}
+      if(op.endDate&&now>new Date(op.endDate+'T23:59:59')){se(msg);return;}
+    }
+  }catch(e){}
   try{
     const[locSnap,coursesSnap,locsSnap]=await Promise.all([getDoc(doc(db,'locations',locId)),getDocs(collection(db,'courses')),getDocs(collection(db,'locations'))]);
     const locData=locSnap.exists()?locSnap.data():null;

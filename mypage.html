@@ -376,6 +376,14 @@ async function load(){
     const nickname=pData.nickname||'';
     document.getElementById('cover-nickname').textContent=nickname?`"${nickname}"`:'닉네임 없음';
     if(nickname)localStorage.setItem('stampNickname',nickname);
+    // 닉네임 없는 기존 사용자 유도
+    if(!nickname){
+      setTimeout(()=>{
+        if(confirm('닉네임을 설정하면 완주자 랭킹에 표시돼요! 지금 설정할까요?')){
+          window.openNicknameEdit();
+        }
+      },1000);
+    }
     document.getElementById('s-visited').textContent=visitedCount;
     document.getElementById('s-courses').textContent=participatingCourses.length;
     document.getElementById('s-completed').textContent=completedCourses.length;

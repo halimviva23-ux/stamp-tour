@@ -155,6 +155,7 @@
   <div class="nav-tab" onclick="sw('participants',this)">👥 참여자 <span class="nb" id="nb-parts">0</span></div>
   <div class="nav-tab" onclick="sw('completions',this)">🏆 완주 신청 <span class="nb green" id="nb-comps">0</span></div>
   <div class="nav-tab" onclick="sw('notices',this)">📢 공지사항 <span class="nb" style="background:#6a1b9a" id="nb-notices">0</span></div>
+  <div class="nav-tab" onclick="sw('settings',this)">⚙️ 운영 설정</div>
 </div>
 
 <!-- 현황 -->
@@ -276,7 +277,7 @@
         <button class="btn btn-outline btn-sm" onclick="exportPartsCSV()">💾 CSV</button>
       </div>
     </div>
-    <div class="table-wrap"><table><thead><tr><th>#</th><th>이름</th><th>전화번호</th><th>방문 현황</th><th>완주 코스</th><th>마지막 방문</th><th>상태</th><th>관리</th></tr></thead><tbody id="p-tbody"></tbody></table></div>
+    <div class="table-wrap"><table><thead><tr><th>#</th><th>이름</th><th>닉네임</th><th>전화번호</th><th>방문 현황</th><th>완주 코스</th><th>마지막 방문</th><th>상태</th><th>관리</th></tr></thead><tbody id="p-tbody"></tbody></table></div>
   </div>
 </div>
 
@@ -320,6 +321,54 @@
   <div class="card">
     <div class="toolbar"><div class="card-title" style="margin-bottom:0">📋 등록된 공지사항 <span style="font-size:.74rem;color:#aaa;font-weight:400" id="notice-cnt-label">0개</span></div></div>
     <div id="notice-list"></div>
+  </div>
+</div>
+
+<!-- 운영 설정 -->
+<div class="page-section" id="section-settings">
+  <div class="card">
+    <div class="card-title">⚙️ 운영 기간 설정</div>
+    <p style="font-size:.81rem;color:#7a6a50;margin-bottom:16px;line-height:1.7;">운영 기간을 설정하면 기간 외에는 QR 스캔이 차단되고 안내 메시지가 표시됩니다.<br>기간을 비워두면 항상 운영 중으로 간주합니다.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+      <div>
+        <label>운영 시작일</label>
+        <input type="date" id="op-start" style="width:100%;padding:8px 11px;border:1px solid var(--aged);border-radius:4px;background:var(--paper);font-family:'Noto Sans KR',sans-serif;font-size:.84rem;color:var(--ink);"/>
+      </div>
+      <div>
+        <label>운영 종료일</label>
+        <input type="date" id="op-end" style="width:100%;padding:8px 11px;border:1px solid var(--aged);border-radius:4px;background:var(--paper);font-family:'Noto Sans KR',sans-serif;font-size:.84rem;color:var(--ink);"/>
+      </div>
+    </div>
+    <div style="margin-bottom:16px;">
+      <label>기간 외 안내 메시지</label>
+      <input type="text" id="op-message" placeholder="예: 전주시 자전거 여권 투어가 종료되었습니다. 내년에 다시 만나요!"/>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--paper);border-radius:6px;border:1px solid var(--aged);margin-bottom:16px;">
+      <span style="font-size:.82rem;font-weight:500;color:var(--ink);flex:1">🔓 운영 중단 (강제로 QR 차단)</span>
+      <span style="font-size:.76rem;color:#aaa" id="op-active-label">운영 중</span>
+      <div style="position:relative;width:44px;height:24px;cursor:pointer;" onclick="toggleOpActive()">
+        <div id="op-active-track" style="position:absolute;inset:0;border-radius:12px;background:#2ecc71;transition:background .2s;"></div>
+        <div id="op-active-thumb" style="position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:white;transition:transform .2s;box-shadow:0 1px 4px rgba(0,0,0,.2);"></div>
+      </div>
+    </div>
+    <button class="btn btn-dark" onclick="saveSettings()">⚙️ 설정 저장</button>
+    <div id="settings-status" style="margin-top:12px;padding:10px 14px;border-radius:6px;display:none;font-size:.79rem;"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">💾 전체 데이터 백업</div>
+    <p style="font-size:.81rem;color:#7a6a50;margin-bottom:16px;line-height:1.7;">모든 데이터를 Excel 파일로 내보냅니다. 각 시트에 참여자, 스탬프 기록, 완주 신청, 지점 정보가 담겨요.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="btn btn-dark" onclick="exportAllExcel()">📊 전체 데이터 Excel 내보내기</button>
+      <button class="btn btn-outline" onclick="exportPartsCSV()">👥 참여자 CSV</button>
+      <button class="btn btn-outline" onclick="exportCompsCSV()">🏆 완주신청 CSV</button>
+      <button class="btn btn-outline" onclick="exportLocCSV()">📍 지점 CSV</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📊 현재 운영 상태</div>
+    <div id="op-status-display" style="font-size:.84rem;color:#7a6a50;line-height:2;"></div>
   </div>
 </div>
 
@@ -429,6 +478,7 @@ window.loadAll=async function(){
     const lvc={};Object.values(allStamps).forEach(s=>Object.keys(s).forEach(id=>{lvc[id]=(lvc[id]||0)+1;}));
     locations.forEach(l=>l.visitCount=lvc[l.id]||0);
     await loadNoticesData();
+    await loadSettings();
     updateBadges();renderOverview();renderCourseList();renderLocations();renderParts();renderComps();
   }catch(e){console.error(e);showToast('로드 실패: '+e.message);}
   document.getElementById('page-loading').style.display='none';
@@ -693,6 +743,7 @@ window.renderParts=function(){
     const tr=document.createElement('tr');
     tr.innerHTML=`<td style="color:#bbb;font-size:.72rem">${i+1}</td>
       <td><div style="font-weight:500">${esc(p.name)}</div></td>
+      <td><div style="font-size:.81rem;color:var(--gold);font-weight:500">${p.nickname?`"${esc(p.nickname)}"` :'<span style="color:#bbb;font-size:.72rem">미설정</span>'}</div></td>
       <td style="font-size:.78rem;color:#7a6a50">${fmtPhone(p.phone)}</td>
       <td><div style="font-size:.74rem;color:#7a6a50">${v}/${tot}곳</div><div class="pm-bar"><div class="pm-fill" style="width:${pct}%"></div></div></td>
       <td style="font-size:.74rem">${cc.length?cc.map(c=>`<span style="background:${c.required?'#fff3e0':'#e8f5e9'};color:${c.required?'#e65100':'var(--green)'};border:1px solid ${c.required?'#ffcc80':'#a5d6a7'};border-radius:3px;padding:1px 5px;font-size:.66rem">${c.required?'⭐ ':''} ${esc(c.name)}</span>`).join(' '):'<span style="color:#bbb">없음</span>'}</td>
@@ -866,6 +917,98 @@ window.toggleNotice=async function(id,active){
 window.deleteNotice=async function(id){
   if(!confirm('공지사항을 삭제할까요?'))return;await deleteDoc(doc(db,'notices',id));notices=notices.filter(n=>n.id!==id);
   renderNotices();document.getElementById('nb-notices').textContent=notices.filter(n=>n.active).length;showToast('삭제됨');
+};
+
+window.exportAllExcel=function(){
+  const wb=XLSX.utils.book_new();
+
+  // 시트1: 참여자
+  const partsData=[['이름','닉네임','전화번호','방문수','완주코스','필수완주','상태','가입일']];
+  participants.forEach(p=>{
+    const v=Object.keys(allStamps[p.uid]||{}).length;
+    const cc=getCompletedCourses(p.uid);
+    const {allDone}=getRequiredStatus(p.uid);
+    partsData.push([p.name,p.nickname||'',fmtPhone(p.phone),v,cc.map(c=>c.name).join('/'),allDone?'Y':'N',p.applied?'완주신청':cc.length?'신청가능':'진행중',fmtDate(p.createdAt)]);
+  });
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(partsData),'참여자');
+
+  // 시트2: 스탬프 전체 기록
+  const stampsData=[['참여자이름','닉네임','지점명','방문시각']];
+  participants.forEach(p=>{
+    Object.values(allStamps[p.uid]||{}).sort((a,b)=>new Date(a.visitedAt)-new Date(b.visitedAt)).forEach(s=>{
+      stampsData.push([p.name,p.nickname||'',s.locName||'',fmtDate(s.visitedAt)]);
+    });
+  });
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(stampsData),'스탬프기록');
+
+  // 시트3: 완주 신청
+  const compsData=[['계정이름','닉네임','신청이름','신청전화번호','신청시각','방문수','완주코스','처리상태','반려사유']];
+  participants.filter(p=>p.applied).forEach(p=>{
+    const v=Object.keys(allStamps[p.uid]||{}).length;
+    const cc=getCompletedCourses(p.uid);
+    compsData.push([p.name,p.nickname||'',p.applyName||p.name,fmtPhone(p.applyPhone||p.phone),fmtDate(p.appliedAt),v,cc.map(c=>c.name).join('/'),p.applyStatus||'pending',p.applyMemo||'']);
+  });
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(compsData),'완주신청');
+
+  // 시트4: 지점
+  const lcm={};courses.forEach(c=>(c.locationIds||[]).forEach(id=>{if(!lcm[id])lcm[id]=[];lcm[id].push(c.name);}));
+  const locsData=[['지점명','설명','주소','배정코스','방문수']];
+  locations.forEach(l=>locsData.push([l.name,l.desc||'',l.address||'',(lcm[l.id]||[]).join('/'),l.visitCount||0]));
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(locsData),'지점목록');
+
+  const date=new Date().toLocaleDateString('ko').replace(/\. /g,'-').replace('.','');
+  XLSX.writeFile(wb,`전주자전거여권_전체백업_${date}.xlsx`);
+  showToast('✓ Excel 파일이 다운로드됐어요!');
+};
+
+// ── 운영 설정 ──
+let opSettings={startDate:'',endDate:'',message:'',forceStop:false};
+async function loadSettings(){
+  try{
+    const snap=await getDocs(collection(db,'meta'));
+    snap.forEach(d=>{if(d.id==='operationSettings')opSettings={...opSettings,...d.data()};});
+  }catch(e){}
+  renderSettings();
+}
+function renderSettings(){
+  document.getElementById('op-start').value=opSettings.startDate||'';
+  document.getElementById('op-end').value=opSettings.endDate||'';
+  document.getElementById('op-message').value=opSettings.message||'';
+  const isActive=!opSettings.forceStop;
+  document.getElementById('op-active-track').style.background=isActive?'#2ecc71':'#e74c3c';
+  document.getElementById('op-active-thumb').style.transform=isActive?'translateX(0)':'translateX(20px)';
+  document.getElementById('op-active-label').textContent=isActive?'운영 중':'강제 중단';
+  document.getElementById('op-active-label').style.color=isActive?'var(--green)':'var(--seal)';
+  // 현재 상태 표시
+  const now=new Date();
+  const start=opSettings.startDate?new Date(opSettings.startDate):null;
+  const end=opSettings.endDate?new Date(opSettings.endDate+'T23:59:59'):null;
+  let statusHTML='';
+  if(opSettings.forceStop){statusHTML=`<span style="color:var(--seal)">🔴 강제 중단 중</span><br>`;}
+  else if(start&&now<start){statusHTML=`<span style="color:#e65100">⏳ 운영 시작 전</span> (${opSettings.startDate} 부터)<br>`;}
+  else if(end&&now>end){statusHTML=`<span style="color:#aaa">⏹️ 운영 종료됨</span> (${opSettings.endDate} 까지)<br>`;}
+  else{statusHTML=`<span style="color:var(--green)">🟢 운영 중</span><br>`;}
+  statusHTML+=`시작일: <strong>${opSettings.startDate||'미설정'}</strong><br>`;
+  statusHTML+=`종료일: <strong>${opSettings.endDate||'미설정'}</strong><br>`;
+  statusHTML+=`안내 메시지: <strong>${opSettings.message||'미설정'}</strong>`;
+  document.getElementById('op-status-display').innerHTML=statusHTML;
+}
+window.toggleOpActive=function(){
+  opSettings.forceStop=!opSettings.forceStop;
+  renderSettings();
+};
+window.saveSettings=async function(){
+  opSettings.startDate=document.getElementById('op-start').value;
+  opSettings.endDate=document.getElementById('op-end').value;
+  opSettings.message=document.getElementById('op-message').value.trim();
+  try{
+    await setDoc(doc(db,'meta','operationSettings'),opSettings);
+    const status=document.getElementById('settings-status');
+    status.style.display='block';status.style.background='#e8f5e9';status.style.color='var(--green)';
+    status.textContent='✓ 설정이 저장됐어요! 즉시 적용됩니다.';
+    setTimeout(()=>status.style.display='none',3000);
+    renderSettings();showToast('✓ 운영 설정 저장됨');
+  }catch(e){showToast('저장 실패: '+e.message);}
 };
 
 // ── 탭 전환 ──
