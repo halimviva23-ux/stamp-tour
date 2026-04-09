@@ -15,14 +15,22 @@
   body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");pointer-events:none;z-index:0;}
 
   /* ── Nav ── */
-  nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 32px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(to bottom,rgba(15,30,56,.95),rgba(15,30,56,0));backdrop-filter:blur(6px);}
-  .nav-logo{font-family:'Noto Serif KR',serif;font-size:.95rem;font-weight:700;color:#f0e8d4;letter-spacing:.06em;display:flex;align-items:center;gap:8px;}
-  .nav-logo span{font-size:1.2rem;}
-  .nav-actions{display:flex;gap:10px;align-items:center;}
-  .nav-btn{padding:7px 18px;border-radius:20px;font-size:.8rem;font-family:'Noto Sans KR',sans-serif;cursor:pointer;letter-spacing:.03em;transition:all .2s;text-decoration:none;display:inline-block;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(to bottom,rgba(15,30,56,.97),rgba(15,30,56,0));backdrop-filter:blur(6px);}
+  .nav-logo{font-family:'Noto Serif KR',serif;font-size:.82rem;font-weight:700;color:#f0e8d4;letter-spacing:.03em;display:flex;align-items:center;gap:6px;flex-shrink:0;}
+  .nav-logo img{height:26px !important;}
+  .nav-actions{display:flex;gap:6px;align-items:center;flex-wrap:nowrap;}
+  .nav-btn{padding:5px 12px;border-radius:16px;font-size:.72rem;font-family:'Noto Sans KR',sans-serif;cursor:pointer;letter-spacing:.02em;transition:all .2s;text-decoration:none;display:inline-block;white-space:nowrap;}
   .nav-btn-outline{background:transparent;border:1.5px solid rgba(232,220,200,.35);color:rgba(232,220,200,.7);}.nav-btn-outline:hover{border-color:var(--gold);color:var(--gold);}
   .nav-btn-fill{background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.2);color:white;}.nav-btn-fill:hover{background:var(--seal);border-color:var(--seal);}
   .nav-btn-mypage{background:var(--gold);border:1.5px solid var(--gold);color:white;display:none;}.nav-btn-mypage:hover{background:#9a7209;}
+  @media(max-width:480px){
+    nav{padding:10px 14px;}
+    .nav-logo{font-size:.75rem;}
+    .nav-btn{padding:4px 9px;font-size:.68rem;}
+    /* 모바일에서 로그인/회원가입 텍스트 축약 */
+    .nav-btn-fill .full-text{display:none;}
+    .nav-btn-fill::after{content:'가입';}
+  }
 
   /* ── Hero ── */
   .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:100px 24px 80px;position:relative;text-align:center;background:linear-gradient(160deg,#1a2744 0%,#0f1e38 100%);}
@@ -247,11 +255,16 @@
   <div style="position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 18px,rgba(255,255,255,.005) 18px,rgba(255,255,255,.005) 19px);pointer-events:none;"></div>
   <div class="section-label" style="color:rgba(184,134,11,.7)">WEEKLY RANKING</div>
   <h2 class="section-title" style="color:#d4af37;margin-bottom:8px">이주의 완주자</h2>
-  <p style="font-size:.88rem;color:rgba(232,220,200,.5);text-align:center;margin-bottom:36px;" id="ranking-week-label">불러오는 중...</p>
+  <p style="font-size:.88rem;color:rgba(232,220,200,.5);text-align:center;margin-bottom:28px;" id="ranking-week-label">불러오는 중...</p>
 
-  <div id="ranking-preview" style="max-width:560px;margin:0 auto 28px;display:flex;flex-direction:column;gap:8px;"></div>
+  <!-- 로딩 스피너 -->
+  <div id="ranking-spinner" style="text-align:center;padding:20px 0;">
+    <div style="width:32px;height:32px;border:3px solid rgba(255,255,255,.15);border-top-color:#d4af37;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto;"></div>
+  </div>
 
-  <div style="text-align:center;">
+  <div id="ranking-preview" style="max-width:560px;margin:0 auto 28px;display:none;flex-direction:column;gap:8px;"></div>
+
+  <div style="text-align:center;margin-top:8px;">
     <a href="ranking.html" style="display:inline-flex;align-items:center;gap:8px;padding:13px 32px;background:rgba(184,134,11,.15);color:#d4af37;border:1.5px solid rgba(184,134,11,.4);border-radius:8px;font-family:'Noto Serif KR',serif;font-size:.95rem;text-decoration:none;transition:all .2s;">
       🏆 전체 명단 보기
     </a>
@@ -395,6 +408,9 @@ async function loadRanking(){
 
     const label=document.getElementById('ranking-week-label');
     const preview=document.getElementById('ranking-preview');
+    const spinner=document.getElementById('ranking-spinner');
+    spinner.style.display='none';
+    preview.style.display='flex';
 
     if(!previewList.length){
       label.textContent=`${prevWi.year}년 ${prevWi.weekNum}주차 완주자를 기다리는 중...`;
@@ -413,6 +429,7 @@ async function loadRanking(){
       preview.innerHTML+=`<div style="text-align:center;font-size:.78rem;color:rgba(184,134,11,.6);padding:8px">외 ${previewList.length-5}명 더보기 →</div>`;
     }
   }catch(e){
+    document.getElementById('ranking-spinner').style.display='none';
     document.getElementById('ranking-week-label').textContent='랭킹을 불러올 수 없어요';
   }
 }
