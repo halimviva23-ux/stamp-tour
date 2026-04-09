@@ -165,11 +165,22 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, getDocs, collection, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig={apiKey:"AIzaSyAW13Cf2qQnsGWYiAdz9rF3TrWkGR_lLNg",authDomain:"stemp-tour.firebaseapp.com",projectId:"stemp-tour",storageBucket:"stemp-tour.firebasestorage.app",messagingSenderId:"823116268455",appId:"1:823116268455:web:4b060bf808eae664f62c82"};
 const app=initializeApp(firebaseConfig);
 const db=getFirestore(app);
+
+// 닉네임 중복 확인
+async function checkNicknameDuplicate(nickname, excludeUid=''){
+  const snap=await getDocs(collection(db,'participants'));
+  let isDup=false;
+  snap.forEach(d=>{
+    if(d.id===excludeUid)return;
+    if((d.data().nickname||'').toLowerCase()===nickname.toLowerCase())isDup=true;
+  });
+  return isDup;
+}
 
 // If already logged in, redirect
 if(localStorage.getItem('stampUID')){
@@ -248,6 +259,15 @@ window.doRegister=async function(){
   if(!ok)return;
   hideGlobalErr();
   document.getElementById('btn-reg').disabled=true;
+  document.getElementById('checking-msg').textContent='닉네임 확인 중...';
+  showState('state-checking');
+  // 닉네임 중복 확인
+  const isDup=await checkNicknameDuplicate(nickname);
+  if(isDup){
+    showState('state-form');
+    fieldErr('reg-nickname-err','이미 사용 중인 닉네임이에요. 다른 닉네임을 입력해주세요.');
+    document.getElementById('btn-reg').disabled=false;return;
+  }
   document.getElementById('checking-msg').textContent='가입 처리 중...';
   showState('state-checking');
   try{
