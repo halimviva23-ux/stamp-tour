@@ -27,9 +27,7 @@
     nav{padding:10px 14px;}
     .nav-logo{font-size:.75rem;}
     .nav-btn{padding:4px 9px;font-size:.68rem;}
-    /* 모바일에서 로그인/회원가입 텍스트 축약 */
-    .nav-btn-fill .full-text{display:none;}
-    .nav-btn-fill::after{content:'가입';}
+    .hide-mobile{display:none;}
   }
 
   /* ── Hero ── */
@@ -143,6 +141,7 @@
   </div>
   <div class="nav-actions">
     <a class="nav-btn nav-btn-outline" href="notices.html" style="display:inline-block;">📢 공지</a>
+    <a class="nav-btn nav-btn-fill" href="https://linktr.ee/jeonjucyclingpassport" target="_blank" rel="noopener" style="background:var(--gold);border-color:var(--gold);"><span class="hide-mobile">📘 </span>실물여권</a>
     <!-- 비로그인 -->
     <a class="nav-btn nav-btn-outline logged-out-only" href="login.html">로그인</a>
     <a class="nav-btn nav-btn-fill logged-out-only" href="login.html#register">회원가입</a>
@@ -180,10 +179,12 @@
   <p class="hero-sub">자전거로 전주 곳곳을 누비고 QR코드를 스캔해<br>나만의 자전거 여권을 완성해보세요.</p>
   <div class="hero-cta logged-out-only">
     <a class="btn-hero-main" href="login.html#register">지금 시작하기</a>
+    <a class="btn-hero-sub" href="https://linktr.ee/jeonjucyclingpassport" target="_blank" rel="noopener">📘 실물여권 신청</a>
     <a class="btn-hero-sub" href="courses.html">코스 둘러보기</a>
   </div>
   <div class="hero-cta logged-in-only">
     <a class="btn-hero-main" href="mypage.html">📖 내 여권 보기</a>
+    <a class="btn-hero-sub" href="https://linktr.ee/jeonjucyclingpassport" target="_blank" rel="noopener">📘 실물여권 신청</a>
     <a class="btn-hero-sub" href="courses.html">코스 둘러보기</a>
   </div>
   <div class="hero-scroll">SCROLL</div>
@@ -296,7 +297,7 @@
     <a href="login.html">로그인</a>
     <a href="admin.html">관리자</a>
   </p>
-  <p style="margin-top:12px">© 2025 전주시 자전거 여권. All rights reserved.</p>
+  <p style="margin-top:12px">© 2026 전주시 자전거 여권. All rights reserved.</p>
 </footer>
 
 <script>
