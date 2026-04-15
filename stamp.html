@@ -163,16 +163,16 @@ async function init(){
       requestAnimationFrame(()=>requestAnimationFrame(()=>document.querySelectorAll('.cc-bar-fill').forEach(el=>el.style.width=el.dataset.pct+'%')));
     }
 // 👇 이미지가 있으면 동그란 스탬프로 보여주고, 없으면 기본 이모지로 보여주기 👇
-    if (locData && locData.imageUrl) {
-      document.getElementById('stamp-emoji').innerHTML = `<img src="${locData.imageUrl}" alt="" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
-      
-      // 💡 팁: 이미지 뒤에 깔리는 빨간색 배경을 없애고 싶다면 아래 줄의 주석(//)을 지워주세요.
-      // document.getElementById('stamp-emoji').style.background = 'transparent';
-      // document.getElementById('stamp-emoji').style.boxShadow = 'none'; // 그림자 제거
-    } else {
-      document.getElementById('stamp-emoji').textContent = EMOJIS[locIdx % EMOJIS.length];
-    }
-    // 👆 교체 완료 👆
+if (locData && locData.imageUrl) {
+  document.getElementById('stamp-emoji').innerHTML = `<img src="${locData.imageUrl}" alt="" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
+  
+  // 하림님이 선택하신 화사한 골드색 적용!
+  document.getElementById('stamp-emoji').style.background = '#f5da84'; 
+  document.getElementById('stamp-emoji').style.boxShadow = 'none'; // 기존 붉은색 그림자 제거
+} else {
+  document.getElementById('stamp-emoji').textContent = EMOJIS[locIdx % EMOJIS.length];
+}
+// 👆 교체 완료 👆
     document.getElementById('loc-name-text').textContent=locName;
     document.getElementById('loc-desc-text').textContent=locData?.desc||'';
     document.getElementById('visitor-label').innerHTML=`<strong>${visitorName}</strong> 님의 방문`;
