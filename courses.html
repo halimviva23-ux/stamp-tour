@@ -177,7 +177,7 @@ function buildCard(course,ci,locs){
 <div class="loc-summary" onclick="toggleLoc(this)">
         <span class="loc-num" style="color:${color}">${String(li+1).padStart(2,'0')}</span>
         <span class="loc-emoji" style="display: flex; align-items: center; justify-content: center;">
-          ${loc?.imageUrl ? `<img src="${loc.imageUrl}" alt="" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;">` : emoji}
+          ${loc?.imageUrl ? `<img src="${loc.imageUrl}" alt="" style="width: 70px; height: 70px; object-fit: cover; border-radius: 4px;">` : emoji}
         </span>
         <div class="loc-info">
           <div class="loc-name">${loc?.name||id}</div>
